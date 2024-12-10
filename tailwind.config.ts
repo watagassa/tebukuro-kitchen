@@ -14,7 +14,8 @@ const config: Config = {
       },
       screens: {
         'button':'320px',
-        'timer':'390px'
+        'image-mid':{'raw':'(max-height: 550px)'},
+        'image-sml':{'raw':'(max-height: 380px)'}
       },
     },
   },

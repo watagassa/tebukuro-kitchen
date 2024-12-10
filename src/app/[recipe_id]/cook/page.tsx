@@ -154,9 +154,8 @@ const Cook = ({
 
         <div className="flex justify-center content-center">
           {imageSrc != "" ? (
-            <div className="relative w-[100vw] h-[42vh]">
+            <div className="relative w-[100vw] h-[42vh] image-mid:h-[25vh] image-sml:h-[20vh]">
               <Image
-                // これの前に画像をフェッチして存在するかどうか確かめる必要があるかもしれない
                 src={imageSrc}
                 alt={title}
                 fill
@@ -165,14 +164,14 @@ const Cook = ({
               />
             </div>
           ) : (
-            <div className="shadow-lg content-center bg-gray-100 w-[100vw] h-[42vh]">
+            <div className="shadow-lg content-center bg-gray-100 w-[100vw] h-[42vh] image-mid:h-[25vh] image-sml:h-[20vh]">
               <div className="w-full">
                 <FiCameraOff size={40} stroke="#737373" className="mx-auto" />
               </div>
             </div>
           )}
         </div>
-        <div className="mt-6 mb-10 flex justify-center">
+        <div className="mt-6 mb-10 flex justify-center image-mid:mb-2 image-mid:mt-5 image-sml:mb-0 image-sml:mt-2">
           <Circle length={length} page={page} />
         </div>
         <div
