@@ -126,7 +126,7 @@ const Speech = ({
     {
       command: /.*(リセット).*/,
       callback: () => {
-        setTimerReset(!timerReset)
+        setTimerReset(!timerReset);
         resetTranscript();
         SpeechRecognition.startListening({ continuous: true });
       },
@@ -171,7 +171,7 @@ const Speech = ({
     transcript,
     listening,
     resetTranscript,
-    browserSupportsSpeechRecognition,
+    // browserSupportsSpeechRecognition,
   } = useSpeechRecognition({ commands });
 
   // ここの処理はなくても良さそう。認識が止まることがあれば戻す。
