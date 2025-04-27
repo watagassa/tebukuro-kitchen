@@ -41,9 +41,6 @@ const FavoriteButton = ({ recipe }: FavoriteButtonProps) => {
     // isFavoriteの状態を反転
     setIsFavorite(await isFavorited(recipe_id));
   };
-  useEffect(() => {
-    console.log("FAVO",isFavorite)
-  },[isFavorite])
 
   if (loading) {
     return null;
