@@ -74,7 +74,7 @@ export const addRecipe = async (recipe: RecipeObjectSchemaType) => {
       how_many: recipe?.how_many,
       time: recipe?.time,
       comment: recipe?.recipe_comment,
-      user_id: getCurrentUserID()
+      user_id: await getCurrentUserID()
     })
     .select(); // 挿入されたデータを取得するために select() を使用
 
@@ -232,8 +232,8 @@ export const getDetailRecipebyId = async (id: number) => {
     console.error("supabaseエラー", detailRecipe.error);
   }
   console.log(detailRecipe.data);
-  if (detailRecipe.data?.Descripts !== undefined) {
-    detailRecipe.data?.Descripts.sort(
+  if (detailRecipe.data?.descripts !== undefined) {
+    detailRecipe.data?.descripts.sort(
       (firstItem: Descript, secondItem: Descript) => {
         // 数値の比較で安全なデフォルト値を設定
         const firstIndex = Number(firstItem.index ?? Number.MAX_SAFE_INTEGER);
@@ -244,10 +244,10 @@ export const getDetailRecipebyId = async (id: number) => {
       }
     );
   }
-  console.log("sortDes", detailRecipe.data?.Descripts);
+  console.log("sortDes", detailRecipe.data?.descripts);
   // sort
-  if (detailRecipe.data?.Ingredients !== undefined) {
-    detailRecipe.data?.Ingredients.sort(
+  if (detailRecipe.data?.ingredients !== undefined) {
+    detailRecipe.data?.ingredients.sort(
       (firstItem: Ingredient, secondItem: Ingredient) => {
         const firstIndex = Number(firstItem.index ?? Number.MAX_SAFE_INTEGER);
         const secondIndex = Number(secondItem.index ?? Number.MAX_SAFE_INTEGER);
@@ -255,7 +255,7 @@ export const getDetailRecipebyId = async (id: number) => {
         return firstIndex - secondIndex;
       }
     );
-    console.log("sortING", detailRecipe.data?.Ingredients);
+    console.log("sortING", detailRecipe.data?.ingredients);
   }
   if (detailRecipe.error) {
     console.error("supabaseエラー", detailRecipe.error);
@@ -268,7 +268,7 @@ export const getCurrentUserID = async () => {
   if (userData.error) {
     console.error("ユーザーID取得中にエラー", userData.error);
   }
-  return userData.data.user;
+  return userData.data.user?.id;
 };
 // favorites追加関数
 export const addFavorites = async (recipe_id: number) => {

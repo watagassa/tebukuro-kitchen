@@ -7,7 +7,7 @@ import {
   getByDescriptId,
   getByIngredientId,
   getRecipesbyId,
-} from "@/app/utils/supabaseFunctions";
+} from "@/app/utils/supabaseFunctionsNew";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
