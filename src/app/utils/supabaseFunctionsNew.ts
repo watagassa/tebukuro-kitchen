@@ -74,7 +74,7 @@ export const addRecipe = async (recipe: RecipeObjectSchemaType) => {
       how_many: recipe?.how_many,
       time: recipe?.time,
       comment: recipe?.recipe_comment,
-      user_id: await getCurrentUserID()
+      user_id: await getCurrentUserID(),
     })
     .select(); // 挿入されたデータを取得するために select() を使用
 
@@ -273,7 +273,7 @@ export const getCurrentUserID = async () => {
 // favorites追加関数
 export const addFavorites = async (recipe_id: number) => {
   const res = await supabase.from("favorites").insert({
-    user_id: getCurrentUserID(),
+    user_id: await getCurrentUserID(),
     recipe_id: recipe_id,
   });
   if (res.error) {
@@ -285,12 +285,25 @@ export const getFavorites = async () => {
   const res = await supabase
     .from("favorites")
     .select("*")
-    .eq("user_id", getCurrentUserID());
+    .eq("user_id", await getCurrentUserID());
   if (res.error) {
     console.error("favorites取得中にエラー", res.error);
   }
-  return res.data
+  return res.data;
 };
-export const deleteFavorites = async (id: number) => {
-  await supabase.from("favorites").delete().eq("id", id);
+// favorites登録判定関数
+export const isFavorited = async (recipe_id: number) => {
+  const res = await supabase
+    .from("favorites")
+    .select("recipe_id")
+    .eq("recipe_id", recipe_id)
+    .limit(1);
+  if(res.error) {
+    console.error("favorites登録判定中にエラー", res.error);
+  }
+  return res.data !== null && res.data.length > 0;
+};
+// favorites削除関数
+export const deleteFavorites = async (recipe_id: number) => {
+  await supabase.from("favorites").delete().eq("recipe_id", recipe_id);
 };
