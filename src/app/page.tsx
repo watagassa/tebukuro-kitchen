@@ -4,7 +4,7 @@ import ArticleCard from "@/app/conponents/ArticleCard";
 import Footer from "@/app/conponents/Footer";
 import Header from "@/app/conponents/Header";
 import { Recipe } from "@/app/types";
-import { getPageRecipes } from "@/app/utils/supabaseFunctions";
+import { getPageRecipes } from "@/app/utils/supabaseFunctionsNew";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useSwipeable } from "react-swipeable";

@@ -21,7 +21,7 @@ import {
   addSomeIngredient,
   getImageUrl,
   uploadImage,
-} from "../utils/supabaseFunctions";
+} from "../utils/supabaseFunctionsNew";
 import { RecipeSchemaType } from "../validations/schema";
 import { useRecipeFormTop } from "../validations/useFormUtils";
 
@@ -79,12 +79,12 @@ const Registration = () => {
   }, [errors]);
 
   return (
-    <div {...handlers} className="min-h-screen flex flex-col contain-paint bg-[#FFFBF4]">
+    <div {...handlers} className="min-h-screen flex flex-col contain-paint bg-[#FFFBF4] text-black">
       {loading === false ? (
         <form onSubmit={handleSubmit(onSubmit)}>
           <div>
             <main className="pr-4 pl-4">
-              <p className="text-center font-semibold text-lg pt-4 text-black">
+              <p className="text-center font-semibold text-lg pt-4">
                 レシピを登録
               </p>
               <section className="bg-gray-100 h-56 w-9/12 mx-auto rounded-xl mt-10 mb-12 shadow-lg flex-col flex gap-y-4 justify-center items-center relative">
@@ -221,7 +221,7 @@ const Registration = () => {
               </section>
 
               <section className="mx-4">
-                <p className="font-semibold text-lg pb-1 mb-3 border-b border-black mt-4 text-black">
+                <p className="font-semibold text-lg pb-1 mb-3 border-b border-black mt-4">
                   作り方
                 </p>
                 <DescriptInputItem
@@ -232,7 +232,7 @@ const Registration = () => {
                 />
               </section>
               <section className="mx-4">
-                <p className="font-semibold text-lg pb-1 mb-3 border-b border-black mt-4 text-black">
+                <p className="font-semibold text-lg pb-1 mb-3 border-b border-black mt-4">
                   料理の紹介
                 </p>
                 <textarea

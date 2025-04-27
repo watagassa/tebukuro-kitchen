@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
 // import { Recipe } from "../types";
-// import { getPageRecipes } from "../utils/supabaseFunctions";
+// import { getPageRecipes } from "../utils/supabaseFunctionsNew";
 
 export default function MyComponent() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

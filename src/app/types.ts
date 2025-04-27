@@ -35,8 +35,8 @@ export type DetailRecipe = {
   time?: string; //料理時間
   comment?: string;
   howmany?: string; //何人前
-  Descripts: Descript[];
-  Ingredients: Ingredient[];
+  descripts: Descript[];
+  ingredients: Ingredient[];
 };
 
 // 入力フォーム用

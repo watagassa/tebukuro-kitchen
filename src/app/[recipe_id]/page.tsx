@@ -6,7 +6,7 @@ import Footer from "@/app/conponents/Footer";
 import IngredientItem from "@/app/conponents/IngredientItem";
 import RecipeHeader from "@/app/conponents/RecipeHeader";
 import { Descript, DetailRecipe, Ingredient } from "@/app/types";
-import { getDetailRecipebyId } from "@/app/utils/supabaseFunctions";
+import { getDetailRecipebyId } from "@/app/utils/supabaseFunctionsNew";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -25,14 +25,15 @@ export default function RecipeId({
   const [list, setList] = useState<DetailRecipe>();
   const from = searchParams?.from || "/";
   const [showFooter, setshowFooter] = useState(true);
-
+  
   //スクロールを検知する
   const handlers = useSwipeable({
     onSwipedUp: () => setshowFooter(false),
     onSwipedDown: () => setshowFooter(true),
     delta: 60,
   });
-
+  
+  
   useEffect(() => {
     const getDetailRecipe = async () => {
       const detailRecipe = await getDetailRecipebyId(params.recipe_id);
@@ -111,7 +112,7 @@ export default function RecipeId({
             <div className="bg-[#F9DEDC] font-semibold text-sm px-4 py-2">
               {list.howmany ? <p>材料（{list.howmany}）</p> : <p>材料</p>}
             </div>
-            {list.Ingredients.map((ingredient: Ingredient) => (
+            {list.ingredients.map((ingredient: Ingredient) => (
               <IngredientItem
                 key={ingredient.id}
                 id={ingredient.id}
@@ -127,7 +128,7 @@ export default function RecipeId({
               作り方
             </p>
             <div className="space-y-1">
-              {list.Descripts.map((descript: Descript, index) => (
+              {list.descripts.map((descript: Descript, index) => (
                 <DescriptItem
                   key={descript.id}
                   id={index + 1}
