@@ -24,6 +24,7 @@ import {
 } from "../utils/supabaseFunctionsNew";
 import { RecipeSchemaType } from "../validations/schema";
 import { useRecipeFormTop } from "../validations/useFormUtils";
+import { useRouter } from "next/navigation";
 
 const Registration = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -42,6 +43,7 @@ const Registration = () => {
     onSwipedDown: () => setshowFooter(true),
     delta: 10,
   });
+  const router = useRouter();
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file !== undefined) {
@@ -50,7 +52,7 @@ const Registration = () => {
       reader.readAsDataURL(file);
     }
   };
-
+  
   const onSubmit: SubmitHandler<RecipeSchemaType> = async (data) => {
     setLoading(true);
     const recipe_id = await addRecipe(data.recipe);
@@ -68,6 +70,7 @@ const Registration = () => {
 
     window.alert("レシピが登録できました！");
     setLoading(false);
+    router.replace(`/${recipe_id}`);
     return true;
   };
   const { register, handleSubmit, errors } = useRecipeFormTop();
