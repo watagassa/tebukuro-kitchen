@@ -2,9 +2,10 @@
 
 import { Recipe } from "@/app/types";
 import {
-  getFavoriteRecipes,
-  setFavoriteRecipes,
-} from "@/app/utils/localstorageFunction";
+  addFavorites,
+  isFavorited,
+  deleteFavorites,
+} from "../utils/supabaseFunctionsNew";
 import { useEffect, useState } from "react";
 import { FiHeart } from "react-icons/fi";
 
@@ -19,28 +20,30 @@ const FavoriteButton = ({ recipe }: FavoriteButtonProps) => {
 
   // レンダリング時にlocalStorageを確認し、記事が既にお気に入りにあるかを判定
   useEffect(() => {
-    const favoriteRecipes: Recipe[] = getFavoriteRecipes();
-    setIsFavorite(favoriteRecipes.some((r: Recipe) => r.id === recipe_id));
-    setLoading(false);
+    const checkFavorite = async () => {
+      const isFavo = await isFavorited(recipe_id)
+      setIsFavorite(isFavo);
+      setLoading(false);
+    }
+    checkFavorite();
   }, [recipe_id]);
 
   // クリックイベント: お気に入りの状態を切り替え、localStorageを更新
-  const handleFavoriteClick = () => {
-    const favoriteRecipes: Recipe[] = getFavoriteRecipes();
+  const handleFavoriteClick = async () => {
     if (isFavorite) {
       // お気に入りから削除
-      const updatedFavorites: Recipe[] = favoriteRecipes.filter(
-        (r: Recipe) => r.id !== recipe_id
-      );
-      setFavoriteRecipes(updatedFavorites);
+      await deleteFavorites(recipe_id)
     } else {
       // お気に入りに追加
-      setFavoriteRecipes([...favoriteRecipes, recipe]);
+      await addFavorites(recipe_id)
     }
 
     // isFavoriteの状態を反転
-    setIsFavorite(!isFavorite);
+    setIsFavorite(await isFavorited(recipe_id));
   };
+  useEffect(() => {
+    console.log("FAVO",isFavorite)
+  },[isFavorite])
 
   if (loading) {
     return null;
