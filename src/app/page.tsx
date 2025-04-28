@@ -127,7 +127,7 @@ export default function Home() {
         <LoadingDataFetch />
       ) : (
         <div
-          className={`bg-[#FFFBF4] border-none flex-grow grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 auto-rows-min gap-5 p-5`}
+          className={`bg-[#FFFBF4] border-none flex-grow grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 auto-rows-min gap-3 p-5`}
         >
           {filteringNow
             ? filRecipes.map((filRecipe) => {

@@ -66,7 +66,7 @@ const Favorites = () => {
           </p>
         </section>
       ) : (
-        <section className="bg-[#FFFBF4] flex-grow grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 auto-rows-min gap-5 p-5">
+        <section className="bg-[#FFFBF4] flex-grow grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 auto-rows-min gap-3 p-5">
           {list.map((recipe: Recipe) => (
             <ArticleCard recipe={recipe} key={recipe.id} from="favorites" />
           ))}
