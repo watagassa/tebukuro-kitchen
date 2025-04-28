@@ -25,15 +25,14 @@ export default function RecipeId({
   const [list, setList] = useState<DetailRecipe>();
   const from = searchParams?.from || "/";
   const [showFooter, setshowFooter] = useState(true);
-  
+
   //スクロールを検知する
   const handlers = useSwipeable({
     onSwipedUp: () => setshowFooter(false),
     onSwipedDown: () => setshowFooter(true),
     delta: 60,
   });
-  
-  
+
   useEffect(() => {
     const getDetailRecipe = async () => {
       const detailRecipe = await getDetailRecipebyId(params.recipe_id);
@@ -60,12 +59,11 @@ export default function RecipeId({
         iconFill="black"
       />
 
-      <main className="pb-10 min-h-[calc(100vh-150px)] " >
+      <main className="pb-10 min-h-[calc(100vh-150px)] ">
         <figure className="flex justify-center items-center border-b border-gray-400 shadow-md aspect-[3/2] bg-gray-100 relative">
           {/* nullのみを判定しているので、url先の画像が見つからない場合に対処できない */}
           {list.image_url ? (
             <Image
-              // src={`https://picsum.photos/${list.id + 500}`}
               src={list.image_url}
               alt={list.name}
               sizes="100vw"
@@ -80,7 +78,12 @@ export default function RecipeId({
 
         <div className="border-b border-gray-300 m-4 pb-4">
           <div className="flex justify-between gap-2">
-            <p className="text-2xl font-semibold text-[#815B2C]">{list.name}</p>
+            <div>
+              <p className="text-2xl font-semibold text-[#815B2C]">
+                {list.name}
+              </p>
+              <p className="text-sm pt-1">@田中太郎さん</p>
+            </div>
             <FavoriteButton
               recipe={{
                 id: list.id,
@@ -151,7 +154,11 @@ export default function RecipeId({
           つくる
         </Link>
       </main>
-      <div className={`sticky bottom-0 w-full z-20 transition-transform duration-200 ${showFooter ? "translate-y-0" : "translate-y-full"}`}>
+      <div
+        className={`sticky bottom-0 w-full z-20 transition-transform duration-200 ${
+          showFooter ? "translate-y-0" : "translate-y-full"
+        }`}
+      >
         <Footer pathName="/registration" />
       </div>
     </div>
