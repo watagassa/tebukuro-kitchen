@@ -32,11 +32,11 @@ const Footer = (props: FooterProps) => {
         </div>
       </Link>
 
-      <Link className='w-1/3' href={'/future_user_id'}>
+      <Link className='w-1/3' href={'/mypage'}>
         <AiOutlineUser 
           size={iconsize} 
-          className={`mx-auto w-fit ${pathName==='/future_user_id'?'text-orange-600' : 'text-gray-600'}`}/>
-        <div className={`text-xs w-fit mx-auto ${pathName==='/future_user_id'?'text-orange-600' : 'text-gray-600'}`}>
+          className={`mx-auto w-fit ${pathName==='/mypage'?'text-orange-600' : 'text-gray-600'}`}/>
+        <div className={`text-xs w-fit mx-auto ${pathName==='/mypage'?'text-orange-600' : 'text-gray-600'}`}>
           マイページ
         </div>
       </Link> 
