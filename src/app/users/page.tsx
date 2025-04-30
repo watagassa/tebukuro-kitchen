@@ -22,7 +22,7 @@ const UserId = () => {
           <p className="text-xs">@1124awerq</p>
         </div>
       </section>
-      <Footer pathName="/future_user_id" />
+      <Footer pathName="/users" />
     </div>
   );
 };
