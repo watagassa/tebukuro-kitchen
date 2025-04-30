@@ -298,7 +298,7 @@ export const isFavorited = async (recipe_id: number) => {
     .select("recipe_id")
     .eq("recipe_id", recipe_id)
     .limit(1);
-  if(res.error) {
+  if (res.error) {
     console.error("favorites登録判定中にエラー", res.error);
   }
   return res.data !== null && res.data.length > 0;
@@ -306,4 +306,12 @@ export const isFavorited = async (recipe_id: number) => {
 // favorites削除関数
 export const deleteFavorites = async (recipe_id: number) => {
   await supabase.from("favorites").delete().eq("recipe_id", recipe_id);
+};
+
+// recipe, descripts, ingredientsをまとめて削除する関数
+export const deleteRecipeDatas = async (recipe_id: number) => {
+  await supabase.from("descripts").delete().eq("recipe_id", recipe_id)
+  await supabase.from("ingredients").delete().eq("recipe_id",recipe_id)
+  await deleteFavorites(recipe_id);
+  await deleteRecipe(recipe_id);
 };
