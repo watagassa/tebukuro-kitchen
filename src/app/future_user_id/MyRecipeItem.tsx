@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-const MyResipeItem = () => {
+const MyRecipeItem = () => {
   return (
     <section className="flex justify-between px-2 py-3 border-b-2">
       <div className="flex items-start gap-3 w-full">
@@ -13,7 +13,7 @@ const MyResipeItem = () => {
           />
         </div>
         <div className="flex flex-col justify-between flex-grow h-full">
-          <p className="font-semibold mt-auto text-sm break-words">
+          <p className="font-semibold mt-auto text-base break-words">
             基本チャーハン
           </p>
           <div className="flex gap-4 text-xs self-end pt-1 md:pt-3">
@@ -30,4 +30,4 @@ const MyResipeItem = () => {
   );
 };
 
-export default MyResipeItem;
+export default MyRecipeItem;

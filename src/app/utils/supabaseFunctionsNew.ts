@@ -18,6 +18,16 @@ export const getAllRecipes = async () => {
   // 強制的にRecipe[]として認識させる
   return recipes.data as Recipe[];
 };
+export const getAllUserRecipes = async () => {
+  const recipes = await supabase
+    .from("recipes")
+    .select("*")
+    .eq("user_id", await getCurrentUserID());
+  if (recipes.error) {
+    console.error("ユーザーのレシピ取得中にエラー", recipes.error);
+  }
+  return recipes.data as Recipe[];
+};
 // // 全レシピランダム取得
 export const getAllRandomRecipes = async () => {
   const recipes = await supabase.from("recipes").select("*");
@@ -310,8 +320,8 @@ export const deleteFavorites = async (recipe_id: number) => {
 
 // recipe, descripts, ingredientsをまとめて削除する関数
 export const deleteRecipeDatas = async (recipe_id: number) => {
-  await supabase.from("descripts").delete().eq("recipe_id", recipe_id)
-  await supabase.from("ingredients").delete().eq("recipe_id",recipe_id)
+  await supabase.from("descripts").delete().eq("recipe_id", recipe_id);
+  await supabase.from("ingredients").delete().eq("recipe_id", recipe_id);
   await deleteFavorites(recipe_id);
   await deleteRecipe(recipe_id);
 };
