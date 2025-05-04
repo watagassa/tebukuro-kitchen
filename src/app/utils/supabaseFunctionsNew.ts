@@ -280,6 +280,21 @@ export const getCurrentUserID = async () => {
   }
   return userData.data.user?.id;
 };
+// ユーザーIDからユーザー名とアイコンを取得
+export const getUserData = async (user_id: string) => {
+  const userData = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("user_id", user_id)
+    .single();
+  if (userData.error) {
+    console.error("ユーザーデータ取得中にエラー", userData.error);
+  }
+  return {
+    name: userData.data?.["name"],
+    avatar_url: userData.data?.["avatar_url"],
+  };
+};
 // favorites追加関数
 export const addFavorites = async (recipe_id: number) => {
   const res = await supabase.from("favorites").insert({
