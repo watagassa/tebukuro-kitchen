@@ -14,13 +14,11 @@ const MyRecipeList = () => {
     getUserRecipes();
   }, []);
 
-  useEffect(() => {
-    console.log(userRecipe);
-  }, [userRecipe]);
-
   return (
     <section className="bg-white rounded-xl mx-2 max-h-[36rem] overflow-y-scroll">
-      <MyRecipeItem />
+      {userRecipe.map((recipe: Recipe) => {
+        return <MyRecipeItem key={recipe.id} name={recipe.name} image_url={recipe.image_url}/>
+      })}
       <p className="flex justify-center font-semibold p-8 text-gray-400">
         保存されたレシピは以上です
       </p>
