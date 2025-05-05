@@ -12,8 +12,8 @@ const MyRecipeItem = ({
       <div className="flex items-start gap-3 w-full">
         <div className="relative w-20 md:w-32 aspect-[5/4] shrink-0">
           <Image
-            // TODO : undefinedの場合のデフォルト画像設定する
-            src={image_url != undefined ? image_url : ""}
+            // undefinedの場合はアプリロゴを表示する（仮）
+            src={image_url != undefined ? image_url : "/apple-touch-icon.png"}
             alt=""
             fill
             className="rounded-lg object-cover"
