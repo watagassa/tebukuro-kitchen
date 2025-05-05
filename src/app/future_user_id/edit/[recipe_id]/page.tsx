@@ -11,18 +11,18 @@ import { BiCamera, BiCameraOff, BiPlus } from "react-icons/bi";
 import DescriptInputItem from "@/app/conponents/registration/DescriptInputItem";
 import IngredientInputItem from "@/app/conponents/registration/IngredientInputItem";
 import Footer from "@/app/conponents/Footer";
-import { inputDescript, InputIngredient } from "../../types";
-import { getFileExtension } from "../../utils/fileUtils";
-import { updateRecipeImage } from "../../utils/supabaseFncUpdate";
+import { inputDescript, InputIngredient } from "../../../types";
+import { getFileExtension } from "../../../utils/fileUtils";
+import { updateRecipeImage } from "../../../utils/supabaseFncUpdate";
 import {
   addRecipe,
   addSomeDescript,
   addSomeIngredient,
   getImageUrl,
   uploadImage,
-} from "../../utils/supabaseFunctionsNew";
-import { RecipeSchemaType } from "../../validations/schema";
-import { useRecipeFormTop } from "../../validations/useFormUtils";
+} from "../../../utils/supabaseFunctionsNew";
+import { RecipeSchemaType } from "../../../validations/schema";
+import { useRecipeFormTop } from "../../../validations/useFormUtils";
 import { useRouter } from "next/navigation";
 
 const Edit = () => {
@@ -267,7 +267,7 @@ const Edit = () => {
                 showFooter ? "translate-y-0" : "translate-y-full"
               }`}
             >
-              <Footer pathName="/registration" />
+              <Footer pathName="/future_user_id" />
             </div>
           </div>
         </form>
