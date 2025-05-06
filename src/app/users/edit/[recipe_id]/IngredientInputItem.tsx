@@ -37,6 +37,7 @@ const IngredientInputItem = ({
           <div className="w-full border-b border-gray-400 pl-3 bg-[#FEF9EC]">
             <input
               {...register(`ingredient.${index}.name`)}
+              value={input != undefined ? input.name : ""}
               type="text"
               name={`ingredient.${index}.name`}
               id={`ingredient.${index}.name`}
@@ -58,6 +59,7 @@ const IngredientInputItem = ({
           <div className="w-1/2 border-b border-gray-400 bg-[#FEF9EC]">
             <input
               {...register(`ingredient.${index}.amount`)}
+              value={input != undefined ? input.amount : ""}
               type="text"
               name={`ingredient.${index}.amount`}
               id={`ingredient.${index}.amount`}
