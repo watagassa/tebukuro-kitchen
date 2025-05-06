@@ -6,7 +6,7 @@ const MyResipeItem = () => {
       <div className="flex items-start gap-3 w-full">
         <div className="relative w-20 md:w-32 aspect-[5/4] shrink-0">
           <Image
-            src="/image/thumbnail.png"
+            src="/thumbnail.png"
             alt=""
             fill
             className="rounded-lg object-cover"

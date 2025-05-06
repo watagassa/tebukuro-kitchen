@@ -14,7 +14,7 @@ const UserId = () => {
         <div className="flex gap-x-3">
           <div className="relative size-16 shrink-0">
             <Image
-              src="/image/thumbnail.png"
+              src="/thumbnail.png"
               alt=""
               fill
               className="rounded-full object-cover"

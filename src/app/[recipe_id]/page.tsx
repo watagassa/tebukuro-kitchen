@@ -82,7 +82,7 @@ export default function RecipeId({
               <p className="text-2xl font-semibold text-[#815B2C]">
                 {list.name}
               </p>
-              <p className="text-sm pt-1">@田中太郎さん</p>
+              <p className="text-sm pt-1">by 田中太郎さん</p>
             </div>
             <FavoriteButton
               recipe={{
