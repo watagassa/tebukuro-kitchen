@@ -8,10 +8,10 @@ import { useSwipeable } from "react-swipeable";
 import { FaPen } from "react-icons/fa";
 import { BiCamera, BiCameraOff, BiPlus } from "react-icons/bi";
 // import Link from "next/link";
-import DescriptInputItem from "@/app/conponents/registration/DescriptInputItem";
-import IngredientInputItem from "@/app/conponents/registration/IngredientInputItem";
+import DescriptInputItem from "./DescriptInputItem";
+import IngredientInputItem from "./IngredientInputItem";
 import Footer from "@/app/conponents/Footer";
-import { inputDescript, InputIngredient } from "../../../types";
+import { Ingredient, inputDescript, InputIngredient } from "../../../types";
 import { getFileExtension } from "../../../utils/fileUtils";
 import { updateRecipeImage } from "../../../utils/supabaseFncUpdate";
 import {
@@ -24,17 +24,40 @@ import {
 import { RecipeSchemaType } from "../../../validations/schema";
 import { useRecipeFormTop } from "../../../validations/useFormUtils";
 import { useRouter } from "next/navigation";
+import {
+  getRecipesbyId,
+  getByIngredientId,
+  getByDescriptId,
+} from "../../../utils/supabaseFunctionsNew";
 
-const Edit = () => {
+const Edit = ({ params }: { params: { recipe_id: number } }) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [inputDescripts, setInputDescripts] = useState<inputDescript[]>([
-    { image: undefined, text: "" },
-    { image: undefined, text: "" },
-  ]);
   const [inputIngredients, setInputIngredients] = useState<InputIngredient[]>([
     { name: "", amount: "" },
     { name: "", amount: "" },
   ]);
+  const [inputDescripts, setInputDescripts] = useState<inputDescript[]>([
+    { image: undefined, text: "" },
+    { image: undefined, text: "" },
+  ]);
+
+  useEffect(()=> {
+    const init= async() => {
+      const recipe = await getRecipesbyId(params.recipe_id);
+      const ingredients = await getByIngredientId(params.recipe_id);
+      const descripts = await getByDescriptId(params.recipe_id);
+      console.log(recipe,ingredients,descripts)
+      setSelectedImage(recipe[0].image_url != undefined ? recipe[0].image_url : "");
+      const ingData:InputIngredient[] = [];
+      ingredients.map((ing) => {
+        ingData.push({"name": ing.name, "amount": ing.amount});
+      })
+      setInputIngredients(ingData);
+      
+    }
+    init()
+  },[params.recipe_id])
+
   const [showFooter, setshowFooter] = useState(true);
   const [loading, setLoading] = useState(false);
   const handlers = useSwipeable({
