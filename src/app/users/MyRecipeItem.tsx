@@ -25,7 +25,7 @@ const MyRecipeItem = ({
         <div className="flex flex-col justify-between flex-grow h-full">
           <p className="font-semibold mt-auto text-base break-words">{name}</p>
           <div className="flex gap-4 text-xs self-end pt-1 md:pt-3">
-            <Link href={`/future_user_id/edit/${id}`} className="bg-white text-orange-400 border-orange-400 border-2 px-4 py-1 rounded-3xl">
+            <Link href={`/users/edit/${id}`} className="bg-white text-orange-400 border-orange-400 border-2 px-4 py-1 rounded-3xl">
               編集
             </Link>
             <button className="bg-orange-400 text-white px-4 py-1 rounded-3xl">

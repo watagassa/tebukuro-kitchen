@@ -46,14 +46,13 @@ const Edit = ({ params }: { params: { recipe_id: number } }) => {
       const recipe = await getRecipesbyId(params.recipe_id);
       const ingredients = await getByIngredientId(params.recipe_id);
       const descripts = await getByDescriptId(params.recipe_id);
-      console.log(recipe,ingredients,descripts)
+
       setSelectedImage(recipe[0].image_url != undefined ? recipe[0].image_url : "");
       const ingData:InputIngredient[] = [];
       ingredients.map((ing) => {
         ingData.push({"name": ing.name, "amount": ing.amount});
       })
       setInputIngredients(ingData);
-      
     }
     init()
   },[params.recipe_id])
@@ -290,7 +289,7 @@ const Edit = ({ params }: { params: { recipe_id: number } }) => {
                 showFooter ? "translate-y-0" : "translate-y-full"
               }`}
             >
-              <Footer pathName="/future_user_id" />
+              <Footer pathName="/users" />
             </div>
           </div>
         </form>

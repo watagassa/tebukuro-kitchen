@@ -32,7 +32,7 @@ const UserId = () => {
       <p className="font-semibold text-xl mt-8 mb-4 pl-2">マイレシピ一覧</p>
       <MyRecipeList />
       <div className="mt-auto">
-        <Footer pathName="/future_user_id" />
+        <Footer pathName="/users" />
       </div>
     </div>
   );
