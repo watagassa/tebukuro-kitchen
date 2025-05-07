@@ -16,12 +16,25 @@ const MyRecipeList = () => {
 
   return (
     <section className="bg-white rounded-xl mx-2 max-h-[36rem] overflow-y-scroll">
-      {userRecipe.map((recipe: Recipe) => {
-        return <MyRecipeItem key={recipe.id} id={recipe.id} name={recipe.name} image_url={recipe.image_url}/>
-      })}
-      <p className="flex justify-center font-semibold p-8 text-gray-400">
-        保存されたレシピは以上です
-      </p>
+      {userRecipe != undefined ? (
+        <>
+          {userRecipe.map((recipe: Recipe) => (
+            <MyRecipeItem
+              key={recipe.id}
+              id={recipe.id}
+              name={recipe.name}
+              image_url={recipe.image_url}
+            />
+          ))}
+          <p className="flex justify-center font-semibold p-8 text-gray-400">
+            保存されたレシピは以上です
+          </p>
+        </>
+      ) : (
+        <p className="flex justify-center font-semibold p-8 text-gray-400">
+          レシピがありません。
+        </p>
+      )}
     </section>
   );
 };
