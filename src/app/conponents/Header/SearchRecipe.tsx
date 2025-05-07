@@ -26,7 +26,10 @@ const SeachResipe = ({ setSearchKeyWord }: propsType) => {
         placeholder="レシピを検索"
         className="ps-2 pe-6 w-full text-lg border-spacing-4 bg-gray-200 border-gray-50 focus:outline-none"
       />
-      <button className="mr-4 ml-3 right-10 text-black" onClick={() => setSearchKeyWord('')}>
+      <button className="mr-4 ml-3 right-10 text-black" onClick={() => {
+        setSearchKeyWord('');
+        setInput('')
+      }}>
         ✕
       </button>
     </div>
