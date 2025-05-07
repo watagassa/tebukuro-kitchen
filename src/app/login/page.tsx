@@ -2,7 +2,8 @@
 "use client";
 import { useState } from "react";
 import {
-  insertProfileIfNeeded,
+  addProfile,
+  getProfileByID,
   isLoggedIn,
   logout,
   signInWithGoogle,
@@ -12,7 +13,6 @@ const Login = () => {
   const [isLogin, setLogin] = useState<boolean>(true);
   return (
     <div className="text-black">
-      <h1>Welcome to My App</h1>
       <button onClick={signInWithGoogle}>Sign in with Google</button>
       <div>
         <button
@@ -23,14 +23,24 @@ const Login = () => {
             });
           }}
         >
-          checkUserLoggedIn
+          ログイン状態を確認
         </button>
         <div>{isLogin ? "ログイン中" : "ログインしていません"}</div>
       </div>
       <div>
-        <button onClick={insertProfileIfNeeded}>insertProfileIfNeeded</button>
+        <button onClick={addProfile}>プロファイルを登録</button>
       </div>
-
+      <div></div>
+      <button
+        onClick={() => {
+          getProfileByID("a9ae5546-bd56-478b-b0ff-109c6ca53e68").then((res) => {
+            console.log(res);
+          });
+        }}
+        title="Get Profile"
+      >
+        Get Profile
+      </button>
       <div>
         <button onClick={logout}>logout</button>
       </div>
