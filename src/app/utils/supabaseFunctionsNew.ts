@@ -221,6 +221,41 @@ export const uploadImage = async (
     console.error("supabaseエラー", error);
   }
 };
+// id指定で画像の削除
+export const deleteImage = async (id: number) => {
+  const folderPath = `${id}/`;
+
+  // フォルダ内のファイル一覧を取得
+  const { data: files, error: listError } = await supabase.storage
+    .from("images")
+    .list(folderPath, { limit: 1000 });
+  console.log(folderPath)
+
+  if (listError) {
+    console.error("画像リスト取得中にエラー", listError);
+    return;
+  }
+
+  if (!files || files.length === 0) {
+    console.log("削除対象のフォルダは空です。");
+    return;
+  }
+
+  // 削除対象のファイルパスを作成
+  const filePaths = files.map(file => `${folderPath}${file.name}`);
+
+  // ファイルの削除
+  const { error: deleteError } = await supabase.storage
+    .from("images")
+    .remove(filePaths);
+
+  if (deleteError) {
+    console.error("画像削除中にエラー", deleteError);
+  } else {
+    console.log("画像を削除しました:", filePaths);
+  }
+};
+
 // 画像名より画像のurl取得
 export const getImageUrl = async (filePath: string) => {
   const { data } = supabase.storage.from("images").getPublicUrl(filePath);
@@ -339,4 +374,5 @@ export const deleteRecipeDatas = async (recipe_id: number) => {
   await supabase.from("ingredients").delete().eq("recipe_id", recipe_id);
   await deleteFavorites(recipe_id);
   await deleteRecipe(recipe_id);
+  await deleteImage(recipe_id)
 };
