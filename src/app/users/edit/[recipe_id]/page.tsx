@@ -18,11 +18,11 @@ import {
 import { getFileExtension } from "../../../utils/fileUtils";
 import { updateRecipeImage } from "../../../utils/supabaseFncUpdate";
 import {
-  addRecipe,
-  addSomeDescript,
-  addSomeIngredient,
   getImageUrl,
-  uploadImage,
+  updateImage,
+  updateRecipe,
+  updateSomeDescript,
+  updateSomeIngredient,
 } from "../../../utils/supabaseFunctionsNew";
 import { RecipeSchemaType } from "../../../validations/schema";
 import { useRecipeFormTop } from "../../../validations/useFormUtils";
@@ -87,7 +87,7 @@ const Edit = ({ params }: { params: { recipe_id: number } }) => {
     };
     init();
   }, [params.recipe_id, setValue]);
-
+  
   const [showFooter, setshowFooter] = useState(true);
   const [loading, setLoading] = useState(false);
   const handlers = useSwipeable({
@@ -107,22 +107,22 @@ const Edit = ({ params }: { params: { recipe_id: number } }) => {
 
   const onSubmit: SubmitHandler<RecipeSchemaType> = async (data) => {
     setLoading(true);
-    const recipe_id = await addRecipe(data.recipe);
-    if (recipe_id !== undefined) {
+    await updateRecipe(params.recipe_id, data.recipe);
+    if (params.recipe_id !== undefined) {
       if (data.recipe.recipe_image !== undefined) {
         const extension = getFileExtension(data.recipe.recipe_image);
-        const imagePath = `${recipe_id}/recipe.${extension}`;
-        await uploadImage(data.recipe.recipe_image, imagePath);
+        const imagePath = `${params.recipe_id}/recipe.${extension}`;
+        await updateImage(data.recipe.recipe_image, imagePath);
         const recipeImageUrl = await getImageUrl(imagePath);
-        await updateRecipeImage(recipe_id, recipeImageUrl);
+        await updateRecipeImage(params.recipe_id, recipeImageUrl);
       }
-      await addSomeDescript(recipe_id, data.descript);
-      await addSomeIngredient(recipe_id, data.ingredient);
+      await updateSomeDescript(params.recipe_id, data.descript);
+      await updateSomeIngredient(params.recipe_id, data.ingredient);
     }
 
     window.alert("レシピが保存できました！");
     setLoading(false);
-    router.replace(`/${recipe_id}`);
+    router.replace(`/${params.recipe_id}`);
     return true;
   };
 

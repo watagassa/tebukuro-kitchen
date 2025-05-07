@@ -24,8 +24,9 @@ const IngredientInputItem = ({
     inputs.map((input, index)=> {
       setValue(`ingredient.${index}.name`,input.name)
       setValue(`ingredient.${index}.amount`,input.amount)
+      console.log(input,index)
     })
-  })
+  },[inputs])
 
   const addInput = () => {
     if (inputs.length < maxInputs) {

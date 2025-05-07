@@ -95,6 +95,26 @@ export const addRecipe = async (recipe: RecipeObjectSchemaType) => {
     return data[0].id as number;
   }
 };
+// レシピ更新
+export const updateRecipe = async (
+  id: number,
+  recipe: RecipeObjectSchemaType
+) => {
+  const { error } = await supabase
+    .from("recipes")
+    .update({
+      name: recipe.recipe_name,
+      image_url: recipe?.recipe_image,
+      how_many: recipe?.how_many,
+      time: recipe?.time,
+      comment: recipe?.recipe_comment,
+    })
+    .eq("id", id);
+
+  if (error) {
+    console.error("Error inserting data:", error);
+  }
+};
 // レシピ削除
 export const deleteRecipe = async (id: number) => {
   await supabase.from("recipes").delete().eq("id", id);
@@ -144,6 +164,15 @@ export const addSomeIngredient = async (
   recipe_id: number,
   inputIngredients: IngredientSchemaType
 ) => {
+  inputIngredients.forEach((e, index) => {
+    addIngredient(recipe_id, index, e.name, e.amount);
+  });
+};
+export const updateSomeIngredient = async (
+  recipe_id: number,
+  inputIngredients: IngredientSchemaType
+) => {
+  await supabase.from("ingredients").delete().eq("recipe_id", recipe_id);
   inputIngredients.forEach((e, index) => {
     addIngredient(recipe_id, index, e.name, e.amount);
   });
@@ -205,10 +234,29 @@ export const addSomeDescript = async (
     }
   });
 };
+// 複数個の作り方を更新
+export const updateSomeDescript = async (
+  recipe_id: number,
+  descripts: DescriptSchemaType
+) => {
+  await supabase.from("descripts").delete().eq("recipe_id",recipe_id);
+  descripts.map(async (e, index) => {
+    if (e.image !== undefined) {
+      const descriptExtension = getFileExtension(e.image);
+      const descriptImagePath = `${recipe_id}/Descripts/${index}.${descriptExtension}`;
+      await updateImage(e.image, descriptImagePath);
+      const image_url = await getImageUrl(descriptImagePath);
+      console.log("image_url", image_url);
+      await addDescript(recipe_id, index, image_url, e.text);
+    } else {
+      await addDescript(recipe_id, index, undefined, e.text);
+    }
+  });
+};
 export const deleteDescripts = async (id: number) => {
   await supabase.from("descripts").delete().eq("id", id);
 };
-
+// レシピ画像アップロード用
 export const uploadImage = async (
   file: File,
   filePath: string
@@ -221,6 +269,21 @@ export const uploadImage = async (
     console.error("supabaseエラー", error);
   }
 };
+// レシピ画像更新用
+export const updateImage = async (
+  file: File,
+  filePath: string
+  // recipe_id: number
+) => {
+  const { error } = await supabase.storage
+    .from("images")
+    .upload(filePath, file, {
+      upsert: true,
+    });
+  if (error) {
+    console.error("supabaseエラー", error);
+  }
+};
 // id指定で画像の削除
 export const deleteImage = async (id: number) => {
   const folderPath = `${id}/`;
@@ -229,7 +292,7 @@ export const deleteImage = async (id: number) => {
   const { data: files, error: listError } = await supabase.storage
     .from("images")
     .list(folderPath, { limit: 1000 });
-  console.log(folderPath)
+  console.log(folderPath);
 
   if (listError) {
     console.error("画像リスト取得中にエラー", listError);
@@ -242,7 +305,7 @@ export const deleteImage = async (id: number) => {
   }
 
   // 削除対象のファイルパスを作成
-  const filePaths = files.map(file => `${folderPath}${file.name}`);
+  const filePaths = files.map((file) => `${folderPath}${file.name}`);
 
   // ファイルの削除
   const { error: deleteError } = await supabase.storage
@@ -374,5 +437,5 @@ export const deleteRecipeDatas = async (recipe_id: number) => {
   await supabase.from("ingredients").delete().eq("recipe_id", recipe_id);
   await deleteFavorites(recipe_id);
   await deleteRecipe(recipe_id);
-  await deleteImage(recipe_id)
+  await deleteImage(recipe_id);
 };
