@@ -2,7 +2,8 @@
 import { inputDescript } from "@/app/types";
 import { RecipeSchemaType } from "@/app/validations/schema";
 import Image from "next/image";
-import { FieldErrors, UseFormRegister } from "react-hook-form";
+import { useEffect } from "react";
+import { FieldErrors, UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { BiCameraOff, BiPlus } from "react-icons/bi";
 
 interface DescriptInputItem {
@@ -10,14 +11,25 @@ interface DescriptInputItem {
   register: UseFormRegister<RecipeSchemaType>;
   inputItems: inputDescript[];
   setInputItems: React.Dispatch<React.SetStateAction<inputDescript[]>>;
+  setValue: UseFormSetValue<RecipeSchemaType>;
 }
 const DescriptInputItem = ({
   errors,
   register,
   inputItems,
   setInputItems,
+  setValue,
 }: DescriptInputItem) => {
   const maxInputs = 6;
+
+  useEffect(() => {
+    inputItems.map((input, index) => {
+      setValue(
+        `descript.${index}.text`,
+        input.text != undefined ? input.text : ""
+      );
+    });
+  });
 
   const addInput = () => {
     if (inputItems.length < maxInputs) {

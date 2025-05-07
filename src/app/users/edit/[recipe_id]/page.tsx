@@ -40,22 +40,35 @@ const Edit = ({ params }: { params: { recipe_id: number } }) => {
     { image: undefined, text: "" },
     { image: undefined, text: "" },
   ]);
+  const { register, handleSubmit, setValue, errors } = useRecipeFormTop();
 
-  useEffect(()=> {
-    const init= async() => {
+  useEffect(() => {
+    const init = async () => {
       const recipe = await getRecipesbyId(params.recipe_id);
       const ingredients = await getByIngredientId(params.recipe_id);
       const descripts = await getByDescriptId(params.recipe_id);
 
-      setSelectedImage(recipe[0].image_url != undefined ? recipe[0].image_url : "");
-      const ingData:InputIngredient[] = [];
+      setSelectedImage(
+        recipe[0].image_url != undefined ? recipe[0].image_url : ""
+      );
+
+      const ingData: InputIngredient[] = [];
       ingredients.map((ing) => {
-        ingData.push({"name": ing.name, "amount": ing.amount});
-      })
+        ingData.push({ name: ing.name, amount: ing.amount });
+      });
       setInputIngredients(ingData);
-    }
-    init()
-  },[params.recipe_id])
+
+      const descData: inputDescript[] = [];
+      descripts.map((desc) => {
+        descData.push({
+          image: desc.image_url != undefined ? desc.image_url : "",
+          text: desc.text,
+        });
+      });
+      setInputDescripts(descData);
+    };
+    init();
+  }, [params.recipe_id]);
 
   const [showFooter, setshowFooter] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -94,7 +107,6 @@ const Edit = ({ params }: { params: { recipe_id: number } }) => {
     router.replace(`/${recipe_id}`);
     return true;
   };
-  const { register, handleSubmit, errors } = useRecipeFormTop();
 
   useEffect(() => {
     return () => {
@@ -244,6 +256,7 @@ const Edit = ({ params }: { params: { recipe_id: number } }) => {
                   register={register}
                   inputs={inputIngredients}
                   setInputs={setInputIngredients}
+                  setValue={setValue}
                 />
               </section>
 
@@ -256,6 +269,7 @@ const Edit = ({ params }: { params: { recipe_id: number } }) => {
                   register={register}
                   inputItems={inputDescripts}
                   setInputItems={setInputDescripts}
+                  setValue={setValue}
                 />
               </section>
               <section className="mx-4">

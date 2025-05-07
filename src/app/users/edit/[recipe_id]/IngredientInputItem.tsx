@@ -1,22 +1,31 @@
 "use client";
 import { InputIngredient } from "@/app/types";
 import { RecipeSchemaType } from "@/app/validations/schema";
-import { Dispatch, SetStateAction } from "react";
-import { FieldErrors, UseFormRegister } from "react-hook-form";
+import { Dispatch, SetStateAction, useEffect } from "react";
+import { FieldErrors, UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { BiPlus } from "react-icons/bi";
 interface IngredientInputItem {
   errors: FieldErrors<RecipeSchemaType>;
   register: UseFormRegister<RecipeSchemaType>;
   inputs: InputIngredient[];
   setInputs: Dispatch<SetStateAction<InputIngredient[]>>;
+  setValue: UseFormSetValue<RecipeSchemaType>
 }
 const IngredientInputItem = ({
   errors,
   register,
   inputs,
   setInputs,
+  setValue
 }: IngredientInputItem) => {
   const maxInputs = 5;
+
+  useEffect(()=>{
+    inputs.map((input, index)=> {
+      setValue(`ingredient.${index}.name`,input.name)
+      setValue(`ingredient.${index}.amount`,input.amount)
+    })
+  })
 
   const addInput = () => {
     if (inputs.length < maxInputs) {
@@ -37,7 +46,6 @@ const IngredientInputItem = ({
           <div className="w-full border-b border-gray-400 pl-3 bg-[#FEF9EC]">
             <input
               {...register(`ingredient.${index}.name`)}
-              value={input != undefined ? input.name : ""}
               type="text"
               name={`ingredient.${index}.name`}
               id={`ingredient.${index}.name`}
@@ -59,7 +67,6 @@ const IngredientInputItem = ({
           <div className="w-1/2 border-b border-gray-400 bg-[#FEF9EC]">
             <input
               {...register(`ingredient.${index}.amount`)}
-              value={input != undefined ? input.amount : ""}
               type="text"
               name={`ingredient.${index}.amount`}
               id={`ingredient.${index}.amount`}
