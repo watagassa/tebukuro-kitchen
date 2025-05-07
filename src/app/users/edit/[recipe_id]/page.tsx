@@ -11,7 +11,10 @@ import { BiCamera, BiCameraOff, BiPlus } from "react-icons/bi";
 import DescriptInputItem from "./DescriptInputItem";
 import IngredientInputItem from "./IngredientInputItem";
 import Footer from "@/app/conponents/Footer";
-import { Ingredient, inputDescript, InputIngredient } from "../../../types";
+import {
+  inputDescript,
+  InputIngredient,
+} from "../../../types";
 import { getFileExtension } from "../../../utils/fileUtils";
 import { updateRecipeImage } from "../../../utils/supabaseFncUpdate";
 import {
@@ -47,6 +50,20 @@ const Edit = ({ params }: { params: { recipe_id: number } }) => {
       const recipe = await getRecipesbyId(params.recipe_id);
       const ingredients = await getByIngredientId(params.recipe_id);
       const descripts = await getByDescriptId(params.recipe_id);
+
+      setValue("recipe.recipe_name", recipe[0].name);
+      setValue(
+        "recipe.time",
+        recipe[0].time != undefined ? recipe[0].time : ""
+      );
+      setValue(
+        "recipe.how_many",
+        recipe[0].howmany != undefined ? recipe[0].howmany : ""
+      );
+      setValue(
+        "recipe.recipe_comment",
+        recipe[0].comment != undefined ? recipe[0].comment : ""
+      );
 
       setSelectedImage(
         recipe[0].image_url != undefined ? recipe[0].image_url : ""
