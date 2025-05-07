@@ -58,7 +58,8 @@ const Edit = ({ params }: { params: { recipe_id: number } }) => {
       );
       setValue(
         "recipe.how_many",
-        recipe[0].howmany != undefined ? recipe[0].howmany : ""
+        // FIXME: 強制的にRecipeにキャストしているためキーが合わない（型チェックでエラー出てるけど正常な動作する）
+        recipe[0].how_many != undefined ? recipe[0].how_many : ""
       );
       setValue(
         "recipe.recipe_comment",
@@ -85,7 +86,7 @@ const Edit = ({ params }: { params: { recipe_id: number } }) => {
       setInputDescripts(descData);
     };
     init();
-  }, [params.recipe_id]);
+  }, [params.recipe_id, setValue]);
 
   const [showFooter, setshowFooter] = useState(true);
   const [loading, setLoading] = useState(false);
