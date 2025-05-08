@@ -81,7 +81,7 @@ export const addRecipe = async (recipe: RecipeObjectSchemaType) => {
     .insert({
       name: recipe.recipe_name,
       image_url: recipe?.recipe_image,
-      how_many: recipe?.how_many,
+      howmany: recipe?.how_many,
       time: recipe?.time,
       comment: recipe?.recipe_comment,
       user_id: await getCurrentUserID(),
@@ -105,7 +105,7 @@ export const updateRecipe = async (
     .update({
       name: recipe.recipe_name,
       image_url: recipe?.recipe_image,
-      how_many: recipe?.how_many,
+      howmany: recipe?.how_many,
       time: recipe?.time,
       comment: recipe?.recipe_comment,
     })
@@ -159,6 +159,31 @@ export const addIngredient = async (
     console.error("supabaseエラー", error);
   }
 };
+// 材料作成
+export const upsertIngredient = async (
+  recipe_id: number,
+  index: number,
+  name: string,
+  amount: string
+) => {
+  const { error } = await supabase
+    .from("ingredients")
+    .upsert(
+      {
+        recipe_id: recipe_id,
+        index: index,
+        name: name,
+        amount: amount,
+      },
+      {
+        onConflict: "recipe_id,index",
+      }
+    )
+    .select(); // 挿入されたデータを取得するために select() を使用
+  if (error) {
+    console.error("supabaseエラー", error);
+  }
+};
 // 複数個の材料作成
 export const addSomeIngredient = async (
   recipe_id: number,
@@ -172,9 +197,8 @@ export const updateSomeIngredient = async (
   recipe_id: number,
   inputIngredients: IngredientSchemaType
 ) => {
-  await supabase.from("ingredients").delete().eq("recipe_id", recipe_id);
   inputIngredients.forEach((e, index) => {
-    addIngredient(recipe_id, index, e.name, e.amount);
+    upsertIngredient(recipe_id, index, e.name, e.amount);
   });
 };
 export const deleteIngredient = async (id: number) => {
@@ -215,6 +239,25 @@ export const addDescript = async (
     text: text,
   });
 };
+// 材料更新
+export const upsertDescript = async (
+  recipe_id: number,
+  index: number,
+  image_url?: string,
+  text?: string
+) => {
+  await supabase.from("descripts").upsert(
+    {
+      recipe_id: recipe_id,
+      index: index,
+      image_url: image_url,
+      text: text,
+    },
+    {
+      onConflict: "recipe_id,index",
+    }
+  );
+};
 // 複数個の作り方を作成
 export const addSomeDescript = async (
   recipe_id: number,
@@ -239,19 +282,18 @@ export const updateSomeDescript = async (
   recipe_id: number,
   descripts: DescriptSchemaType
 ) => {
-  await supabase.from("descripts").delete().eq("recipe_id",recipe_id);
-  descripts.map(async (e, index) => {
+  for (const [index, e] of descripts.entries()) {
     if (e.image !== undefined) {
       const descriptExtension = getFileExtension(e.image);
       const descriptImagePath = `${recipe_id}/Descripts/${index}.${descriptExtension}`;
       await updateImage(e.image, descriptImagePath);
       const image_url = await getImageUrl(descriptImagePath);
       console.log("image_url", image_url);
-      await addDescript(recipe_id, index, image_url, e.text);
+      await upsertDescript(recipe_id, index, image_url, e.text);
     } else {
-      await addDescript(recipe_id, index, undefined, e.text);
+      await upsertDescript(recipe_id, index, undefined, e.text);
     }
-  });
+  }
 };
 export const deleteDescripts = async (id: number) => {
   await supabase.from("descripts").delete().eq("id", id);

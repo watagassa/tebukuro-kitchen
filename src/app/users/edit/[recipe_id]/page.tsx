@@ -59,7 +59,7 @@ const Edit = ({ params }: { params: { recipe_id: number } }) => {
       setValue(
         "recipe.how_many",
         // FIXME: 強制的にRecipeにキャストしているためキーが合わない（型チェックでエラー出てるけど正常な動作する）
-        recipe[0].how_many != undefined ? recipe[0].how_many : ""
+        recipe[0].howmany != undefined ? recipe[0].howmany : ""
       );
       setValue(
         "recipe.recipe_comment",
