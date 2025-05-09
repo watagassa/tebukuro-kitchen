@@ -1,7 +1,3 @@
-// export interface Todo {
-//     id: number;
-//     title: string;
-//   }
 // レシピ
 export type Recipe = {
   id: number;
@@ -14,7 +10,7 @@ export type Recipe = {
 // 材料
 export type Ingredient = {
   id: number;
-  index?:number;
+  index?: number;
   recipe_id: number;
   name: string;
   amount: string;
@@ -22,7 +18,7 @@ export type Ingredient = {
 // 作り方説明
 export type Descript = {
   id: number;
-  index?:number;
+  index?: number;
   recipe_id: number;
   image_url?: string | null;
   text?: string;
@@ -40,7 +36,6 @@ export type DetailRecipe = {
 };
 
 // 入力フォーム用
-
 export type inputDescript = {
   image: string | undefined;
   text: string | undefined;
