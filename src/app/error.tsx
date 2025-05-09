@@ -1,6 +1,6 @@
 "use client";
-import React, { useEffect } from "react";
-// ここ大文字で
+import { useEffect } from "react";
+
 const Error = ({ error, reset }: { error: Error; reset: () => void }) => {
   useEffect(() => {
     console.error(error);
