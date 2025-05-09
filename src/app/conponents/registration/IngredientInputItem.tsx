@@ -1,9 +1,12 @@
 "use client";
-import { InputIngredient } from "@/app/types";
-import { RecipeSchemaType } from "@/app/validations/schema";
 import { Dispatch, SetStateAction } from "react";
+
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { BiPlus } from "react-icons/bi";
+
+import { InputIngredient } from "@/app/types";
+import { RecipeSchemaType } from "@/app/validations/schema";
+
 interface IngredientInputItem {
   errors: FieldErrors<RecipeSchemaType>;
   register: UseFormRegister<RecipeSchemaType>;
@@ -32,7 +35,7 @@ const IngredientInputItem = ({
 
   return (
     <div className="mt-4">
-      {inputs.map((input, index) => (
+      {inputs.map((_, index) => (
         <div key={index} className="flex gap-4 items-center ">
           <div className="w-full border-b border-gray-400 pl-3 bg-[#FEF9EC]">
             <input
@@ -40,9 +43,10 @@ const IngredientInputItem = ({
               type="text"
               name={`ingredient.${index}.name`}
               id={`ingredient.${index}.name`}
-              style={{ outline: "none" }}
               placeholder="材料  /例  たまご"
-              className="w-full  border-gray-400 pl-3 bg-[#FEF9EC] h-[40px]"
+              autoCapitalize="off"
+              autoCorrect="off"
+              className="w-full  border-gray-400 pl-3 bg-[#FEF9EC] h-10 outline-none"
             />
 
             {/* zodのエラー文 */}
@@ -61,9 +65,10 @@ const IngredientInputItem = ({
               type="text"
               name={`ingredient.${index}.amount`}
               id={`ingredient.${index}.amount`}
-              style={{ outline: "none" }}
               placeholder="分量  /例  2個"
-              className="w-full border-gray-400 pl-3 bg-[#FEF9EC] h-[40px]"
+              autoCapitalize="off"
+              autoCorrect="off"
+              className="w-full border-gray-400 pl-3 bg-[#FEF9EC] h-10 outline-none"
             />
             {/* zodのエラー文 */}
             {errors?.ingredient !== undefined ? (
