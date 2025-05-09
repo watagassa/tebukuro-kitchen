@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
-import { Recipe } from "../types";
+import { Recipe } from "@/app/types";
 import { FiSearch } from "react-icons/fi";
 
 type propsType = {
@@ -46,7 +46,10 @@ const SearchRecipe: React.FC<propsType> = (props: propsType) => {
         }}
         onKeyDown={filerandsetter}
         placeholder="レシピを検索"
-        className="ps-2 pe-6 w-full text-lg border-spacing-4 bg-gray-200 border-gray-50 rounded-2xl focus:outline-none"
+        autoComplete="off"
+        autoCapitalize="off"
+        autoCorrect="off"
+        className="ps-2 pe-6 w-full text-lg border-spacing-4 bg-gray-200 border-gray-50 rounded-2xl outline-none"
       />
       <button className="mr-4 ml-3 right-10 text-black" onClick={resetRicipes}>
         ✕
