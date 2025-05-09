@@ -14,7 +14,7 @@ import { FiCameraOff } from "react-icons/fi";
 import { WiTime4 } from "react-icons/wi";
 import LoadingDataFetch from "@/app/conponents/LoadingDataFetch";
 import { useSwipeable } from "react-swipeable";
-import { deleteRecipeDatas,deleteImage } from "@/app/utils/supabaseFunctionsNew";
+import { deleteRecipeDatas } from "@/app/utils/supabaseFunctionsNew";
 import { useRouter } from "next/navigation";
 
 export default function RecipeId({
@@ -37,9 +37,8 @@ export default function RecipeId({
   });
 
   const deleter = async () =>  {
-    // await deleteRecipeDatas(params.recipe_id);
-    // router.replace('/')
-    await deleteImage(params.recipe_id);
+    await deleteRecipeDatas(params.recipe_id);
+    router.replace('/')
   }
 
   useEffect(() => {
