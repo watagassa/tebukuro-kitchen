@@ -122,7 +122,7 @@ const Edit = ({ params }: { params: { recipe_id: number } }) => {
 
     window.alert("レシピが保存できました！");
     setLoading(false);
-    router.replace(`/${params.recipe_id}`);
+    router.replace(`/users`);
     return true;
   };
 
