@@ -14,6 +14,8 @@ import { FiCameraOff } from "react-icons/fi";
 import { WiTime4 } from "react-icons/wi";
 import LoadingDataFetch from "@/app/conponents/LoadingDataFetch";
 import { useSwipeable } from "react-swipeable";
+import { deleteRecipeDatas } from "@/app/utils/supabaseFunctionsNew";
+import { useRouter } from "next/navigation";
 
 export default function RecipeId({
   params,
@@ -25,6 +27,7 @@ export default function RecipeId({
   const [list, setList] = useState<DetailRecipe>();
   const from = searchParams?.from || "/";
   const [showFooter, setshowFooter] = useState(true);
+  const router = useRouter();
 
   //スクロールを検知する
   const handlers = useSwipeable({
@@ -32,6 +35,11 @@ export default function RecipeId({
     onSwipedDown: () => setshowFooter(true),
     delta: 60,
   });
+
+  const deleter = async () =>  {
+    await deleteRecipeDatas(params.recipe_id);
+    router.replace('/')
+  }
 
   useEffect(() => {
     const getDetailRecipe = async () => {
@@ -83,6 +91,12 @@ export default function RecipeId({
                 {list.name}
               </p>
               <p className="text-sm pt-1">by 田中太郎さん</p>
+            </div>
+            <div
+              className="bg-black cursor-pointer"
+              onClick={deleter}
+            >
+              delete
             </div>
             <FavoriteButton
               recipe={{

@@ -5,6 +5,7 @@ export const useRecipeFormTop = () => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<RecipeSchemaType>({
     resolver: zodResolver(RecipeSchema),
@@ -23,6 +24,7 @@ export const useRecipeFormTop = () => {
   return {
     register,
     handleSubmit:handleSubmit,
+    setValue,
     // onSubmit: onSubmit,
     errors,
   };

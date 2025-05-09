@@ -8,33 +8,86 @@ import { useSwipeable } from "react-swipeable";
 import { FaPen } from "react-icons/fa";
 import { BiCamera, BiCameraOff, BiPlus } from "react-icons/bi";
 // import Link from "next/link";
-import DescriptInputItem from "@/app/conponents/registration/DescriptInputItem";
-import IngredientInputItem from "@/app/conponents/registration/IngredientInputItem";
+import DescriptInputItem from "./DescriptInputItem";
+import IngredientInputItem from "./IngredientInputItem";
 import Footer from "@/app/conponents/Footer";
-import { inputDescript, InputIngredient } from "../../types";
-import { getFileExtension } from "../../utils/fileUtils";
-import { updateRecipeImage } from "../../utils/supabaseFncUpdate";
 import {
-  addRecipe,
-  addSomeDescript,
-  addSomeIngredient,
+  inputDescript,
+  InputIngredient,
+} from "../../../types";
+import { getFileExtension } from "../../../utils/fileUtils";
+import { updateRecipeImage } from "../../../utils/supabaseFncUpdate";
+import {
   getImageUrl,
-  uploadImage,
-} from "../../utils/supabaseFunctionsNew";
-import { RecipeSchemaType } from "../../validations/schema";
-import { useRecipeFormTop } from "../../validations/useFormUtils";
+  updateImage,
+  updateRecipe,
+  updateSomeDescript,
+  updateSomeIngredient,
+} from "../../../utils/supabaseFunctionsNew";
+import { RecipeSchemaType } from "../../../validations/schema";
+import { useRecipeFormTop } from "../../../validations/useFormUtils";
 import { useRouter } from "next/navigation";
+import {
+  getRecipesbyId,
+  getByIngredientId,
+  getByDescriptId,
+} from "../../../utils/supabaseFunctionsNew";
 
-const Edit = () => {
+const Edit = ({ params }: { params: { recipe_id: number } }) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [inputDescripts, setInputDescripts] = useState<inputDescript[]>([
-    { image: undefined, text: "" },
-    { image: undefined, text: "" },
-  ]);
   const [inputIngredients, setInputIngredients] = useState<InputIngredient[]>([
     { name: "", amount: "" },
     { name: "", amount: "" },
   ]);
+  const [inputDescripts, setInputDescripts] = useState<inputDescript[]>([
+    { image: undefined, text: "" },
+    { image: undefined, text: "" },
+  ]);
+  const { register, handleSubmit, setValue, errors } = useRecipeFormTop();
+
+  useEffect(() => {
+    const init = async () => {
+      const recipe = await getRecipesbyId(params.recipe_id);
+      const ingredients = await getByIngredientId(params.recipe_id);
+      const descripts = await getByDescriptId(params.recipe_id);
+
+      setValue("recipe.recipe_name", recipe[0].name);
+      setValue(
+        "recipe.time",
+        recipe[0].time != undefined ? recipe[0].time : ""
+      );
+      setValue(
+        "recipe.how_many",
+        // FIXME: 強制的にRecipeにキャストしているためキーが合わない（型チェックでエラー出てるけど正常な動作する）
+        recipe[0].howmany != undefined ? recipe[0].howmany : ""
+      );
+      setValue(
+        "recipe.recipe_comment",
+        recipe[0].comment != undefined ? recipe[0].comment : ""
+      );
+
+      setSelectedImage(
+        recipe[0].image_url != undefined ? recipe[0].image_url : ""
+      );
+
+      const ingData: InputIngredient[] = [];
+      ingredients.map((ing) => {
+        ingData.push({ name: ing.name, amount: ing.amount });
+      });
+      setInputIngredients(ingData);
+
+      const descData: inputDescript[] = [];
+      descripts.map((desc) => {
+        descData.push({
+          image: desc.image_url != undefined ? desc.image_url : "",
+          text: desc.text,
+        });
+      });
+      setInputDescripts(descData);
+    };
+    init();
+  }, [params.recipe_id, setValue]);
+  
   const [showFooter, setshowFooter] = useState(true);
   const [loading, setLoading] = useState(false);
   const handlers = useSwipeable({
@@ -54,25 +107,24 @@ const Edit = () => {
 
   const onSubmit: SubmitHandler<RecipeSchemaType> = async (data) => {
     setLoading(true);
-    const recipe_id = await addRecipe(data.recipe);
-    if (recipe_id !== undefined) {
+    await updateRecipe(params.recipe_id, data.recipe);
+    if (params.recipe_id !== undefined) {
       if (data.recipe.recipe_image !== undefined) {
         const extension = getFileExtension(data.recipe.recipe_image);
-        const imagePath = `${recipe_id}/recipe.${extension}`;
-        await uploadImage(data.recipe.recipe_image, imagePath);
+        const imagePath = `${params.recipe_id}/recipe.${extension}`;
+        await updateImage(data.recipe.recipe_image, imagePath);
         const recipeImageUrl = await getImageUrl(imagePath);
-        await updateRecipeImage(recipe_id, recipeImageUrl);
+        await updateRecipeImage(params.recipe_id, recipeImageUrl);
       }
-      await addSomeDescript(recipe_id, data.descript);
-      await addSomeIngredient(recipe_id, data.ingredient);
+      await updateSomeDescript(params.recipe_id, data.descript);
+      await updateSomeIngredient(params.recipe_id, data.ingredient);
     }
 
     window.alert("レシピが保存できました！");
     setLoading(false);
-    router.replace(`/${recipe_id}`);
+    router.replace(`/users`);
     return true;
   };
-  const { register, handleSubmit, errors } = useRecipeFormTop();
 
   useEffect(() => {
     return () => {
@@ -222,6 +274,7 @@ const Edit = () => {
                   register={register}
                   inputs={inputIngredients}
                   setInputs={setInputIngredients}
+                  setValue={setValue}
                 />
               </section>
 
@@ -234,6 +287,7 @@ const Edit = () => {
                   register={register}
                   inputItems={inputDescripts}
                   setInputItems={setInputDescripts}
+                  setValue={setValue}
                 />
               </section>
               <section className="mx-4">
@@ -267,7 +321,7 @@ const Edit = () => {
                 showFooter ? "translate-y-0" : "translate-y-full"
               }`}
             >
-              <Footer pathName="/registration" />
+              <Footer pathName="/users" />
             </div>
           </div>
         </form>
