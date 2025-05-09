@@ -1,23 +1,20 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
+import { FiHeart } from "react-icons/fi";
+import { useSwipeable } from "react-swipeable";
+
 import ArticleCard from "@/app/conponents/ArticleCard";
 import Footer from "@/app/conponents/Footer";
 import Header from "@/app/conponents/Header";
+import SearchRecipeFav from "@/app/conponents/SearchRecipeFav";
 import { Recipe } from "@/app/types";
 import { getFavoriteRecipes } from "@/app/utils/localstorageFunction";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { FiHeart } from "react-icons/fi";
-import { useSwipeable } from "react-swipeable";
-import LoadingDataFetch from "@/app/conponents/LoadingDataFetch";
-import SearchRecipeFav from "../conponents/SearchRecipeFav";
 
 const Favorites = () => {
-  const pathName = usePathname();
-
   const [listBase, setlistBase] = useState<Recipe[]>([]);
   const [list, setList] = useState<Recipe[]>([]);
-  const [isloading, setIsLoading] = useState(true);
   const [showHeadFooter, setshowshowHeadFooter] = useState(true);
 
   //スクロールを検知する
@@ -29,11 +26,8 @@ const Favorites = () => {
 
   useEffect(() => {
     const favoriteRecipes: Recipe[] = getFavoriteRecipes();
-    if (favoriteRecipes.length > 0) {
-      setList(favoriteRecipes);
-      setlistBase(favoriteRecipes);
-    }
-    setIsLoading(false);
+    setList(favoriteRecipes);
+    setlistBase(favoriteRecipes);
   }, []);
 
   const setshowlist = (newrecipeslist: Recipe[]) => {
@@ -51,12 +45,10 @@ const Favorites = () => {
         }`}
       >
         <SearchRecipeFav recipes={listBase} setlist={setshowlist} />
-        <Header pathName={pathName} />
+        <Header pathName="/favorites" />
       </div>
 
-      {isloading ? (
-        <LoadingDataFetch />
-      ) : list.length === 0 ? (
+      {list.length === 0 ? (
         <section className="bg-[#FFFBF4] flex-grow flex flex-col justify-center items-center gap-4 text-black">
           <FiHeart size={55} />
           <p className="font-black text-2xl">
@@ -78,7 +70,7 @@ const Favorites = () => {
           showHeadFooter ? "translate-y-0" : "translate-y-full"
         }`}
       >
-        <Footer pathName={pathName} />
+        <Footer pathName="/favorites" />
       </div>
     </div>
   );
