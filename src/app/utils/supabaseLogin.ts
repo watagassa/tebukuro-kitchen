@@ -51,11 +51,13 @@ export const addProfile = async () => {
 export const signInWithGoogle = async () => {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
+    options: {
+      redirectTo: `${location.origin}/auth/callback`,
+    },
   });
   if (error) {
     console.error("Error logging in:", error);
   } else {
-    addProfile();
     console.log("User logged in:", data);
   }
 };
