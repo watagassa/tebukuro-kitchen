@@ -6,7 +6,7 @@ type propsType = {
     setSearchKeyWord: (kw: string) => void
 }
 
-const Headertst = ({ setSearchKeyWord }: propsType) => {
+const Header = ({ setSearchKeyWord }: propsType) => {
     const target = useScrollTrigger()
 
     return (
@@ -19,4 +19,4 @@ const Headertst = ({ setSearchKeyWord }: propsType) => {
     )
 }
 
-export default Headertst
+export default Header

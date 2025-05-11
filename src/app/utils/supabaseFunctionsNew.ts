@@ -9,11 +9,11 @@ import {
   RecipeObjectSchemaType,
 } from "../validations/schema";
 import { Dispatch, SetStateAction } from "react";
+
 // 全レシピ取得
 export const getAllRecipes = async () => {
   const recipes = await supabase.from("recipes").select("*");
   if (recipes.error) {
-    console.error("supabaseエラー", recipes.error);
   }
   // 強制的にRecipe[]として認識させる
   return recipes.data as Recipe[];
@@ -298,7 +298,7 @@ export const isFavorited = async (recipe_id: number) => {
     .select("recipe_id")
     .eq("recipe_id", recipe_id)
     .limit(1);
-  if(res.error) {
+  if (res.error) {
     console.error("favorites登録判定中にエラー", res.error);
   }
   return res.data !== null && res.data.length > 0;
@@ -307,3 +307,43 @@ export const isFavorited = async (recipe_id: number) => {
 export const deleteFavorites = async (recipe_id: number) => {
   await supabase.from("favorites").delete().eq("recipe_id", recipe_id);
 };
+
+export const PAGE_SIZE_SWR = 10;
+//無限スクロール用のfetcher関数
+//addRecipeCords.tsxのfetcher関数に渡す
+export const Homefetcher_SWR = async (key: string): Promise<Recipe[]> => {
+  // console.log(`fetcher key: ${key}`);
+
+  //keyは`${kw}-${materialKey}-${pageIndex}`の形式
+  //kwは検索キーワード
+  //materialKeyは表示管理用の一意のキー:指定することで、複数のキーでdataを保存可能．fetther関数で使うことはない
+  //pageIndexはページ番号：supabaseのrange関数で使う
+  const [kw, materialKey, pageIndexStr] = key.split('-');
+  const pageIndex = Number(pageIndexStr);
+
+  // console.log("fetcher kw", kw);
+  // console.log("fetcher kwType", typeof kw);
+  if (kw === "") {
+    const { data, error } = await supabase
+      .from('Recipes')
+      .select('*')
+      .range(pageIndex * PAGE_SIZE, (pageIndex + 1) * PAGE_SIZE - 1);
+
+    if (error) throw error;
+    return data ?? [];
+
+  } else {
+    const { data, error } = await supabase
+      .from('Recipes')
+      .select()
+      .ilike('name', `%${kw}%`)
+      .range(pageIndex * PAGE_SIZE, (pageIndex + 1) * PAGE_SIZE - 1);
+    //簡単な部分一致検索(参考:https://zenn.dev/417/scraps/b494b081c2c33b)
+    if (error) console.error(error)
+    return data ?? [] as Recipe[];
+  }
+}
+
+export const favoritesFetcher_SWR = async (key: string): Promise<Recipe[]> => {
+  throw new Error("Function not implemented.");
+}

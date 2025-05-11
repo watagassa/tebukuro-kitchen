@@ -52,7 +52,7 @@ const Registration = () => {
       reader.readAsDataURL(file);
     }
   };
-  
+
   const onSubmit: SubmitHandler<RecipeSchemaType> = async (data) => {
     setLoading(true);
     const recipe_id = await addRecipe(data.recipe);

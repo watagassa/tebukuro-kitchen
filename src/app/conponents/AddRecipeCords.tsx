@@ -15,6 +15,8 @@ type propsType = {
 const AddRecipeCords = ({ materialKey, fetcher, kw, pageSize }: propsType) => {
 
     const getKey = (pageIndex: number, previousPageData: Recipe[][] | null) => {
+        const key = `${kw}-${materialKey}-${pageIndex}`;
+        console.log("getKey:", key);
         if (previousPageData && previousPageData.length < pageSize) return null;
         return `${kw}-${materialKey}-${pageIndex}`;
     }
@@ -22,9 +24,11 @@ const AddRecipeCords = ({ materialKey, fetcher, kw, pageSize }: propsType) => {
         {
             revalidateIfStale: false, // キャッシュがあっても再検証しない
             revalidateOnFocus: false, // windowをフォーカスすると再検証しない
+            revalidateOnMount: false, // マウント時に再検証しない
             revalidateFirstPage: false, // 2ページ目以降を読み込むとき毎回1ページ目を再検証しない
         },
     );
+
     const isEmpty = data?.[0]?.length === 0
     const isReachingEnd = isEmpty || (data && data?.[data?.length - 1]?.length < pageSize)
 
@@ -44,6 +48,7 @@ const AddRecipeCords = ({ materialKey, fetcher, kw, pageSize }: propsType) => {
                         <ArticleCard recipe={recipe} />
                     </div>))}
             </div>
+
             {/* データ取得時は検知の要素を表示しない */}
             {!isValidating && <div ref={ref} aria-hidden='true' />}
             {/* データ取得時はローダーを表示する */}
