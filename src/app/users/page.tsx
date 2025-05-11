@@ -1,10 +1,10 @@
 import Footer from "@/app/conponents/Footer";
-import MyResipeItem from "./MyResipeItem";
+import MyRecipeList from "./MyRecipeList";
 import Image from "next/image";
 
 const UserId = () => {
   return (
-    <div className="bg-[#FFFBF4] min-h-screen flex flex-col">
+    <div className="bg-[#FFFBF4] min-h-screen flex flex-col text-black">
       <header className="bg-orange-400 sticky w-full flex items-center justify-center p-6 border-b border-gray-400 shadow-md">
         <p className="text-center text-xl font-semibold pl-10 pr-4 text-balance text-white">
           マイページ
@@ -30,14 +30,9 @@ const UserId = () => {
         </p>
       </section>
       <p className="font-semibold text-xl mt-8 mb-4 pl-2">マイレシピ一覧</p>
-      <section className="bg-white rounded-xl mx-2">
-        <MyResipeItem />
-        <p className="flex justify-center font-semibold p-8 text-gray-400">
-          保存されたレシピは以上です
-        </p>
-      </section>
+      <MyRecipeList />
       <div className="mt-auto">
-        <Footer pathName="/future_user_id" />
+        <Footer pathName="/users" />
       </div>
     </div>
   );
