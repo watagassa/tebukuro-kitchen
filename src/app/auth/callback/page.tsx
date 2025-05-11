@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/app/utils/supabase";
 import { addProfile } from "@/app/utils/supabaseLogin";
+import Loading from "@/app/loading";
 
 export default function AuthCallback() {
   const router = useRouter();
@@ -27,5 +28,5 @@ export default function AuthCallback() {
     processSession();
   }, []);
 
-  return <p>ログイン処理中...</p>;
+  return <Loading />;
 }

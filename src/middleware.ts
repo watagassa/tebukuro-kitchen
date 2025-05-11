@@ -7,7 +7,7 @@ export async function middleware(request: NextRequest) {
     // sb-＜何文字でもOK＞-auth-token か sb-*-auth-token.数字 のいずれかにマッチ
     /^sb-[^-]+-auth-token(?:\.\d+)?$/.test(c.name)
   );
-  const protectedPaths = ["/edit", "/users", "/registration"];
+  const protectedPaths = ["/edit", "/users", "/registration", "/favorites"];
   const isProtected = protectedPaths.some((p) => path.startsWith(p));
 
   console.log("Path:", path);
@@ -20,5 +20,10 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/edit/:path*", "/users/:path*", "/registration/:path*"],
+  matcher: [
+    "/edit/:path*",
+    "/users/:path*",
+    "/registration/:path*",
+    "/favorites/:path*",
+  ],
 };
