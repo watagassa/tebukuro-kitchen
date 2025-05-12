@@ -10,7 +10,7 @@ const Header = ({ setSearchKeyWord }: propsType) => {
     const target = useScrollTrigger()
 
     return (
-        <Slide in={!target} >
+        <Slide in={!target} appear={false}>
             <div className=" pt-2 px-3 w-full border-black border-b-2 bg-white">
                 <SearchRecipe setSearchKeyWord={setSearchKeyWord} />
                 <SwitchMode />
