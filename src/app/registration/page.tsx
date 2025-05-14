@@ -68,8 +68,7 @@ const Registration = () => {
       await addSomeIngredient(recipe_id, data.ingredient);
     }
 
-    window.alert("レシピが登録できました！");
-    setLoading(false);
+    // window.alert("レシピが登録できました！");
     router.replace(`/${recipe_id}`);
     return true;
   };
