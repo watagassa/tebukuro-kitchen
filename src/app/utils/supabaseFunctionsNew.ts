@@ -371,6 +371,7 @@ export const getImageUrl = async (filePath: string) => {
     return "";
   }
   const imageUrl = data.publicUrl;
+  // supabase側のキャッシュによる更新の遅延を防ぐため、タイムスタンプをURLに付加する
   const timeStamp = Date.now();
   return imageUrl + "?v=" + timeStamp;
 };
