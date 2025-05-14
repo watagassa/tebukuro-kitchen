@@ -1,3 +1,5 @@
+import { UUID } from "crypto";
+
 // レシピ
 export type Recipe = {
   id: number;
@@ -7,6 +9,7 @@ export type Recipe = {
   comment?: string;
   howmany?: string; //何人前
 };
+
 // 材料
 export type Ingredient = {
   id: number;
@@ -15,6 +18,7 @@ export type Ingredient = {
   name: string;
   amount: string;
 };
+
 // 作り方説明
 export type Descript = {
   id: number;
@@ -45,4 +49,10 @@ export type inputDescript = {
 export type InputIngredient = {
   name: string;
   amount: string;
+};
+
+export type profiles = {
+  user_id: UUID;
+  name: string;
+  avatar_url: string;
 };

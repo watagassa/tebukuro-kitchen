@@ -9,6 +9,7 @@ export default async function RecipeId({
   params: { recipe_id: number };
   searchParams: { from?: string };
 }) {
+
   const detailRecipe: DetailRecipe = await getDetailRecipebyId(
     params.recipe_id
   );
