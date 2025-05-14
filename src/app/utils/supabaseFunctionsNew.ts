@@ -371,7 +371,8 @@ export const getImageUrl = async (filePath: string) => {
     return "";
   }
   const imageUrl = data.publicUrl;
-  return imageUrl;
+  const timeStamp = Date.now();
+  return imageUrl + "?v=" + timeStamp;
 };
 // レシピのidより1つのレシピ詳細取得
 export const getDetailRecipebyId = async (id: number) => {
