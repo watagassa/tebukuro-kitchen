@@ -1,7 +1,6 @@
 import { PostgrestSingleResponse } from "@supabase/supabase-js";
 import { Descript, DetailRecipe, Ingredient, Recipe } from "../types";
 import { supabase } from "../utils/supabase";
-import { getFileExtension } from "./fileUtils";
 import { arrayShuffle } from "./supabaseFncUpdate";
 import {
   DescriptSchemaType,
@@ -9,6 +8,7 @@ import {
   RecipeObjectSchemaType,
 } from "../validations/schema";
 import { Dispatch, SetStateAction } from "react";
+import imageCompression from "browser-image-compression";
 // 全レシピ取得
 export const getAllRecipes = async () => {
   const recipes = await supabase.from("recipes").select("*");
@@ -265,9 +265,9 @@ export const addSomeDescript = async (
 ) => {
   descripts.map(async (e, index) => {
     if (e.image !== undefined) {
-      const descriptExtension = getFileExtension(e.image);
-      const descriptImagePath = `${recipe_id}/Descripts/${index}.${descriptExtension}`;
-      await uploadImage(e.image, descriptImagePath);
+      const descriptImagePath = `${recipe_id}/Descripts/${index}.jpg`;
+      const image = await compressImage(e.image);
+      await uploadImage(image, descriptImagePath);
       const image_url = await getImageUrl(descriptImagePath);
       console.log("image_url", image_url);
       // await addDescript(recipe_id,index, image_url, e.text);
@@ -284,9 +284,9 @@ export const updateSomeDescript = async (
 ) => {
   for (const [index, e] of descripts.entries()) {
     if (e.image !== undefined) {
-      const descriptExtension = getFileExtension(e.image);
-      const descriptImagePath = `${recipe_id}/Descripts/${index}.${descriptExtension}`;
-      await updateImage(e.image, descriptImagePath);
+      const descriptImagePath = `${recipe_id}/Descripts/${index}.jpg`;
+      const image = await compressImage(e.image);
+      await updateImage(image, descriptImagePath);
       const image_url = await getImageUrl(descriptImagePath);
       console.log("image_url", image_url);
       await upsertDescript(recipe_id, index, image_url, e.text);
@@ -326,18 +326,29 @@ export const updateImage = async (
     console.error("supabaseエラー", error);
   }
 };
+// 画像圧縮関数
+export const compressImage = async (file: File) => {
+  const compressedFile = await imageCompression(file,{
+    maxSizeMB: 0.2,
+    maxWidthOrHeight: 1920,
+    useWebWorker: true,
+    exifOrientation: 0.9, // 圧縮品質
+    fileType: 'image/jpeg',
+  })
+  return compressedFile;
+};
 // id指定で画像の削除
 export const deleteImage = async (id: number) => {
-  await deleteImageByPath(`${id}/`) // レシピの画像
-  await deleteImageByPath(`${id}/Descripts/`) // 説明の画像
+  await deleteImageByPath(`${id}/`); // レシピの画像
+  await deleteImageByPath(`${id}/Descripts/`); // 説明の画像
 };
 // path指定で画像の削除
-export const deleteImageByPath = async(folderPath:string)=> {
-   // フォルダ内のファイル一覧を取得
+export const deleteImageByPath = async (folderPath: string) => {
+  // フォルダ内のファイル一覧を取得
   const { data: files, error: listError } = await supabase.storage
     .from("images")
     .list(folderPath, { limit: 1000 });
-  console.log(files)
+  console.log(files);
   if (listError) {
     console.error("画像リスト取得中にエラー", listError);
     return;
@@ -361,7 +372,7 @@ export const deleteImageByPath = async(folderPath:string)=> {
   } else {
     console.log("画像を削除しました:", filePaths);
   }
-}
+};
 
 // 画像名より画像のurl取得
 export const getImageUrl = async (filePath: string) => {

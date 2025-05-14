@@ -15,9 +15,9 @@ import {
   inputDescript,
   InputIngredient,
 } from "../../../types";
-import { getFileExtension } from "../../../utils/fileUtils";
 import { updateRecipeImage } from "../../../utils/supabaseFncUpdate";
 import {
+  compressImage,
   getImageUrl,
   updateImage,
   updateRecipe,
@@ -110,9 +110,9 @@ const Edit = ({ params }: { params: { recipe_id: number } }) => {
     await updateRecipe(params.recipe_id, data.recipe);
     if (params.recipe_id !== undefined) {
       if (data.recipe.recipe_image !== undefined) {
-        const extension = getFileExtension(data.recipe.recipe_image);
-        const imagePath = `${params.recipe_id}/recipe.${extension}`;
-        await updateImage(data.recipe.recipe_image, imagePath);
+        const imagePath = `${params.recipe_id}/recipe.jpg`;
+        const image = await compressImage(data.recipe.recipe_image);
+        await updateImage(image, imagePath);
         const recipeImageUrl = await getImageUrl(imagePath);
         await updateRecipeImage(params.recipe_id, recipeImageUrl);
       }
