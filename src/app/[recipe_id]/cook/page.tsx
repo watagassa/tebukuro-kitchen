@@ -1,5 +1,16 @@
 "use client";
 
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+
+import { createPortal } from "react-dom";
+import { FaArrowLeft, FaArrowRight, FaDoorOpen } from "react-icons/fa";
+import { FiCameraOff } from "react-icons/fi";
+import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
+import { MdOutlineTimer } from "react-icons/md";
+import { PiNoteDuotone } from "react-icons/pi";
+
 import RecipeHeader from "@/app/conponents/RecipeHeader";
 import Speech from "@/app/conponents/Speech";
 import { Descript, Ingredient } from "@/app/types";
@@ -8,19 +19,10 @@ import {
   getByIngredientId,
   getRecipesbyId,
 } from "@/app/utils/supabaseFunctionsNew";
-import Image from "next/image";
-import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
-import { FaArrowLeft, FaArrowRight, FaDoorOpen } from "react-icons/fa";
-import { FiCameraOff } from "react-icons/fi";
-import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
-import { MdOutlineTimer } from "react-icons/md";
-import { PiNoteDuotone } from "react-icons/pi";
-import GuideModal from "./GuideModal";
-import IngModal from "./IngModal";
-import TimerModal from "./TimerModal";
-import YtModal from "./YtModal";
+import GuideModal from "@/app/[recipe_id]/cook/GuideModal";
+import IngModal from "@/app/[recipe_id]/cook/IngModal";
+import TimerModal from "@/app/[recipe_id]/cook/TimerModal";
+import YtModal from "@/app/[recipe_id]/cook/YtModal";
 
 //丸を描画する　length=丸の数　page=塗りつぶし判定用ページ数
 const Circle = ({ length, page }: { length: number; page: number }) => {
@@ -30,7 +32,7 @@ const Circle = ({ length, page }: { length: number; page: number }) => {
         <div
           key={index}
           className={`mx-2 w-2 h-2 border border-black rounded-full ${
-            page == index ? "bg-orange-400" : ""
+            page === index ? "bg-orange-400" : ""
           }`}
         ></div>
       ))}

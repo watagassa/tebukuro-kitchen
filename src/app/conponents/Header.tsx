@@ -1,36 +1,36 @@
-type headerProp={
-    pathName : string
-}
+import Link from "next/link";
+import clsx from "clsx";
 
-const Header = (prop:headerProp) => {
-    const {pathName} = prop
+type headerProp = {
+  pathName: string;
+};
+
+const Header = ({ pathName }: headerProp) => {
+  const tabs = [
+    { label: "レシピ", path: "/" },
+    { label: "お気に入り", path: "/favorites" },
+  ];
 
   return (
-    
-    <div className='bg-white w-full p-2'>
-        {/* <div className="mt-2 flex items-center bg-gray-200 rounded-2xl">
-            <FiSearch size={32} color="gray" className="p-1 ms-3 h-12"/>
-            <input className='ps-2 pe-6 w-full  text-xl border-spacing-4 bg-gray-200 border-gray-50 rounded-2xl focus:outline-none' 
-            type='text' 
-            placeholder= 'レシピをさがす' />
-        </div> */}
-        <div className='flex'>
-            <div className='w-1/2 px-4 flex justify-center text-black'>
-                <button className={`px-4 py-2 ${pathName === '/' ? 'border-b-4 border-orange-400' : 'border-b-4 border-white'}`}
-                onClick={() => location.href='/'}>
-                    レシピ
-                </button>
-            </div>
+    <div className="bg-white w-full pt-2 pb-1">
+      <div className="flex">
+        {tabs.map(({ label, path }) => {
+          const isActive: boolean = pathName === path;
+          const borderClass: string = clsx({
+            "border-b-4 border-orange-400": isActive,
+          });
 
-            <div className='w-1/2 px-4 flex justify-center text-black'>
-                <button className={`px-4 py-2 ${pathName === '/favorites' ? 'border-b-4 border-orange-500' : 'border-b-4 border-white'}`}
-                onClick={()=> location.href='/favorites'}>
-                    お気に入り
-                </button>
+          return (
+            <div key={path} className="w-1/2 flex justify-center text-black">
+              <Link href={path}>
+                <p className={`px-4 py-2 ${borderClass}`}>{label}</p>
+              </Link>
             </div>
-        </div>
+          );
+        })}
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

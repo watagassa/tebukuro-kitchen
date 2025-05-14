@@ -1,6 +1,8 @@
-import React, { useState } from "react";
-import { Recipe } from "../types";
+import { useState } from "react";
+
 import { FiSearch } from "react-icons/fi";
+
+import { Recipe } from "@/app/types";
 
 type propsType = {
   recipes: Recipe[];
@@ -32,6 +34,9 @@ const SearchRecipeFav: React.FC<propsType> = (props: propsType) => {
         }}
         onKeyDown={filerandsetter}
         placeholder="レシピを検索"
+        autoComplete="off"
+        autoCapitalize="off"
+        autoCorrect="off"
         className="ps-2 pe-6 w-full text-lg border-spacing-4 bg-gray-200 border-gray-50 rounded-2xl focus:outline-none"
       />
       <button

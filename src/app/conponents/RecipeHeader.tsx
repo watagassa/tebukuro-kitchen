@@ -9,8 +9,13 @@ type RecipeHeaderProps = {
   iconFill: string;
 };
 
-const RecipeHeader = (props: RecipeHeaderProps) => {
-  const { bgColor, textColor, title, link, iconFill } = props;
+const RecipeHeader = ({
+  bgColor,
+  textColor,
+  title,
+  link,
+  iconFill,
+}: RecipeHeaderProps) => {
   return (
     <header
       className={`sticky top-0 w-full flex items-center p-5 border-b border-gray-400 shadow-md ${bgColor} z-40`}

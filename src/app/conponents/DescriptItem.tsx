@@ -1,12 +1,17 @@
-import { Descript } from "@/app/types";
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
+
 import { FiCameraOff } from "react-icons/fi";
 
-const DescriptItem = (props: Descript) => {
-  const { id, text, image_url } = props;
+import { Descript } from "@/app/types";
+
+const DescriptItem = ({ id, text, image_url }: Descript) => {
+  const [imageError, setImageError] = useState(false);
 
   return (
-    <div className="bg-white flex items-start justify-between p-1">
+    <li className="bg-white flex items-start justify-between p-1">
       <div className="flex-shrink-0">
         <p className="bg-orange-400 text-white size-4 flex items-center justify-center font-semibold text-xs rounded-sm">
           {id}
@@ -15,16 +20,15 @@ const DescriptItem = (props: Descript) => {
       <p className="pt-2 px-4 font-semibold text-xs break-words max-w-[calc(100%-90px)]">
         {text}
       </p>
-      {/* nullのみを判定しているので、url先の画像が見つからない場合に対処できない */}
 
-      {image_url && text ? (
+      {image_url && !imageError ? (
         <div className="relative size-[72px]">
           <Image
             src={image_url}
-            alt={text}
-            fill={true}
+            alt={text || "作り方画像"}
+            fill
             className="my-auto object-cover"
-            onError={() => console.error("Image failed to load")}
+            onError={() => setImageError(true)}
           />
         </div>
       ) : (
@@ -32,7 +36,7 @@ const DescriptItem = (props: Descript) => {
           <FiCameraOff size={24} stroke="#737373" />
         </div>
       )}
-    </div>
+    </li>
   );
 };
 

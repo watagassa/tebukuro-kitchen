@@ -1,8 +1,3 @@
-// export interface Todo {
-//     id: number;
-//     title: string;
-//   }
-
 import { UUID } from "crypto";
 
 // レシピ
@@ -14,6 +9,7 @@ export type Recipe = {
   comment?: string;
   howmany?: string; //何人前
 };
+
 // 材料
 export type Ingredient = {
   id: number;
@@ -22,6 +18,7 @@ export type Ingredient = {
   name: string;
   amount: string;
 };
+
 // 作り方説明
 export type Descript = {
   id: number;
@@ -43,7 +40,6 @@ export type DetailRecipe = {
 };
 
 // 入力フォーム用
-
 export type inputDescript = {
   image: string | undefined;
   text: string | undefined;

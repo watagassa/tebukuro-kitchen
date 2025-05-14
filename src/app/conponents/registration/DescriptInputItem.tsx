@@ -1,9 +1,11 @@
 "use client";
-import { inputDescript } from "@/app/types";
-import { RecipeSchemaType } from "@/app/validations/schema";
 import Image from "next/image";
+
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { BiCameraOff, BiPlus } from "react-icons/bi";
+
+import { inputDescript } from "@/app/types";
+import { RecipeSchemaType } from "@/app/validations/schema";
 
 interface DescriptInputItem {
   errors: FieldErrors<RecipeSchemaType>;
@@ -85,9 +87,10 @@ const DescriptInputItem = ({
               </p>
               <textarea
                 {...register(`descript.${index}.text`)}
-                className="h-16 w-full pt-1 text-[10px] resize-none"
+                className="h-16 w-full pt-1 text-[10px] resize-none outline-none"
                 placeholder="フライパンに油をひき、卵を割る。白身が白くなったらお米を入れる。"
-                style={{ outline: "none" }}
+                autoCapitalize="off"
+                autoCorrect="off"
                 // onChange={(e) => handleInputChange(index, e.target.value)} // 入力変更ハンドラー
               />
             </div>

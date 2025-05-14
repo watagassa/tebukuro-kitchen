@@ -1,19 +1,18 @@
 "use client";
 
-import ArticleCard from "@/app/conponents/ArticleCard";
-import Footer from "@/app/conponents/Footer";
+import { useEffect, useRef, useState } from "react";
+
+import { useSwipeable } from "react-swipeable";
+
+import SearchRecipe from "@/app/conponents/SearchRecipe";
 import Header from "@/app/conponents/Header";
+import Footer from "@/app/conponents/Footer";
+import ArticleCard from "@/app/conponents/ArticleCard";
+import LoadingDataFetch from "@/app/conponents/LoadingDataFetch";
 import { Recipe } from "@/app/types";
 import { getPageRecipes } from "@/app/utils/supabaseFunctionsNew";
-import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { useSwipeable } from "react-swipeable";
-import SearchRecipe from "@/app/conponents/SearchRecipe";
-
-import LoadingDataFetch from "@/app/conponents/LoadingDataFetch";
 
 export default function Home() {
-  const pathName = usePathname();
   const [RecipesList, setRecipesList] = useState<Recipe[]>([]); //フィルターされてないレシピ
   const [filRecipes, setFilRecipes] = useState<Recipe[]>([]); //検索時のフィルターされたレシピ
   const [filteringNow, setFilteringNow] = useState(false);
@@ -94,7 +93,6 @@ export default function Home() {
       observer.observe(loader.current);
     }
     return () => {
-      console.log("unobserve");
       if (loader.current) observer.unobserve(loader.current);
     };
   }, []);
@@ -109,7 +107,7 @@ export default function Home() {
       {...handlers}
       className="min-h-screen flex flex-col contain-paint bg-[#FFFBF4]"
     >
-      <div
+      <header
         className={`bg-white sticky top-0 px-2 w-full z-20 border-b-2 border-black transition-transform duration-200 ${
           showHeadFooter ? "translate-y-0" : "-translate-y-full"
         }`}
@@ -120,8 +118,8 @@ export default function Home() {
           setFilRecipes={setFilRecipes}
           setFilteringNow={setFilteringNow}
         />
-        <Header pathName={pathName} />
-      </div>
+        <Header pathName="/" />
+      </header>
       {/* 検索中なら filRecipesを、そうでないならRecipesListを表示*/}
       {isloading ? (
         <LoadingDataFetch />
@@ -145,7 +143,7 @@ export default function Home() {
           showHeadFooter ? "translate-y-0" : "translate-y-full"
         }`}
       >
-        <Footer pathName={pathName} />
+        <Footer pathName="/" />
       </div>
     </div>
   );
