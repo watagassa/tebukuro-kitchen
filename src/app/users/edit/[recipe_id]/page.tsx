@@ -119,8 +119,6 @@ const Edit = ({ params }: { params: { recipe_id: number } }) => {
       await updateSomeIngredient(params.recipe_id, data.ingredient);
     }
 
-    window.alert("レシピが保存できました！");
-    setLoading(false);
     router.replace(`/users`);
     return true;
   };
