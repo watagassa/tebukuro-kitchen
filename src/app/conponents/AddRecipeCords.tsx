@@ -15,10 +15,10 @@ type propsType = {
 const AddRecipeCords = ({ materialKey, fetcher, kw, pageSize }: propsType) => {
 
     const getKey = (pageIndex: number, previousPageData: Recipe[][] | null) => {
-        const key = `${kw}-${materialKey}-${pageIndex}`;
+        const key = `${materialKey}-${kw}-${pageIndex}`;
         console.log("getKey:", key);
         if (previousPageData && previousPageData.length < pageSize) return null;
-        return `${kw}-${materialKey}-${pageIndex}`;
+        return `${materialKey}-${kw}-${pageIndex}`;
     }
     const { data, error, isValidating, size, setSize } = useSWRInfinite<Recipe[]>(getKey, fetcher,
         {

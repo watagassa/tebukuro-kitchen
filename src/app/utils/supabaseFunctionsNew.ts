@@ -318,7 +318,7 @@ export const Homefetcher_SWR = async (key: string): Promise<Recipe[]> => {
   //kwは検索キーワード
   //materialKeyは表示管理用の一意のキー:指定することで、複数のキーでdataを保存可能．fetther関数で使うことはない
   //pageIndexはページ番号：supabaseのrange関数で使う
-  const [kw, materialKey, pageIndexStr] = key.split('-');
+  const [materialKey, kw, pageIndexStr] = key.split('-');
   const pageIndex = Number(pageIndexStr);
 
   // console.log("fetcher kw", kw);
