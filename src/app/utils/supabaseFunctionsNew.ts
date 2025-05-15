@@ -328,13 +328,13 @@ export const updateImage = async (
 };
 // 画像圧縮関数
 export const compressImage = async (file: File) => {
-  const compressedFile = await imageCompression(file,{
+  const compressedFile = await imageCompression(file, {
     maxSizeMB: 0.2,
     maxWidthOrHeight: 1920,
     useWebWorker: true,
     exifOrientation: 0.9, // 圧縮品質
-    fileType: 'image/jpeg',
-  })
+    fileType: "image/jpeg",
+  });
   return compressedFile;
 };
 // id指定で画像の削除
@@ -461,15 +461,23 @@ export const addFavorites = async (recipe_id: number) => {
   }
 };
 // favorites取得関数
-export const getFavorites = async () => {
-  const res = await supabase
+export const getFavoriteRecipes = async () => {
+  const res = (await supabase
     .from("favorites")
-    .select("*")
-    .eq("user_id", await getCurrentUserID());
+    .select("recipes(*)")
+    .eq("user_id", await getCurrentUserID())) as PostgrestSingleResponse<
+    { recipes: Recipe }[]
+  >;
   if (res.error) {
     console.error("favorites取得中にエラー", res.error);
   }
-  return res.data;
+  console.log(res.data);
+  const favoriteRecipes: Recipe[] = [];
+  res.data?.forEach((favo) => {
+    console.log(favo.recipes);
+    favoriteRecipes.push(favo.recipes);
+  });
+  return favoriteRecipes;
 };
 // favorites登録判定関数
 export const isFavorited = async (recipe_id: number) => {

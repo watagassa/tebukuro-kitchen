@@ -4,7 +4,7 @@ import ArticleCard from "@/app/conponents/ArticleCard";
 import Footer from "@/app/conponents/Footer";
 import Header from "@/app/conponents/Header";
 import { Recipe } from "@/app/types";
-import { getFavoriteRecipes } from "@/app/utils/localstorageFunction";
+import { getFavoriteRecipes } from "../utils/supabaseFunctionsNew";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FiHeart } from "react-icons/fi";
@@ -28,12 +28,15 @@ const Favorites = () => {
   });
 
   useEffect(() => {
-    const favoriteRecipes: Recipe[] = getFavoriteRecipes();
-    if (favoriteRecipes.length > 0) {
-      setList(favoriteRecipes);
-      setlistBase(favoriteRecipes);
+    const setRecipes = async() => {
+      const favoriteRecipes: Recipe[] = await getFavoriteRecipes();
+      if (favoriteRecipes.length > 0) {
+        setList(favoriteRecipes);
+        setlistBase(favoriteRecipes);
+      }
+      setIsLoading(false);
     }
-    setIsLoading(false);
+    setRecipes();
   }, []);
 
   const setshowlist = (newrecipeslist: Recipe[]) => {
