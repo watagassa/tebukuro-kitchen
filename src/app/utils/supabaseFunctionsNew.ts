@@ -1,7 +1,6 @@
 import { PostgrestSingleResponse } from "@supabase/supabase-js";
 import { Descript, DetailRecipe, Ingredient, Recipe } from "../types";
 import { supabase } from "../utils/supabase";
-import { getFileExtension } from "./fileUtils";
 import { arrayShuffle } from "./supabaseFncUpdate";
 import {
   DescriptSchemaType,
@@ -9,11 +8,11 @@ import {
   RecipeObjectSchemaType,
 } from "../validations/schema";
 import { Dispatch, SetStateAction } from "react";
+import imageCompression from "browser-image-compression";
 // 全レシピ取得
 export const getAllRecipes = async () => {
   const recipes = await supabase.from("recipes").select("*");
   if (recipes.error) {
-    console.error("supabaseエラー", recipes.error);
   }
   // 強制的にRecipe[]として認識させる
   return recipes.data as Recipe[];
@@ -265,9 +264,9 @@ export const addSomeDescript = async (
 ) => {
   descripts.map(async (e, index) => {
     if (e.image !== undefined) {
-      const descriptExtension = getFileExtension(e.image);
-      const descriptImagePath = `${recipe_id}/Descripts/${index}.${descriptExtension}`;
-      await uploadImage(e.image, descriptImagePath);
+      const descriptImagePath = `${recipe_id}/Descripts/${index}.jpg`;
+      const image = await compressImage(e.image);
+      await uploadImage(image, descriptImagePath);
       const image_url = await getImageUrl(descriptImagePath);
       console.log("image_url", image_url);
       // await addDescript(recipe_id,index, image_url, e.text);
@@ -284,9 +283,9 @@ export const updateSomeDescript = async (
 ) => {
   for (const [index, e] of descripts.entries()) {
     if (e.image !== undefined) {
-      const descriptExtension = getFileExtension(e.image);
-      const descriptImagePath = `${recipe_id}/Descripts/${index}.${descriptExtension}`;
-      await updateImage(e.image, descriptImagePath);
+      const descriptImagePath = `${recipe_id}/Descripts/${index}.jpg`;
+      const image = await compressImage(e.image);
+      await updateImage(image, descriptImagePath);
       const image_url = await getImageUrl(descriptImagePath);
       console.log("image_url", image_url);
       await upsertDescript(recipe_id, index, image_url, e.text);
@@ -325,6 +324,17 @@ export const updateImage = async (
   if (error) {
     console.error("supabaseエラー", error);
   }
+};
+// 画像圧縮関数
+export const compressImage = async (file: File) => {
+  const compressedFile = await imageCompression(file, {
+    maxSizeMB: 0.2,
+    maxWidthOrHeight: 1920,
+    useWebWorker: true,
+    exifOrientation: 0.9, // 圧縮品質
+    fileType: "image/jpeg",
+  });
+  return compressedFile;
 };
 // id指定で画像の削除
 export const deleteImage = async (id: number) => {
@@ -371,7 +381,9 @@ export const getImageUrl = async (filePath: string) => {
     return "";
   }
   const imageUrl = data.publicUrl;
-  return imageUrl;
+  // supabase側のキャッシュによる更新の遅延を防ぐため、タイムスタンプをURLに付加する
+  const timeStamp = Date.now();
+  return imageUrl + "?v=" + timeStamp;
 };
 // レシピのidより1つのレシピ詳細取得
 export const getDetailRecipebyId = async (id: number) => {
@@ -448,15 +460,23 @@ export const addFavorites = async (recipe_id: number) => {
   }
 };
 // favorites取得関数
-export const getFavorites = async () => {
-  const res = await supabase
+export const getFavoriteRecipes = async () => {
+  const res = (await supabase
     .from("favorites")
-    .select("*")
-    .eq("user_id", await getCurrentUserID());
+    .select("recipes(*)")
+    .eq("user_id", await getCurrentUserID())) as PostgrestSingleResponse<
+    { recipes: Recipe }[]
+  >;
   if (res.error) {
     console.error("favorites取得中にエラー", res.error);
   }
-  return res.data;
+  console.log(res.data);
+  const favoriteRecipes: Recipe[] = [];
+  res.data?.forEach((favo) => {
+    console.log(favo.recipes);
+    favoriteRecipes.push(favo.recipes);
+  });
+  return favoriteRecipes;
 };
 // favorites登録判定関数
 export const isFavorited = async (recipe_id: number) => {
@@ -475,6 +495,44 @@ export const deleteFavorites = async (recipe_id: number) => {
   await supabase.from("favorites").delete().eq("recipe_id", recipe_id);
 };
 
+export const PAGE_SIZE_SWR = 10;
+//無限スクロール用のfetcher関数
+//addRecipeCords.tsxのfetcher関数に渡す
+export const Homefetcher_SWR = async (key: string): Promise<Recipe[]> => {
+  // console.log(`fetcher key: ${key}`);
+
+  //keyは`${kw}-${materialKey}-${pageIndex}`の形式
+  //kwは検索キーワード
+  //materialKeyは表示管理用の一意のキー:指定することで、複数のキーでdataを保存可能．fetther関数で使うことはない
+  //pageIndexはページ番号：supabaseのrange関数で使う
+  const [materialKey, kw, pageIndexStr] = key.split("-");
+  const pageIndex = Number(pageIndexStr);
+
+  // console.log("fetcher kw", kw);
+  // console.log("fetcher kwType", typeof kw);
+  if (kw === "") {
+    const { data, error } = await supabase
+      .from("recipes")
+      .select("*")
+      .range(pageIndex * PAGE_SIZE, (pageIndex + 1) * PAGE_SIZE - 1);
+
+    if (error) throw error;
+    return data ?? [];
+  } else {
+    const { data, error } = await supabase
+      .from("recipes")
+      .select()
+      .ilike("name", `%${kw}%`)
+      .range(pageIndex * PAGE_SIZE, (pageIndex + 1) * PAGE_SIZE - 1);
+    //簡単な部分一致検索(参考:https://zenn.dev/417/scraps/b494b081c2c33b)
+    if (error) console.error(error);
+    return data ?? ([] as Recipe[]);
+  }
+};
+
+export const favoritesFetcher_SWR = async (key: string): Promise<Recipe[]> => {
+  throw new Error("Function not implemented.");
+};
 // recipe, descripts, ingredientsをまとめて削除する関数
 export const deleteRecipeDatas = async (recipe_id: number) => {
   await supabase.from("descripts").delete().eq("recipe_id", recipe_id);

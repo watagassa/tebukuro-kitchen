@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 
 import { SubmitHandler } from "react-hook-form";
 import { useSwipeable } from "react-swipeable";
+
 import { FaPen } from "react-icons/fa";
 import { BiCamera, BiCameraOff, BiPlus } from "react-icons/bi";
 import { WiTime4 } from "react-icons/wi";
@@ -20,6 +21,7 @@ import {
   addRecipe,
   addSomeDescript,
   addSomeIngredient,
+  compressImage,
   getImageUrl,
   uploadImage,
 } from "@/app/utils/supabaseFunctionsNew";
@@ -58,9 +60,9 @@ const Registration = () => {
     const recipe_id = await addRecipe(data.recipe);
     if (recipe_id !== undefined) {
       if (data.recipe.recipe_image !== undefined) {
-        const extension = getFileExtension(data.recipe.recipe_image);
-        const imagePath = `${recipe_id}/recipe.${extension}`;
-        await uploadImage(data.recipe.recipe_image, imagePath);
+        const imagePath = `${recipe_id}/recipe.jpg`;
+        const image = await compressImage(data.recipe.recipe_image); // 画像を圧縮
+        await uploadImage(image, imagePath);
         const recipeImageUrl = await getImageUrl(imagePath);
         await updateRecipeImage(recipe_id, recipeImageUrl);
       }
@@ -68,8 +70,7 @@ const Registration = () => {
       await addSomeIngredient(recipe_id, data.ingredient);
     }
 
-    window.alert("レシピが登録できました！");
-    setLoading(false);
+    // window.alert("レシピが登録できました！");
     router.replace(`/${recipe_id}`);
     return true;
   };
