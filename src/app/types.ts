@@ -40,6 +40,9 @@ export type DetailRecipe = {
   howmany?: string; //何人前
   descripts: Descript[];
   ingredients: Ingredient[];
+  profiles: {
+    name: string;
+  };
 };
 
 // 入力フォーム用

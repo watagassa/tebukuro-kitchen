@@ -328,16 +328,16 @@ export const updateImage = async (
 };
 // id指定で画像の削除
 export const deleteImage = async (id: number) => {
-  await deleteImageByPath(`${id}/`) // レシピの画像
-  await deleteImageByPath(`${id}/Descripts/`) // 説明の画像
+  await deleteImageByPath(`${id}/`); // レシピの画像
+  await deleteImageByPath(`${id}/Descripts/`); // 説明の画像
 };
 // path指定で画像の削除
-export const deleteImageByPath = async(folderPath:string)=> {
-   // フォルダ内のファイル一覧を取得
+export const deleteImageByPath = async (folderPath: string) => {
+  // フォルダ内のファイル一覧を取得
   const { data: files, error: listError } = await supabase.storage
     .from("images")
     .list(folderPath, { limit: 1000 });
-  console.log(files)
+  console.log(files);
   if (listError) {
     console.error("画像リスト取得中にエラー", listError);
     return;
@@ -361,7 +361,7 @@ export const deleteImageByPath = async(folderPath:string)=> {
   } else {
     console.log("画像を削除しました:", filePaths);
   }
-}
+};
 
 // 画像名より画像のurl取得
 export const getImageUrl = async (filePath: string) => {
@@ -377,7 +377,7 @@ export const getImageUrl = async (filePath: string) => {
 export const getDetailRecipebyId = async (id: number) => {
   const detailRecipe: PostgrestSingleResponse<DetailRecipe> = await supabase
     .from("recipes")
-    .select("*, descripts(*), ingredients(*)")
+    .select("*, descripts(*), ingredients(*), profiles(name)")
     .eq("id", id)
     .single();
   if (detailRecipe.error) {

@@ -36,10 +36,10 @@ export default function RecipeId({
     delta: 60,
   });
 
-  const deleter = async () =>  {
+  const deleter = async () => {
     await deleteRecipeDatas(params.recipe_id);
-    router.replace('/')
-  }
+    router.replace("/");
+  };
 
   useEffect(() => {
     const getDetailRecipe = async () => {
@@ -90,12 +90,9 @@ export default function RecipeId({
               <p className="text-2xl font-semibold text-[#815B2C]">
                 {list.name}
               </p>
-              <p className="text-sm pt-1">by 田中太郎さん</p>
+              <p className="text-sm pt-1">by {list.profiles.name}</p>
             </div>
-            <div
-              className="bg-black cursor-pointer"
-              onClick={deleter}
-            >
+            <div className="bg-black cursor-pointer" onClick={deleter}>
               delete
             </div>
             <FavoriteButton
