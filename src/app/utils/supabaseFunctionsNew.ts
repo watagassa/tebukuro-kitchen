@@ -512,7 +512,7 @@ export const Homefetcher_SWR = async (key: string): Promise<Recipe[]> => {
   // console.log("fetcher kwType", typeof kw);
   if (kw === "") {
     const { data, error } = await supabase
-      .from("Recipes")
+      .from("recipes")
       .select("*")
       .range(pageIndex * PAGE_SIZE, (pageIndex + 1) * PAGE_SIZE - 1);
 
@@ -520,7 +520,7 @@ export const Homefetcher_SWR = async (key: string): Promise<Recipe[]> => {
     return data ?? [];
   } else {
     const { data, error } = await supabase
-      .from("Recipes")
+      .from("recipes")
       .select()
       .ilike("name", `%${kw}%`)
       .range(pageIndex * PAGE_SIZE, (pageIndex + 1) * PAGE_SIZE - 1);
