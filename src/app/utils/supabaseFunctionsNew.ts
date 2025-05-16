@@ -9,11 +9,11 @@ import {
   RecipeObjectSchemaType,
 } from "../validations/schema";
 import { Dispatch, SetStateAction } from "react";
+
 // 全レシピ取得
 export const getAllRecipes = async () => {
   const recipes = await supabase.from("recipes").select("*");
   if (recipes.error) {
-    console.error("supabaseエラー", recipes.error);
   }
   // 強制的にRecipe[]として認識させる
   return recipes.data as Recipe[];
@@ -328,16 +328,16 @@ export const updateImage = async (
 };
 // id指定で画像の削除
 export const deleteImage = async (id: number) => {
-  await deleteImageByPath(`${id}/`) // レシピの画像
-  await deleteImageByPath(`${id}/Descripts/`) // 説明の画像
+  await deleteImageByPath(`${id}/`); // レシピの画像
+  await deleteImageByPath(`${id}/Descripts/`); // 説明の画像
 };
 // path指定で画像の削除
-export const deleteImageByPath = async(folderPath:string)=> {
-   // フォルダ内のファイル一覧を取得
+export const deleteImageByPath = async (folderPath: string) => {
+  // フォルダ内のファイル一覧を取得
   const { data: files, error: listError } = await supabase.storage
     .from("images")
     .list(folderPath, { limit: 1000 });
-  console.log(files)
+  console.log(files);
   if (listError) {
     console.error("画像リスト取得中にエラー", listError);
     return;
@@ -361,7 +361,7 @@ export const deleteImageByPath = async(folderPath:string)=> {
   } else {
     console.log("画像を削除しました:", filePaths);
   }
-}
+};
 
 // 画像名より画像のurl取得
 export const getImageUrl = async (filePath: string) => {
@@ -475,6 +475,44 @@ export const deleteFavorites = async (recipe_id: number) => {
   await supabase.from("favorites").delete().eq("recipe_id", recipe_id);
 };
 
+export const PAGE_SIZE_SWR = 10;
+//無限スクロール用のfetcher関数
+//addRecipeCords.tsxのfetcher関数に渡す
+export const Homefetcher_SWR = async (key: string): Promise<Recipe[]> => {
+  // console.log(`fetcher key: ${key}`);
+
+  //keyは`${kw}-${materialKey}-${pageIndex}`の形式
+  //kwは検索キーワード
+  //materialKeyは表示管理用の一意のキー:指定することで、複数のキーでdataを保存可能．fetther関数で使うことはない
+  //pageIndexはページ番号：supabaseのrange関数で使う
+  const [materialKey, kw, pageIndexStr] = key.split("-");
+  const pageIndex = Number(pageIndexStr);
+
+  // console.log("fetcher kw", kw);
+  // console.log("fetcher kwType", typeof kw);
+  if (kw === "") {
+    const { data, error } = await supabase
+      .from("Recipes")
+      .select("*")
+      .range(pageIndex * PAGE_SIZE, (pageIndex + 1) * PAGE_SIZE - 1);
+
+    if (error) throw error;
+    return data ?? [];
+  } else {
+    const { data, error } = await supabase
+      .from("Recipes")
+      .select()
+      .ilike("name", `%${kw}%`)
+      .range(pageIndex * PAGE_SIZE, (pageIndex + 1) * PAGE_SIZE - 1);
+    //簡単な部分一致検索(参考:https://zenn.dev/417/scraps/b494b081c2c33b)
+    if (error) console.error(error);
+    return data ?? ([] as Recipe[]);
+  }
+};
+
+export const favoritesFetcher_SWR = async (key: string): Promise<Recipe[]> => {
+  throw new Error("Function not implemented.");
+};
 // recipe, descripts, ingredientsをまとめて削除する関数
 export const deleteRecipeDatas = async (recipe_id: number) => {
   await supabase.from("descripts").delete().eq("recipe_id", recipe_id);

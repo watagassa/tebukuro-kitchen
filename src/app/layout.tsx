@@ -41,6 +41,9 @@ export default function RootLayout({
           content="音声認識を使ったレシピアプリ"
         />
         <meta name="twitter:image" content="../../public/thumbnail.png" />
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="apple-touch-icon" href="/icon.png"></link>
+        <meta name="theme-color" content="#8936FF" />
       </head>
 
       <body className="bg-white">{children}</body>
