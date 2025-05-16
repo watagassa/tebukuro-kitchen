@@ -18,6 +18,16 @@ export const getAllRecipes = async () => {
   // 強制的にRecipe[]として認識させる
   return recipes.data as Recipe[];
 };
+export const getAllUserRecipes = async () => {
+  const recipes = await supabase
+    .from("recipes")
+    .select("*")
+    .eq("user_id", await getCurrentUserID());
+  if (recipes.error) {
+    console.error("ユーザーのレシピ取得中にエラー", recipes.error);
+  }
+  return recipes.data as Recipe[];
+};
 // // 全レシピランダム取得
 export const getAllRandomRecipes = async () => {
   const recipes = await supabase.from("recipes").select("*");
@@ -71,7 +81,7 @@ export const addRecipe = async (recipe: RecipeObjectSchemaType) => {
     .insert({
       name: recipe.recipe_name,
       image_url: recipe?.recipe_image,
-      how_many: recipe?.how_many,
+      howmany: recipe?.how_many,
       time: recipe?.time,
       comment: recipe?.recipe_comment,
       user_id: await getCurrentUserID(),
@@ -83,6 +93,26 @@ export const addRecipe = async (recipe: RecipeObjectSchemaType) => {
   } else {
     // 挿入されたデータのIDを取得
     return data[0].id as number;
+  }
+};
+// レシピ更新
+export const updateRecipe = async (
+  id: number,
+  recipe: RecipeObjectSchemaType
+) => {
+  const { error } = await supabase
+    .from("recipes")
+    .update({
+      name: recipe.recipe_name,
+      image_url: recipe?.recipe_image,
+      howmany: recipe?.how_many,
+      time: recipe?.time,
+      comment: recipe?.recipe_comment,
+    })
+    .eq("id", id);
+
+  if (error) {
+    console.error("Error inserting data:", error);
   }
 };
 // レシピ削除
@@ -129,6 +159,31 @@ export const addIngredient = async (
     console.error("supabaseエラー", error);
   }
 };
+// 材料作成
+export const upsertIngredient = async (
+  recipe_id: number,
+  index: number,
+  name: string,
+  amount: string
+) => {
+  const { error } = await supabase
+    .from("ingredients")
+    .upsert(
+      {
+        recipe_id: recipe_id,
+        index: index,
+        name: name,
+        amount: amount,
+      },
+      {
+        onConflict: "recipe_id,index",
+      }
+    )
+    .select(); // 挿入されたデータを取得するために select() を使用
+  if (error) {
+    console.error("supabaseエラー", error);
+  }
+};
 // 複数個の材料作成
 export const addSomeIngredient = async (
   recipe_id: number,
@@ -136,6 +191,14 @@ export const addSomeIngredient = async (
 ) => {
   inputIngredients.forEach((e, index) => {
     addIngredient(recipe_id, index, e.name, e.amount);
+  });
+};
+export const updateSomeIngredient = async (
+  recipe_id: number,
+  inputIngredients: IngredientSchemaType
+) => {
+  inputIngredients.forEach((e, index) => {
+    upsertIngredient(recipe_id, index, e.name, e.amount);
   });
 };
 export const deleteIngredient = async (id: number) => {
@@ -176,6 +239,25 @@ export const addDescript = async (
     text: text,
   });
 };
+// 材料更新
+export const upsertDescript = async (
+  recipe_id: number,
+  index: number,
+  image_url?: string,
+  text?: string
+) => {
+  await supabase.from("descripts").upsert(
+    {
+      recipe_id: recipe_id,
+      index: index,
+      image_url: image_url,
+      text: text,
+    },
+    {
+      onConflict: "recipe_id,index",
+    }
+  );
+};
 // 複数個の作り方を作成
 export const addSomeDescript = async (
   recipe_id: number,
@@ -195,10 +277,28 @@ export const addSomeDescript = async (
     }
   });
 };
+// 複数個の作り方を更新
+export const updateSomeDescript = async (
+  recipe_id: number,
+  descripts: DescriptSchemaType
+) => {
+  for (const [index, e] of descripts.entries()) {
+    if (e.image !== undefined) {
+      const descriptExtension = getFileExtension(e.image);
+      const descriptImagePath = `${recipe_id}/Descripts/${index}.${descriptExtension}`;
+      await updateImage(e.image, descriptImagePath);
+      const image_url = await getImageUrl(descriptImagePath);
+      console.log("image_url", image_url);
+      await upsertDescript(recipe_id, index, image_url, e.text);
+    } else {
+      await upsertDescript(recipe_id, index, undefined, e.text);
+    }
+  }
+};
 export const deleteDescripts = async (id: number) => {
   await supabase.from("descripts").delete().eq("id", id);
 };
-
+// レシピ画像アップロード用
 export const uploadImage = async (
   file: File,
   filePath: string
@@ -211,6 +311,58 @@ export const uploadImage = async (
     console.error("supabaseエラー", error);
   }
 };
+// レシピ画像更新用
+export const updateImage = async (
+  file: File,
+  filePath: string
+  // recipe_id: number
+) => {
+  const { error } = await supabase.storage
+    .from("images")
+    .upload(filePath, file, {
+      upsert: true,
+    });
+  if (error) {
+    console.error("supabaseエラー", error);
+  }
+};
+// id指定で画像の削除
+export const deleteImage = async (id: number) => {
+  await deleteImageByPath(`${id}/`); // レシピの画像
+  await deleteImageByPath(`${id}/Descripts/`); // 説明の画像
+};
+// path指定で画像の削除
+export const deleteImageByPath = async (folderPath: string) => {
+  // フォルダ内のファイル一覧を取得
+  const { data: files, error: listError } = await supabase.storage
+    .from("images")
+    .list(folderPath, { limit: 1000 });
+  console.log(files);
+  if (listError) {
+    console.error("画像リスト取得中にエラー", listError);
+    return;
+  }
+
+  if (!files || files.length === 0) {
+    console.log("削除対象のフォルダは空です。");
+    return;
+  }
+
+  // 削除対象のファイルパスを作成
+  const filePaths = files.map((file) => `${folderPath}${file.name}`);
+
+  // ファイルの削除
+  const { error: deleteError } = await supabase.storage
+    .from("images")
+    .remove(filePaths);
+
+  if (deleteError) {
+    console.error("画像削除中にエラー", deleteError);
+  } else {
+    console.log("画像を削除しました:", filePaths);
+  }
+};
+
 // 画像名より画像のurl取得
 export const getImageUrl = async (filePath: string) => {
   const { data } = supabase.storage.from("images").getPublicUrl(filePath);
@@ -270,6 +422,21 @@ export const getCurrentUserID = async () => {
   }
   return userData.data.user?.id;
 };
+// ユーザーIDからユーザー名とアイコンを取得
+export const getUserData = async (user_id: string) => {
+  const userData = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("user_id", user_id)
+    .single();
+  if (userData.error) {
+    console.error("ユーザーデータ取得中にエラー", userData.error);
+  }
+  return {
+    name: userData.data?.["name"],
+    avatar_url: userData.data?.["avatar_url"],
+  };
+};
 // favorites追加関数
 export const addFavorites = async (recipe_id: number) => {
   const res = await supabase.from("favorites").insert({
@@ -318,32 +485,39 @@ export const Homefetcher_SWR = async (key: string): Promise<Recipe[]> => {
   //kwは検索キーワード
   //materialKeyは表示管理用の一意のキー:指定することで、複数のキーでdataを保存可能．fetther関数で使うことはない
   //pageIndexはページ番号：supabaseのrange関数で使う
-  const [materialKey, kw, pageIndexStr] = key.split('-');
+  const [materialKey, kw, pageIndexStr] = key.split("-");
   const pageIndex = Number(pageIndexStr);
 
   // console.log("fetcher kw", kw);
   // console.log("fetcher kwType", typeof kw);
   if (kw === "") {
     const { data, error } = await supabase
-      .from('Recipes')
-      .select('*')
+      .from("Recipes")
+      .select("*")
       .range(pageIndex * PAGE_SIZE, (pageIndex + 1) * PAGE_SIZE - 1);
 
     if (error) throw error;
     return data ?? [];
-
   } else {
     const { data, error } = await supabase
-      .from('Recipes')
+      .from("Recipes")
       .select()
-      .ilike('name', `%${kw}%`)
+      .ilike("name", `%${kw}%`)
       .range(pageIndex * PAGE_SIZE, (pageIndex + 1) * PAGE_SIZE - 1);
     //簡単な部分一致検索(参考:https://zenn.dev/417/scraps/b494b081c2c33b)
-    if (error) console.error(error)
-    return data ?? [] as Recipe[];
+    if (error) console.error(error);
+    return data ?? ([] as Recipe[]);
   }
-}
+};
 
 export const favoritesFetcher_SWR = async (key: string): Promise<Recipe[]> => {
   throw new Error("Function not implemented.");
-}
+};
+// recipe, descripts, ingredientsをまとめて削除する関数
+export const deleteRecipeDatas = async (recipe_id: number) => {
+  await supabase.from("descripts").delete().eq("recipe_id", recipe_id);
+  await supabase.from("ingredients").delete().eq("recipe_id", recipe_id);
+  await deleteFavorites(recipe_id);
+  await deleteRecipe(recipe_id);
+  await deleteImage(recipe_id);
+};
