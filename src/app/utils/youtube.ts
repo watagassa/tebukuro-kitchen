@@ -1,6 +1,6 @@
-
+"use server"
 const youtube = async (keyword: string) => {
-  const apiKey = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;
+  const apiKey = process.env.YOUTUBE_API_KEY;
 
   // 今のYoutubeはほとんどがユーザ名なので、チャンネルページへのリクエストを送って取得する
   const channelId = "UCNfcdefRTSfKsKUTlU-dMGg";

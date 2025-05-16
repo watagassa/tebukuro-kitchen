@@ -1,3 +1,4 @@
+// つかわなくなったかも
 export function getFileExtension(file: File): string | null {
     const fileName = file.name;
     const extension = fileName.split(".").pop(); // 拡張子を取得

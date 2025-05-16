@@ -13,12 +13,12 @@ import { SubmitHandler } from "react-hook-form";
 import { useSwipeable } from "react-swipeable";
 import Footer from "../conponents/Footer";
 import { inputDescript, InputIngredient } from "../types";
-import { getFileExtension } from "../utils/fileUtils";
 import { updateRecipeImage } from "../utils/supabaseFncUpdate";
 import {
   addRecipe,
   addSomeDescript,
   addSomeIngredient,
+  compressImage,
   getImageUrl,
   uploadImage,
 } from "../utils/supabaseFunctionsNew";
@@ -58,9 +58,9 @@ const Registration = () => {
     const recipe_id = await addRecipe(data.recipe);
     if (recipe_id !== undefined) {
       if (data.recipe.recipe_image !== undefined) {
-        const extension = getFileExtension(data.recipe.recipe_image);
-        const imagePath = `${recipe_id}/recipe.${extension}`;
-        await uploadImage(data.recipe.recipe_image, imagePath);
+        const imagePath = `${recipe_id}/recipe.jpg`;
+        const image = await compressImage(data.recipe.recipe_image); // 画像を圧縮
+        await uploadImage(image, imagePath);
         const recipeImageUrl = await getImageUrl(imagePath);
         await updateRecipeImage(recipe_id, recipeImageUrl);
       }
@@ -68,8 +68,7 @@ const Registration = () => {
       await addSomeIngredient(recipe_id, data.ingredient);
     }
 
-    window.alert("レシピが登録できました！");
-    setLoading(false);
+    // window.alert("レシピが登録できました！");
     router.replace(`/${recipe_id}`);
     return true;
   };
