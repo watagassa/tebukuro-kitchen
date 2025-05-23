@@ -3,7 +3,6 @@
 import { useState } from "react";
 import {
   addProfile,
-  getProfileByID,
   isLoggedIn,
   logout,
   signInWithGoogle,
@@ -30,17 +29,6 @@ const Login = () => {
       <div>
         <button onClick={addProfile}>プロファイルを登録</button>
       </div>
-      <div></div>
-      <button
-        onClick={() => {
-          getProfileByID("a9ae5546-bd56-478b-b0ff-109c6ca53e68").then((res) => {
-            console.log(res);
-          });
-        }}
-        title="Get Profile"
-      >
-        Get Profile
-      </button>
       <div>
         <button onClick={logout}>logout</button>
       </div>
