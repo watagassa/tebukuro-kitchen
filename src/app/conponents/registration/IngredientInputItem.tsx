@@ -32,7 +32,7 @@ const IngredientInputItem = ({
 
   return (
     <div className="mt-4">
-      {inputs.map((input, index) => (
+      {inputs.map((_, index) => (
         <div key={index} className="flex gap-4 items-center ">
           <div className="w-full border-b border-gray-400 pl-3 bg-[#FEF9EC]">
             <input

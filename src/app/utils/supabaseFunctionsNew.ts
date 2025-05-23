@@ -271,7 +271,7 @@ export const addSomeDescript = async (
       console.log("image_url", image_url);
       // await addDescript(recipe_id,index, image_url, e.text);
       await addDescript(recipe_id, index, image_url, e.text);
-    } else {
+    } else if (e.text !== "") {
       await addDescript(recipe_id, index, undefined, e.text);
     }
   });
@@ -289,7 +289,7 @@ export const updateSomeDescript = async (
       const image_url = await getImageUrl(descriptImagePath);
       console.log("image_url", image_url);
       await upsertDescript(recipe_id, index, image_url, e.text);
-    } else {
+    } else if (e.text !== "") {
       await upsertDescript(recipe_id, index, undefined, e.text);
     }
   }
