@@ -89,11 +89,11 @@ export const logout = async () => {
 };
 
 // UUIDよりユーザープロフィール取得
-export const getProfileByID = async (user_id: UUID) => {
+export const getProfileByID = async (id: number) => {
   const recipe = await supabase
     .from("profiles")
     .select("*")
-    .eq("user_id", user_id)
+    .eq("id", id)
     .single();
   if (recipe.error) {
     console.error("supabaseエラー", recipe.error);
