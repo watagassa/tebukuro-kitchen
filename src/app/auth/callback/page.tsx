@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/app/utils/supabase";
 import { addProfile } from "@/app/utils/supabaseLogin";
 import Loading from "@/app/loading";
 
 export default function AuthCallback() {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     const processSession = async () => {
@@ -21,7 +22,10 @@ export default function AuthCallback() {
       } else if (session) {
         addProfile();
         console.log("Session fetched:", session);
-        router.replace("/"); // ログイン後の遷移先
+
+        const callbackUrl = searchParams.get("callbackUrl") || "/";
+        console.log("Redirecting to:", callbackUrl);
+        router.replace(callbackUrl);
       }
     };
 

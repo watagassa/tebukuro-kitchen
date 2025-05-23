@@ -49,10 +49,15 @@ export const addProfile = async () => {
 
 // Googleログイン
 export const signInWithGoogle = async () => {
+  const searchParams = new URLSearchParams(window.location.search);
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
+
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: `${location.origin}/auth/callback`,
+      redirectTo: `${
+        location.origin
+      }/auth/callback?callbackUrl=${encodeURIComponent(callbackUrl)}`,
     },
   });
   if (error) {
