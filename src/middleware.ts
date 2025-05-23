@@ -13,7 +13,9 @@ export async function middleware(request: NextRequest) {
   console.log("Path:", path);
   console.log("User:", hasToken);
   if (isProtected && !hasToken) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("callbackUrl", request.nextUrl.pathname);
+    return NextResponse.redirect(loginUrl);
   }
 
   return NextResponse.next();

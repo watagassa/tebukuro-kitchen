@@ -1,4 +1,3 @@
-import { UUID } from "crypto";
 import { supabase } from "./supabase";
 import { profiles } from "../types";
 export const addProfile = async () => {
@@ -49,10 +48,15 @@ export const addProfile = async () => {
 
 // Googleログイン
 export const signInWithGoogle = async () => {
+  const searchParams = new URLSearchParams(window.location.search);
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
+
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: `${location.origin}/auth/callback`,
+      redirectTo: `${
+        location.origin
+      }/auth/callback?callbackUrl=${encodeURIComponent(callbackUrl)}`,
     },
   });
   if (error) {
@@ -84,11 +88,11 @@ export const logout = async () => {
 };
 
 // UUIDよりユーザープロフィール取得
-export const getProfileByID = async (user_id: UUID) => {
+export const getProfileByID = async (id: number) => {
   const recipe = await supabase
     .from("profiles")
     .select("*")
-    .eq("user_id", user_id)
+    .eq("id", id)
     .single();
   if (recipe.error) {
     console.error("supabaseエラー", recipe.error);
