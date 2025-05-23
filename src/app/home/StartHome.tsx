@@ -2,11 +2,8 @@ import { SWRConfig } from 'swr';
 import HomeForm from './HomeForm';
 import { Homefetcher_SWR } from '../utils/supabaseFunctionsNew';
 
-export default async function StartHome() {
-    const searchKW = '';
-    const materialKey = 'Recipe';
-    const pageIndex = 0;
-    const key = `$${materialKey}-${searchKW}-${pageIndex}`;
+export default async function StartHome(materialKey: { materialKey: string }) {
+    const key = `${materialKey}--0`;
 
     const fallbackData = await Homefetcher_SWR(key);
 

@@ -4,7 +4,7 @@ import { FiSearch } from 'react-icons/fi';
 
 
 const SearchBar = () => {
-  const setSearchKW = useContext(kWContext);
+  const setSearchKW = useContext(kWContext).setSearchKW;
   const [input, setInput] = useState<string>('');
 
   const SeachRecipe = (e: React.KeyboardEvent<HTMLInputElement>) => {
