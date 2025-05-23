@@ -5,7 +5,7 @@ import { createContext, useState } from "react";
 import { number, string } from "zod";
 import Header from "../conponents/Header/Header";
 import AddRecipeCords from "../conponents/AddRecipeCords";
-import { getRecipes_tst, PAGE_SIZE_SWR, searchFetcher_tst, } from "../utils/supabaseFunctionsNew";
+import { favoritesFetcher, PAGE_SIZE_SWR, searchfavoritesFetcher } from "../utils/supabaseFunctionsNew";;
 
 export const kWContext = createContext({} as { searchKW: string, setSearchKW: (kW: string) => void });
 
@@ -21,8 +21,8 @@ export default function HomeForm() {
         </div>
 
         <AddRecipeCords
-          materialKey={searchKW === "" ? "Recipe" : searchKW}
-          fetcher={searchKW === "" ? getRecipes_tst : searchFetcher_tst}
+          materialKey={searchKW === "" ? "favorites" : `favorites_${searchKW}`}
+          fetcher={searchKW === "" ? favoritesFetcher : searchfavoritesFetcher}
           kw={searchKW}
           pageSize={PAGE_SIZE_SWR}
         />

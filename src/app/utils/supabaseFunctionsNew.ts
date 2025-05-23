@@ -9,6 +9,7 @@ import {
 } from "../validations/schema";
 import { Dispatch, SetStateAction } from "react";
 import imageCompression from "browser-image-compression";
+
 // 全レシピ取得
 export const getAllRecipes = async () => {
   const recipes = await supabase.from("recipes").select("*");
@@ -465,8 +466,8 @@ export const getFavoriteRecipes = async () => {
     .from("favorites")
     .select("recipes(*)")
     .eq("user_id", await getCurrentUserID())) as PostgrestSingleResponse<
-    { recipes: Recipe }[]
-  >;
+      { recipes: Recipe }[]
+    >;
   if (res.error) {
     console.error("favorites取得中にエラー", res.error);
   }
@@ -478,6 +479,7 @@ export const getFavoriteRecipes = async () => {
   });
   return favoriteRecipes;
 };
+
 // favorites登録判定関数
 export const isFavorited = async (recipe_id: number) => {
   const res = await supabase
@@ -492,7 +494,7 @@ export const isFavorited = async (recipe_id: number) => {
 };
 // favorites削除関数
 export const deleteFavorites = async (recipe_id: number) => {
-  await supabase.from("favorites").delete().eq("recipe_id", recipe_id);
+  await supabase.from("favorites").delete().eq("recipe_id", recipe_id)
 };
 
 export const PAGE_SIZE_SWR = 10;
@@ -505,7 +507,7 @@ export const Homefetcher_SWR = async (key: string): Promise<Recipe[]> => {
   //kwは検索キーワード
   //materialKeyは表示管理用の一意のキー:指定することで、複数のキーでdataを保存可能．fetther関数で使うことはない
   //pageIndexはページ番号：supabaseのrange関数で使う
-  const [materialKey, kw, pageIndexStr] = key.split("-");
+  const [, kw, pageIndexStr] = key.split("-");
   const pageIndex = Number(pageIndexStr);
 
   // console.log("fetcher kw", kw);
@@ -530,9 +532,75 @@ export const Homefetcher_SWR = async (key: string): Promise<Recipe[]> => {
   }
 };
 
-export const favoritesFetcher_SWR = async (key: string): Promise<Recipe[]> => {
-  throw new Error("Function not implemented.");
+export const getRecipes_tst = async (key: string) => {
+  const [, pageIndexStr] = key.split("-");
+  const pageIndex = Number(pageIndexStr);
+  const { data, error } = await supabase
+    .from("recipes")
+    .select("*")
+    .range(pageIndex * PAGE_SIZE_SWR, (pageIndex + 1) * PAGE_SIZE_SWR - 1);
+  if (error) {
+    console.error("supabaseエラー", error);
+  }
+  // 強制的にRecipe[]として認識させる
+  return data ?? ([] as Recipe[]);
+}
+
+export const searchFetcher_tst = async (key: string) => {
+  const [, kw, pageIndexStr] = key.split("-");
+  const pageIndex = Number(pageIndexStr);
+  const { data, error } = await supabase
+    .from("recipes")
+    .select("*")
+    .ilike("name", `%${kw}%`)
+    .range(pageIndex * PAGE_SIZE_SWR, (pageIndex + 1) * PAGE_SIZE_SWR - 1);
+
+  if (error) {
+    console.error("supabaseエラー", error);
+  }
+  return data ?? ([] as Recipe[]);
 };
+
+export const favoritesFetcher = async (key: string): Promise<Recipe[]> => {
+  console.log(`fetcher key: ${key}`);
+  const pageIndexStr = key.split("-").pop();
+  const pageIndex = Number(pageIndexStr);
+  const res = (await supabase
+    .from("favorites")
+    .select("recipes(*)")
+    .range(pageIndex * PAGE_SIZE_SWR, (pageIndex + 1) * PAGE_SIZE_SWR - 1)
+    .eq("user_id", await getCurrentUserID())) as PostgrestSingleResponse<{ recipes: Recipe }[]>;
+
+  if (res.error) {
+    console.error("favorites取得中にエラー", res.error);
+  }
+  if (res.data?.length === 0) {
+    console.log("お気に入りのレシピはありません");
+  }
+  return res.data?.map((favo) => favo.recipes) ?? ([] as Recipe[]);
+};
+
+export const searchfavoritesFetcher = async (key: string): Promise<Recipe[]> => {
+  const [, kw, pageIndexStr] = key.split("-");
+  const pageIndex = Number(pageIndexStr);
+  const res = (await supabase
+    .from("favorites")
+    .select("recipes(*)")
+    .range(pageIndex * PAGE_SIZE_SWR, (pageIndex + 1) * PAGE_SIZE_SWR - 1)
+    .eq("user_id", await getCurrentUserID())
+    .ilike("recipes.name", `%${kw}%`)) as PostgrestSingleResponse<{ recipes: Recipe }[]>;
+  if (res.error) {
+    console.error("favorites取得中にエラー", res.error);
+  }
+  console.log(res.data);
+  const favoriteRecipes: Recipe[] = [];
+  res.data?.forEach((favo) => {
+    console.log(favo.recipes);
+    favoriteRecipes.push(favo.recipes);
+  });
+  return favoriteRecipes;
+};
+
 // recipe, descripts, ingredientsをまとめて削除する関数
 export const deleteRecipeDatas = async (recipe_id: number) => {
   await supabase.from("descripts").delete().eq("recipe_id", recipe_id);

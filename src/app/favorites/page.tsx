@@ -1,40 +1,20 @@
-"use client";
+import { SWRConfig } from 'swr';
+import HomeForm from './HomeForm';
+import { Homefetcher_SWR } from '../utils/supabaseFunctionsNew';
 
-import Footer from "@/app/conponents/Footer";
-import { Recipe } from "@/app/types";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
-import AddRecipeCords from "../conponents/AddRecipeCords";
-import { supabase } from "../utils/supabase";
-import Headertst from "../conponents/Header/Header";
-import {
-  favoritesFetcher_SWR,
-  PAGE_SIZE_SWR,
-} from "../utils/supabaseFunctionsNew";
+export default async function page() {
+    const materialKey = "favorites";
+    const key = `${materialKey}--0`;
 
-const Favorites = () => {
-  const [kW, setKW] = useState("");
+    const fallbackData = await Homefetcher_SWR(key);
 
-  return (
-    <div className="  min-h-screen flex flex-col contain-paint bg-[#FFFBF4]">
-      <div className={`sticky top-0 z-20`}>
-        <Headertst />
-      </div>
+    if (!fallbackData) { return <div>データが取得できませんでした</div>; }
 
-      <AddRecipeCords
-        materialKey="favorite"
-        fetcher={favoritesFetcher_SWR}
-        kw={kW}
-        pageSize={PAGE_SIZE_SWR}
-      />
+    const fallback = { [key]: fallbackData, };
 
-      <div
-        className={` sticky bottom-0 w-full z-20 transition-transform duration-200 `}
-      >
-        <Footer pathName="/" />
-      </div>
-    </div>
-  );
-};
-
-export default Favorites;
+    return (
+        <SWRConfig value={{ fallback }}>
+            <HomeForm />
+        </SWRConfig>
+    );
+}

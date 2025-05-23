@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Recipe } from '../types';
 import ArticleCard from './ArticleCard';
 import useSWRInfinite from 'swr/infinite';
 import { useInView } from 'react-intersection-observer'
 import LoadingComponent from './LoadingDataFetch';
+import { kWContext } from '../home/HomeForm';
 
 type propsType = {
     materialKey: string;                            //表示管理用　一意のキーを指定する
@@ -12,14 +13,14 @@ type propsType = {
     pageSize: number;                               //1ページあたりのデータ数
 }
 
-const AddRecipeCords = ({ materialKey, fetcher, kw, pageSize }: propsType) => {
-
+const AddRecipeCords = ({ materialKey, fetcher, pageSize }: propsType) => {
+    const searchKW = useContext(kWContext).searchKW;
     const getKey = (pageIndex: number, previousPageData: Recipe[][] | null) => {
-        const key = `${materialKey}-${kw}-${pageIndex}`;
-        console.log("getKey:", key);
+        const key = `${materialKey}-${searchKW}-${pageIndex}`;
         if (previousPageData && previousPageData.length < pageSize) return null;
-        return `${materialKey}-${kw}-${pageIndex}`;
+        return key;
     }
+
     const { data, error, isValidating, size, setSize } = useSWRInfinite<Recipe[]>(getKey, fetcher,
         {
             revalidateIfStale: false, // キャッシュがあっても再検証しない
