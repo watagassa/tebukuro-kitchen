@@ -1,4 +1,3 @@
-import { UUID } from "crypto";
 import { supabase } from "./supabase";
 import { profiles } from "../types";
 export const addProfile = async () => {
