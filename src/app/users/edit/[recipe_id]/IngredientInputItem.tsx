@@ -34,6 +34,19 @@ const IngredientInputItem = ({
     }
   };
 
+  const handleInputNameChange =
+    (index: number,e: React.ChangeEvent<HTMLInputElement>) => {
+      const newInputItems = [...inputs];
+          newInputItems[index].name = e.target.value;
+          setInputs(newInputItems);
+    };
+  const handleInputAmountChange =
+    (index: number,e: React.ChangeEvent<HTMLInputElement>) => {
+      const newInputItems = [...inputs];
+          newInputItems[index].amount = e.target.value;
+          setInputs(newInputItems);
+    };
+
   // 削除関数（試作）
   //   const removeInput = (index: number) => {
   //     const newInputs = inputs.filter((_, i) => i !== index);
@@ -52,6 +65,7 @@ const IngredientInputItem = ({
               id={`ingredient.${index}.name`}
               style={{ outline: "none" }}
               placeholder="材料  /例  たまご"
+              onChange={(e) => handleInputNameChange(index, e)}
               className="w-full  border-gray-400 pl-3 bg-[#FEF9EC] h-[40px]"
             />
 
@@ -73,6 +87,7 @@ const IngredientInputItem = ({
               id={`ingredient.${index}.amount`}
               style={{ outline: "none" }}
               placeholder="分量  /例  2個"
+              onChange={(e) => handleInputAmountChange(index, e)}
               className="w-full border-gray-400 pl-3 bg-[#FEF9EC] h-[40px]"
             />
             {/* zodのエラー文 */}

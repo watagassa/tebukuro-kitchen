@@ -24,18 +24,22 @@ const DescriptInputItem = ({
 
   useEffect(() => {
     inputItems.map((input, index) => {
-      setValue(
-        `descript.${index}.text`,
-        input.text != undefined ? input.text : ""
-      );
+      setValue(`descript.${index}.text`, input.text || "");
     });
-  },[inputItems, setValue]);
+  }, [inputItems, setValue]);
 
   const addInput = () => {
     if (inputItems.length < maxInputs) {
       setInputItems([...inputItems, { image: undefined, text: "" }]);
     }
   };
+
+  const handleInputChange =
+    (index: number,e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      const newInputItems = [...inputItems];
+          newInputItems[index].text = e.target.value;
+          setInputItems(newInputItems);
+    };
 
   const handleImageUpload =
     (index: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -100,7 +104,7 @@ const DescriptInputItem = ({
                 className="h-16 w-full pt-1 text-[10px] resize-none"
                 placeholder="フライパンに油をひき、卵を割る。白身が白くなったらお米を入れる。"
                 style={{ outline: "none" }}
-                // onChange={(e) => handleInputChange(index, e.target.value)} // 入力変更ハンドラー
+                onChange={(e) => handleInputChange(index,e)}
               />
             </div>
             {/* zodのエラー文 */}
