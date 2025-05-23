@@ -29,7 +29,7 @@ const DescriptInputItem = ({
         input.text != undefined ? input.text : ""
       );
     });
-  },[inputItems]);
+  },[inputItems, setValue]);
 
   const addInput = () => {
     if (inputItems.length < maxInputs) {

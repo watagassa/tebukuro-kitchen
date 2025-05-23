@@ -15,7 +15,6 @@ import DescriptInputItem from "@/app/conponents/registration/DescriptInputItem";
 import IngredientInputItem from "@/app/conponents/registration/IngredientInputItem";
 import Footer from "@/app/conponents/Footer";
 import { inputDescript, InputIngredient } from "@/app/types";
-import { getFileExtension } from "@/app/utils/fileUtils";
 import { updateRecipeImage } from "@/app/utils/supabaseFncUpdate";
 import {
   addRecipe,
