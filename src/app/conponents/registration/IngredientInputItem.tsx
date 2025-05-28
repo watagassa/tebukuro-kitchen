@@ -1,9 +1,12 @@
 "use client";
-import { InputIngredient } from "@/app/types";
-import { RecipeSchemaType } from "@/app/validations/schema";
 import { Dispatch, SetStateAction } from "react";
+
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { BiPlus } from "react-icons/bi";
+
+import { InputIngredient } from "@/app/types";
+import { RecipeSchemaType } from "@/app/validations/schema";
+
 interface IngredientInputItem {
   errors: FieldErrors<RecipeSchemaType>;
   register: UseFormRegister<RecipeSchemaType>;
@@ -33,63 +36,58 @@ const IngredientInputItem = ({
   return (
     <div className="mt-4">
       {inputs.map((_, index) => (
-        <div key={index} className="flex gap-4 items-center ">
-          <div className="w-full border-b border-gray-400 pl-3 bg-[#FEF9EC]">
+        <div key={index} className="flex justify-between gap-2 mb-2">
+          <section className="flex-1">
             <input
               {...register(`ingredient.${index}.name`)}
               type="text"
               name={`ingredient.${index}.name`}
               id={`ingredient.${index}.name`}
-              style={{ outline: "none" }}
-              placeholder="材料  /例  たまご"
-              className="w-full  border-gray-400 pl-3 bg-[#FEF9EC] h-[40px]"
+              placeholder="材料名"
+              className="w-full p-2 h-10 border border-orange-200 rounded-md"
+              autoCapitalize="off"
+              autoCorrect="off"
             />
 
             {/* zodのエラー文 */}
-            {errors?.ingredient !== undefined ? (
-              errors?.ingredient[index]?.name !== undefined ? (
-                <div className="text-red-500">
-                  {errors?.ingredient[index]?.name?.message}
-                </div>
-              ) : null
-            ) : null}
-          </div>
+            <div className="text-red-500">
+              {errors?.ingredient?.[index]?.name?.message}
+            </div>
+          </section>
 
-          <div className="w-1/2 border-b border-gray-400 bg-[#FEF9EC]">
+          <section className="flex-1">
             <input
               {...register(`ingredient.${index}.amount`)}
               type="text"
               name={`ingredient.${index}.amount`}
               id={`ingredient.${index}.amount`}
-              style={{ outline: "none" }}
-              placeholder="分量  /例  2個"
-              className="w-full border-gray-400 pl-3 bg-[#FEF9EC] h-[40px]"
+              placeholder="分量"
+              className="w-full p-2 h-10 border border-orange-200 rounded-md"
+              autoCapitalize="off"
+              autoCorrect="off"
             />
             {/* zodのエラー文 */}
-            {errors?.ingredient !== undefined ? (
-              errors?.ingredient[index]?.amount !== undefined ? (
-                <div className="text-red-500">
-                  {errors?.ingredient[index]?.amount?.message}
-                </div>
-              ) : null
-            ) : null}
-          </div>
+            <div className="text-red-500">
+              {errors?.ingredient?.[index]?.amount?.message}
+            </div>
+          </section>
 
           {/* 削除用ボタン */}
           {/* <button onClick={() => removeInput(index)} className="text-red-500">
             
             <BiTrash className="text-2xl" />
-          </button> */}
+            </button> */}
         </div>
       ))}
+
       <button
         type="button"
         onClick={addInput}
         disabled={inputs.length >= maxInputs}
-        className="flex mx-auto my-4 text-orange-400"
+        className="flex items-center mx-auto my-5 px-10 py-1 rounded-sm text-orange-400 border border-dashed border-orange-400"
       >
-        <BiPlus className="text-2xl" />
-        <p>項目を増やす</p>
+        <BiPlus className="text-lg" />
+        <p className="text-sm">材料を追加</p>
       </button>
     </div>
   );
