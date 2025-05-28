@@ -11,11 +11,13 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        "orange-primary": "#fffbf4",
+        "orange-secondary": "#fef9ec",
       },
       screens: {
-        'button':'320px',
-        'image-mid':{'raw':'(max-height: 550px)'},
-        'image-sml':{'raw':'(max-height: 380px)'}
+        button: "320px",
+        "image-mid": { raw: "(max-height: 550px)" },
+        "image-sml": { raw: "(max-height: 380px)" },
       },
     },
   },

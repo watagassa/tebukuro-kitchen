@@ -7,6 +7,7 @@ import {
   deleteFavorites,
 } from "../utils/supabaseFunctionsNew";
 import { useEffect, useState } from "react";
+import clsx from "clsx";
 import { FiHeart } from "react-icons/fi";
 
 type FavoriteButtonProps = {
@@ -21,10 +22,10 @@ const FavoriteButton = ({ recipe }: FavoriteButtonProps) => {
   // レンダリング時にlocalStorageを確認し、記事が既にお気に入りにあるかを判定
   useEffect(() => {
     const checkFavorite = async () => {
-      const isFavo = await isFavorited(recipe_id)
+      const isFavo = await isFavorited(recipe_id);
       setIsFavorite(isFavo);
       setLoading(false);
-    }
+    };
     checkFavorite();
   }, [recipe_id]);
 
@@ -32,10 +33,10 @@ const FavoriteButton = ({ recipe }: FavoriteButtonProps) => {
   const handleFavoriteClick = async () => {
     if (isFavorite) {
       // お気に入りから削除
-      await deleteFavorites(recipe_id)
+      await deleteFavorites(recipe_id);
     } else {
       // お気に入りに追加
-      await addFavorites(recipe_id)
+      await addFavorites(recipe_id);
     }
 
     // isFavoriteの状態を反転
@@ -50,13 +51,14 @@ const FavoriteButton = ({ recipe }: FavoriteButtonProps) => {
     <div className="text-center space-y-1" onClick={handleFavoriteClick}>
       <FiHeart
         fill={isFavorite ? "#fa003f" : "#FFFBF4"}
-        stroke={isFavorite ? "#fa003f" : "#807E7E"}
+        stroke={isFavorite ? "#fa003f" : "#6b7280"}
         className="size-9 mx-auto"
       />
       <p
-        className={`text-xs font-light break-keep ${
+        className={clsx(
+          "text-xs font-light break-keep",
           isFavorite ? "text-[#fa003f]" : "text-gray-500"
-        }`}
+        )}
       >
         お気に入り
       </p>
