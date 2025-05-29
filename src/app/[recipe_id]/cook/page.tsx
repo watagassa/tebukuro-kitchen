@@ -26,7 +26,21 @@ import YtModal from "./YtModal";
 const Circle = ({ length, page }: { length: number; page: number }) => {
   return (
     <div className="text-black">
-      <span className="m-2 text-white bg-orange-400 p-1 px-2 rounded-full">{page + 1}</span>/ {length}
+      {page + 1 <= 10 ? (
+        <>
+          <span className="m-2 text-white bg-orange-400 p-1 px-2 rounded-full">
+            {page + 1}
+          </span>
+          / {length}
+        </>
+      ) : (
+        <>
+          <span className="m-2 text-white bg-orange-400 p-1 px-1 rounded-full">
+            {page + 1}
+          </span>
+          / {length}
+        </>
+      )}
     </div>
   );
 };
