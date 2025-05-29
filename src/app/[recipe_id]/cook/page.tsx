@@ -25,16 +25,9 @@ import YtModal from "./YtModal";
 //丸を描画する　length=丸の数　page=塗りつぶし判定用ページ数
 const Circle = ({ length, page }: { length: number; page: number }) => {
   return (
-    <>
-      {Array.from({ length: length }).map((_, index) => (
-        <div
-          key={index}
-          className={`mx-2 w-2 h-2 border border-black rounded-full ${
-            page == index ? "bg-orange-400" : ""
-          }`}
-        ></div>
-      ))}
-    </>
+    <div className="text-black">
+      <span className="m-2 text-white bg-orange-400 p-1 px-2 rounded-full">{page + 1}</span>/ {length}
+    </div>
   );
 };
 
@@ -171,7 +164,7 @@ const Cook = ({
             </div>
           )}
         </div>
-        <div className="mt-6 mb-10 flex justify-center image-mid:mb-2 image-mid:mt-5 image-sml:mb-0 image-sml:mt-2">
+        <div className="mt-6 mb-10 ml-4 image-mid:mb-2 image-mid:mt-5 image-sml:mb-0 image-sml:mt-2">
           <Circle length={length} page={page} />
         </div>
         <div
