@@ -1,5 +1,6 @@
 import { Recipe } from "@/app/types";
 import { supabase } from "../supabase";
+import { exchangeIDtoUUID } from "../supabaseLogin";
 
 const fetchedIds: number[] = [];
 
@@ -47,4 +48,20 @@ export const Homefetcher_SWR_NEW = async (key: string): Promise<Recipe[]> => {
     if (error) console.error(error);
     return data ?? ([] as Recipe[]);
   }
+};
+
+export const getAllUserRecipesByID = async (user_id: number) => {
+  const user_UUID = await exchangeIDtoUUID(user_id);
+  if (!user_UUID) {
+    console.error("ユーザーのUUIDが取得できませんでした");
+    return [] as Recipe[];
+  }
+  const recipes = await supabase
+    .from("recipes")
+    .select("*")
+    .eq("user_id", user_UUID);
+  if (recipes.error) {
+    console.error("ユーザーのレシピ取得中にエラー", recipes.error);
+  }
+  return recipes.data as Recipe[];
 };

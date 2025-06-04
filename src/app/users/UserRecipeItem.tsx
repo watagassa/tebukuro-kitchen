@@ -13,11 +13,13 @@ const ModalContainer = ({ children }: { children: React.JSX.Element }) => {
   return createPortal(children, container);
 };
 
-const MyRecipeItem = ({
+const UserRecipeItem = ({
+  user_id,
   id,
   name,
   image_url,
 }: {
+  user_id?: number;
   id: number;
   name: string;
   image_url?: string;
@@ -36,22 +38,25 @@ const MyRecipeItem = ({
             className="rounded-lg object-cover"
           />
         </div>
+
         <div className="flex flex-col justify-between flex-grow h-full">
           <p className="font-semibold mt-auto text-base break-words">{name}</p>
-          <div className="flex gap-4 text-xs self-end pt-1 md:pt-3">
-            <Link
-              href={`/users/edit/${id}`}
-              className="bg-white text-orange-400 border-orange-400 border-2 px-4 py-1 rounded-3xl"
-            >
-              編集
-            </Link>
-            <button
-              onClick={() => setDeleteModalOpen(true)}
-              className="bg-orange-400 text-white px-4 py-1 rounded-3xl"
-            >
-              削除
-            </button>
-          </div>
+          {!user_id && (
+            <div className="flex gap-4 text-xs self-end pt-1 md:pt-3">
+              <Link
+                href={`/users/edit/${id}`}
+                className="bg-white text-orange-400 border-orange-400 border-2 px-4 py-1 rounded-3xl"
+              >
+                編集
+              </Link>
+              <button
+                onClick={() => setDeleteModalOpen(true)}
+                className="bg-orange-400 text-white px-4 py-1 rounded-3xl"
+              >
+                削除
+              </button>
+            </div>
+          )}
         </div>
       </div>
       <div id="container">
@@ -70,4 +75,4 @@ const MyRecipeItem = ({
   );
 };
 
-export default MyRecipeItem;
+export default UserRecipeItem;

@@ -1,17 +1,31 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import MyRecipeItem from "./MyRecipeItem";
 import { Recipe } from "../types";
 import { getAllUserRecipes } from "../utils/supabaseFunctionsNew";
-const MyRecipeList = () => {
+import UserRecipeItem from "./UserRecipeItem";
+import { getAllUserRecipesByID } from "../utils/supabase/recipe";
+
+type MyRecipeListProps = {
+  user_id?: number;
+};
+
+const UserRecipeList = ({ user_id }: MyRecipeListProps) => {
   const [userRecipe, setUserRecipe] = useState<Recipe[]>([]);
   useEffect(() => {
-    const getUserRecipes = async () => {
-      const recipe = await getAllUserRecipes();
-      setUserRecipe(recipe);
-    };
-    getUserRecipes();
+    if (!user_id) {
+      const getUserRecipes = async () => {
+        const recipe = await getAllUserRecipes();
+        setUserRecipe(recipe);
+      };
+      getUserRecipes();
+    } else {
+      const getUserRecipesByID = async () => {
+        const recipe = await getAllUserRecipesByID(user_id);
+        setUserRecipe(recipe);
+      };
+      getUserRecipesByID();
+    }
   }, []);
 
   return (
@@ -19,7 +33,8 @@ const MyRecipeList = () => {
       {userRecipe != undefined ? (
         <>
           {userRecipe.map((recipe: Recipe) => (
-            <MyRecipeItem
+            <UserRecipeItem
+              user_id={user_id}
               key={recipe.id}
               id={recipe.id}
               name={recipe.name}
@@ -39,4 +54,4 @@ const MyRecipeList = () => {
   );
 };
 
-export default MyRecipeList;
+export default UserRecipeList;
