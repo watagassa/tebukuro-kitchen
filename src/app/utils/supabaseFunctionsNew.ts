@@ -264,9 +264,9 @@ export const addSomeDescript = async (
   descripts: DescriptSchemaType
 ) => {
   descripts.map(async (e, index) => {
-    if (e.image !== undefined) {
+    if (e.imageFile !== undefined) {
       const descriptImagePath = `${recipe_id}/Descripts/${index}.jpg`;
-      const image = await compressImage(e.image);
+      const image = await compressImage(e.imageFile);
       await uploadImage(image, descriptImagePath);
       const image_url = await getImageUrl(descriptImagePath);
       console.log("image_url", image_url);
@@ -283,9 +283,9 @@ export const updateSomeDescript = async (
   descripts: DescriptSchemaType
 ) => {
   for (const [index, e] of descripts.entries()) {
-    if (e.image !== undefined) {
+    if (e.imageFile !== undefined) {
       const descriptImagePath = `${recipe_id}/Descripts/${index}.jpg`;
-      const image = await compressImage(e.image);
+      const image = await compressImage(e.imageFile);
       await updateImage(image, descriptImagePath);
       const image_url = await getImageUrl(descriptImagePath);
       console.log("image_url", image_url);
@@ -390,7 +390,7 @@ export const getImageUrl = async (filePath: string) => {
 export const getDetailRecipebyId = async (id: number) => {
   const detailRecipe: PostgrestSingleResponse<DetailRecipe> = await supabase
     .from("recipes")
-    .select("*, descripts(*), ingredients(*), profiles(name)")
+    .select("*, descripts(*), ingredients(*), profiles(name, avatar_url)")
     .eq("id", id)
     .single();
   if (detailRecipe.error) {
@@ -466,8 +466,8 @@ export const getFavoriteRecipes = async () => {
     .from("favorites")
     .select("recipes(*)")
     .eq("user_id", await getCurrentUserID())) as PostgrestSingleResponse<
-      { recipes: Recipe }[]
-    >;
+    { recipes: Recipe }[]
+  >;
   if (res.error) {
     console.error("favorites取得中にエラー", res.error);
   }
@@ -494,7 +494,7 @@ export const isFavorited = async (recipe_id: number) => {
 };
 // favorites削除関数
 export const deleteFavorites = async (recipe_id: number) => {
-  await supabase.from("favorites").delete().eq("recipe_id", recipe_id)
+  await supabase.from("favorites").delete().eq("recipe_id", recipe_id);
 };
 
 export const PAGE_SIZE_SWR = 10;
@@ -544,7 +544,7 @@ export const getRecipes_tst = async (key: string) => {
   }
   // 強制的にRecipe[]として認識させる
   return data ?? ([] as Recipe[]);
-}
+};
 
 export const searchFetcher_tst = async (key: string) => {
   const [, kw, pageIndexStr] = key.split("-");
@@ -569,7 +569,9 @@ export const favoritesFetcher = async (key: string): Promise<Recipe[]> => {
     .from("favorites")
     .select("recipes(*)")
     .range(pageIndex * PAGE_SIZE_SWR, (pageIndex + 1) * PAGE_SIZE_SWR - 1)
-    .eq("user_id", await getCurrentUserID())) as PostgrestSingleResponse<{ recipes: Recipe }[]>;
+    .eq("user_id", await getCurrentUserID())) as PostgrestSingleResponse<
+    { recipes: Recipe }[]
+  >;
 
   if (res.error) {
     console.error("favorites取得中にエラー", res.error);
@@ -580,7 +582,9 @@ export const favoritesFetcher = async (key: string): Promise<Recipe[]> => {
   return res.data?.map((favo) => favo.recipes) ?? ([] as Recipe[]);
 };
 
-export const searchfavoritesFetcher = async (key: string): Promise<Recipe[]> => {
+export const searchfavoritesFetcher = async (
+  key: string
+): Promise<Recipe[]> => {
   const [, kw, pageIndexStr] = key.split("-");
   const pageIndex = Number(pageIndexStr);
   const res = (await supabase
@@ -588,7 +592,9 @@ export const searchfavoritesFetcher = async (key: string): Promise<Recipe[]> => 
     .select("recipes(*)")
     .range(pageIndex * PAGE_SIZE_SWR, (pageIndex + 1) * PAGE_SIZE_SWR - 1)
     .eq("user_id", await getCurrentUserID())
-    .ilike("recipes.name", `%${kw}%`)) as PostgrestSingleResponse<{ recipes: Recipe }[]>;
+    .ilike("recipes.name", `%${kw}%`)) as PostgrestSingleResponse<
+    { recipes: Recipe }[]
+  >;
   if (res.error) {
     console.error("favorites取得中にエラー", res.error);
   }

@@ -2,19 +2,15 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import { SubmitHandler } from "react-hook-form";
-import { useSwipeable } from "react-swipeable";
-
-import { FaPen } from "react-icons/fa";
-import { BiCamera, BiCameraOff, BiPlus } from "react-icons/bi";
-import { WiTime4 } from "react-icons/wi";
+import { BiPlus } from "react-icons/bi";
+import { TbCameraPlus } from "react-icons/tb";
 
 import DescriptInputItem from "@/app/conponents/registration/DescriptInputItem";
 import IngredientInputItem from "@/app/conponents/registration/IngredientInputItem";
 import Footer from "@/app/conponents/Footer";
-import { inputDescript, InputIngredient } from "@/app/types";
 import { updateRecipeImage } from "@/app/utils/supabaseFncUpdate";
 import {
   addRecipe,
@@ -27,24 +23,19 @@ import {
 import { RecipeSchemaType } from "@/app/validations/schema";
 import { useRecipeFormTop } from "@/app/validations/useFormUtils";
 
-const Registration = () => {
+export default function Registration() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [inputDescripts, setInputDescripts] = useState<inputDescript[]>([
-    { image: undefined, text: "" },
-    { image: undefined, text: "" },
-  ]);
-  const [inputIngredients, setInputIngredients] = useState<InputIngredient[]>([
-    { name: "", amount: "" },
-    { name: "", amount: "" },
-  ]);
-  const [showFooter, setshowFooter] = useState(true);
   const [loading, setLoading] = useState(false);
-  const handlers = useSwipeable({
-    onSwipedUp: () => setshowFooter(false),
-    onSwipedDown: () => setshowFooter(true),
-    delta: 10,
-  });
   const router = useRouter();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    ingredientFieldArray,
+    descriptFieldArray,
+  } = useRecipeFormTop();
+
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file !== undefined) {
@@ -57,219 +48,185 @@ const Registration = () => {
   const onSubmit: SubmitHandler<RecipeSchemaType> = async (data) => {
     setLoading(true);
     const recipe_id = await addRecipe(data.recipe);
-    if (recipe_id !== undefined) {
-      if (data.recipe.recipe_image !== undefined) {
+
+    if (recipe_id) {
+      if (data.recipe.recipe_image) {
         const imagePath = `${recipe_id}/recipe.jpg`;
         const image = await compressImage(data.recipe.recipe_image); // 画像を圧縮
         await uploadImage(image, imagePath);
         const recipeImageUrl = await getImageUrl(imagePath);
         await updateRecipeImage(recipe_id, recipeImageUrl);
       }
+
       await addSomeDescript(recipe_id, data.descript);
       await addSomeIngredient(recipe_id, data.ingredient);
     }
 
     // window.alert("レシピが登録できました！");
-    router.replace(`/${recipe_id}`);
-    return true;
+    router.replace("/");
   };
-  const { register, handleSubmit, errors } = useRecipeFormTop();
-
-  useEffect(() => {
-    return () => {
-      console.log(errors);
-    };
-  }, [errors]);
 
   if (loading) {
     return <div>ロード中です</div>;
   }
 
   return (
-    <div
-      {...handlers}
-      className="min-h-screen flex flex-col contain-paint bg-[#FFFBF4] text-black"
-    >
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <main className="pr-4 pl-4">
-            <p className="text-center font-semibold text-lg pt-4">
-              レシピを登録
-            </p>
-            <section className="bg-gray-100 h-56 w-9/12 mx-auto rounded-xl mt-4 mb-12 shadow-lg flex-col flex gap-y-4 justify-center items-center relative">
-              {selectedImage ? (
-                <>
-                  <Image
-                    src={selectedImage}
-                    alt=""
-                    className="w-full h-full object-cover rounded-xl"
-                    fill
-                  />
-                  <button
-                    type="button"
-                    title="a"
-                    className="w-6 h-6 rounded-full shadow-lg absolute top-0 right-0 bg-gray-400 m-2 flex justify-center items-center"
-                  >
-                    <BiPlus className="rotate-45 text-2xl text-white" />
-                  </button>
-                </>
-              ) : (
-                <>
-                  <BiCameraOff className="text-gray-400 text-6xl" />
-                  <p className="text-gray-400">料理の写真を選択してください</p>
-                </>
-              )}
-              <div className="absolute right-[-16px] bottom-[-16px]">
+    <div className="min-h-screen flex flex-col contain-paint bg-orange-primary text-black">
+      <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+        <main className="p-4">
+          <p className="text-center text-orange-700 font-semibold text-xl pt-4">
+            レシピを登録
+          </p>
+          <div className="text-xs text-orange-600 mb-4 italic">
+            <span className="text-red-500 font-bold">*</span> は必須項目です
+          </div>
+
+          {/* 画像アップロード */}
+          <section className="bg-gray-100 h-56 w-9/12 mx-auto rounded-xl mt-4 mb-12 shadow-lg flex-col flex gap-y-4 justify-center items-center relative">
+            {selectedImage ? (
+              <>
+                <Image
+                  src={selectedImage}
+                  alt=""
+                  className="object-cover rounded-xl"
+                  fill
+                />
                 <button
                   type="button"
-                  title="b"
-                  className="w-12 h-12 rounded-full shadow-lg bg-white flex justify-center items-center"
+                  className="w-6 h-6 rounded-full shadow-lg absolute top-0 right-0 bg-gray-400 m-2 flex justify-center items-center"
+                  onClick={() => setSelectedImage(null)}
                 >
-                  <BiCamera className="text-2xl" style={{ color: "orange" }} />
+                  <BiPlus className="rotate-45 text-2xl text-white" />
                 </button>
+              </>
+            ) : (
+              <>
+                <TbCameraPlus className="text-gray-400 text-6xl" />
+                <p className="text-gray-400">料理の写真を選択してください</p>
                 <input
                   {...register("recipe.recipe_image")}
-                  title="料理の写真"
                   type="file"
                   accept="image/*"
                   className="absolute inset-0 opacity-0 cursor-pointer"
                   onChange={handleImageChange}
                 />
-              </div>
-            </section>
+              </>
+            )}
             {/* zodのエラー文 */}
-            <div className="text-red-500">
+            <div className="text-red-500 text-sm">
               {errors.recipe?.recipe_image?.message}
             </div>
-            <section className="items-center border-b border-gray-400 bg-[#FEF9EC]">
-              <section className="items-center  border-gray-400 bg-[#FEF9EC]">
-                <section className="flex">
-                  <FaPen className="ml-3 text-gray-400 text-2xl" />
-                  <input
-                    {...register("recipe.recipe_name")}
-                    type="text"
-                    name="recipe.recipe_name"
-                    id="recipe_name"
-                    placeholder="タイトル /例  基本のチャーハン"
-                    style={{ height: "40px", outline: "none" }}
-                    className="w-full bg-[#FEF9EC] pl-3"
-                  />
-                </section>
-                <div className="text-red-500">
-                  {errors.recipe?.recipe_name?.message}
-                </div>
-              </section>
-            </section>
-            <section
-              className="items-center w-1/5 border-b border-gray-400 bg-[#FEF9EC] mt-3"
-              style={{ width: "200px" }}
-            >
-              <section className="flex">
-                <WiTime4 className="my-auto text-gray-400 text-2xl" />
-                <input
-                  {...register("recipe.time")}
-                  type="text"
-                  name="recipe.time"
-                  id="time"
-                  placeholder="調理時間  /例  約10分"
-                  style={{ height: "40px", outline: "none" }}
-                  className="pt-1 bg-[#FEF9EC] pl-2"
-                />
-              </section>
-              {/* zodのエラー文 */}
-              <div className="text-red-500">{errors.recipe?.time?.message}</div>
-            </section>
-            <section>
-              <div className="relative inline-block">
-                <Image
-                  className="py-4 pl-1 translate-y-4"
-                  alt={""}
-                  src="/Vector.png"
-                  height={30}
-                  width={80}
-                />
-                <p
-                  className="absolute inset-0 flex items-center justify-center font-semibold translate-y-4 text-gray-600"
-                  style={{ left: "-16px" }}
-                >
-                  材料
-                </p>
-              </div>
+          </section>
 
-              <div className="items-center border-b border-gray-400 bg-[#FEF9EC] mt-3">
-                <input
-                  {...register("recipe.how_many")}
-                  name="recipe.how_many"
-                  id="people"
-                  placeholder="人数  /例  2人分"
-                  style={{
-                    backgroundColor: "#FEF9EC",
-                    height: "40px",
-                    outline: "none",
-                  }}
-                  className="w-full pl-3"
-                />
-                {/* zodのエラー文 */}
-                <div className="text-red-500">
-                  {errors.recipe?.how_many?.message}
-                </div>
-              </div>
-              <IngredientInputItem
-                errors={errors}
-                register={register}
-                inputs={inputIngredients}
-                setInputs={setInputIngredients}
-              />
-            </section>
+          <section className="mb-4">
+            <label htmlFor="recipe_name" className="text-orange-700 mb-2">
+              タイトル<span className="text-red-500 ml-1">*</span>
+            </label>
+            <input
+              {...register("recipe.recipe_name")}
+              type="text"
+              id="recipe_name"
+              placeholder="基本のチャーハン"
+              className="w-full p-2 border border-orange-200 h-10 rounded-md"
+              autoCapitalize="off"
+              autoCorrect="off"
+            />
+            <div className="text-red-500 text-sm">
+              {errors.recipe?.recipe_name?.message}
+            </div>
+          </section>
 
-            <section className="mx-4">
-              <p className="font-semibold text-lg pb-1 mb-3 border-b border-black mt-4">
-                作り方
-              </p>
-              <DescriptInputItem
-                errors={errors}
-                register={register}
-                inputItems={inputDescripts}
-                setInputItems={setInputDescripts}
-              />
-            </section>
-            <section className="mx-4">
-              <p className="font-semibold text-lg pb-1 mb-3 border-b border-black mt-4">
-                料理の紹介
-              </p>
-              <textarea
-                {...register("recipe.recipe_comment")}
-                title="料理の紹介"
-                name="recipe.recipe_comment"
-                id="comment"
-                className="w-full border border-gray-500 outline-none"
-                style={{ outline: "none" }}
-                rows={4}
-              ></textarea>
-            </section>
+          <section className="mb-3">
+            <label htmlFor="recipe_comment" className="text-orange-700">
+              説明
+            </label>
+            <textarea
+              {...register("recipe.recipe_comment")}
+              id="recipe_comment"
+              className="w-full border border-orange-200 rounded-md p-2"
+              placeholder="忙しい日でも簡単に作れる、香ばしい風味漂う絶品チャーハンです。"
+              rows={3}
+              autoCapitalize="off"
+              autoCorrect="off"
+            ></textarea>
             {/* zodのエラー文 */}
-            <div className="text-red-500">
+            <div className="text-red-500 text-sm">
               {errors.recipe?.recipe_comment?.message}
             </div>
-            <button
-              type="submit"
-              className="flex justify-center text-white bg-orange-400 hover:bg-orange-400 font-semibold rounded-xl text-lg py-3 w-64 shadow-md mx-auto mt-8"
-            >
-              レシピを登録する
-            </button>
-            <div className="bg-[#FFFBF4] w-full h-8"></div>
-          </main>
-          <div
-            className={`sticky bottom-0 w-full z-20 transition-transform duration-200 ${
-              showFooter ? "translate-y-0" : "translate-y-full"
-            }`}
-          >
-            <Footer pathName="/registration" />
+          </section>
+
+          <div className="flex gap-2 mb-6">
+            <section className="flex-1">
+              <label htmlFor="time" className="text-orange-700">
+                調理時間
+              </label>
+              <input
+                {...register("recipe.time")}
+                type="text"
+                id="time"
+                placeholder="約10分"
+                className="w-full p-2 border border-orange-200 rounded-md h-10"
+                autoCapitalize="off"
+                autoCorrect="off"
+              />
+              {/* zodのエラー文 */}
+              <div className="text-red-500 text-sm">
+                {errors.recipe?.time?.message}
+              </div>
+            </section>
+
+            <section className="flex-1">
+              <label htmlFor="how_many" className="text-orange-700">
+                人数
+              </label>
+              <input
+                {...register("recipe.how_many")}
+                id="how_many"
+                placeholder="2人分"
+                className="w-full p-2 h-10 border border-orange-200 rounded-md"
+                autoCapitalize="off"
+                autoCorrect="off"
+              />
+              {/* zodのエラー文 */}
+              <div className="text-red-500 text-sm">
+                {errors.recipe?.how_many?.message}
+              </div>
+            </section>
           </div>
+
+          <section className="mb-6">
+            <p className="font-semibold text-orange-600 text-lg border-b border-orange-600">
+              材料<span className="text-red-500 ml-1">*</span>
+            </p>
+            <IngredientInputItem
+              errors={errors}
+              register={register}
+              fieldArray={ingredientFieldArray}
+            />
+          </section>
+
+          <section>
+            <p className="font-semibold text-orange-600 text-lg border-b border-orange-600">
+              作り方
+            </p>
+            <DescriptInputItem
+              errors={errors}
+              register={register}
+              fieldArray={descriptFieldArray}
+            />
+          </section>
+
+          <button
+            type="submit"
+            className="flex justify-center text-white bg-orange-400 hover:bg-orange-400 font-semibold rounded-xl text-lg py-3 w-64 shadow-md mx-auto my-8"
+          >
+            レシピを登録する
+          </button>
+        </main>
+        <div className="sticky bottom-0 w-full z-20">
+          <Footer pathName="/registration" />
         </div>
       </form>
     </div>
   );
-};
-
-export default Registration;
+}
