@@ -264,9 +264,9 @@ export const addSomeDescript = async (
   descripts: DescriptSchemaType
 ) => {
   descripts.map(async (e, index) => {
-    if (e.image !== undefined) {
+    if (e.imageFile !== undefined) {
       const descriptImagePath = `${recipe_id}/Descripts/${index}.jpg`;
-      const image = await compressImage(e.image);
+      const image = await compressImage(e.imageFile);
       await uploadImage(image, descriptImagePath);
       const image_url = await getImageUrl(descriptImagePath);
       console.log("image_url", image_url);
@@ -283,9 +283,9 @@ export const updateSomeDescript = async (
   descripts: DescriptSchemaType
 ) => {
   for (const [index, e] of descripts.entries()) {
-    if (e.image !== undefined) {
+    if (e.imageFile !== undefined) {
       const descriptImagePath = `${recipe_id}/Descripts/${index}.jpg`;
-      const image = await compressImage(e.image);
+      const image = await compressImage(e.imageFile);
       await updateImage(image, descriptImagePath);
       const image_url = await getImageUrl(descriptImagePath);
       console.log("image_url", image_url);

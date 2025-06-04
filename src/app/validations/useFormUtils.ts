@@ -1,31 +1,42 @@
-import { useForm } from "react-hook-form";
-import { RecipeSchema, RecipeSchemaType } from "./schema";
+import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { RecipeSchema, RecipeSchemaType } from "@/app/validations/schema";
+
 export const useRecipeFormTop = () => {
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm<RecipeSchemaType>({
+  const methods = useForm<RecipeSchemaType>({
     resolver: zodResolver(RecipeSchema),
     defaultValues: {
-      recipe: { recipe_name: "", recipe_comment: "", time: "", how_many: "" },
+      recipe: {
+        recipe_name: "",
+        recipe_image: undefined,
+        recipe_comment: "",
+        time: "",
+        how_many: "",
+      },
       ingredient: [
         { name: "", amount: "" },
         { name: "", amount: "" },
       ],
       descript: [
-        { text: "", image: undefined },
-        { text: "", image: undefined },
+        { text: "", imageString: "", imageFile: undefined },
+        { text: "", imageString: "", imageFile: undefined },
       ],
     },
   });
+
+  const ingredientFieldArray = useFieldArray({
+    control: methods.control,
+    name: "ingredient",
+  });
+
+  const descriptFieldArray = useFieldArray({
+    control: methods.control,
+    name: "descript",
+  });
+
   return {
-    register,
-    handleSubmit:handleSubmit,
-    setValue,
-    // onSubmit: onSubmit,
-    errors,
+    ...methods,
+    ingredientFieldArray,
+    descriptFieldArray,
   };
 };
