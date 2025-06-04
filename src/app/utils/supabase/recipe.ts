@@ -1,5 +1,7 @@
 import { Recipe } from "@/app/types";
 import { supabase } from "../supabase";
+import { exchangeIDtoUUID } from "../supabaseLogin";
+import { getCurrentUserID } from "../supabaseFunctionsNew";
 
 const fetchedIds: number[] = [];
 
@@ -47,4 +49,44 @@ export const Homefetcher_SWR_NEW = async (key: string): Promise<Recipe[]> => {
     if (error) console.error(error);
     return data ?? ([] as Recipe[]);
   }
+};
+
+export const FavoriteFetcher_SWR_NEW = async (
+  key: string
+): Promise<Recipe[]> => {
+  const kw = key.split("-")[1];
+  // console.log("fetcher kw", kw);
+  // console.log("fetcher kwType", typeof kw);
+  // keywordが空文字や無い場合はバックで条件なしで取得するようにしている
+  const { data, error } = await supabase.rpc("get_favorite_recipes_by_uuid", {
+    count: 10,
+    exclude_ids: fetchedIds, // 取得済みID
+    target_user_id: await getCurrentUserID(),
+    keyword: kw,
+  });
+  if (data) {
+    const newIds = data.map((r: Recipe) => r.id);
+    fetchedIds.push(...newIds);
+    console.log("fetchedIds", fetchedIds);
+    console.log("data", data);
+  }
+  //簡単な部分一致検索(参考:https://zenn.dev/417/scraps/b494b081c2c33b)
+  if (error) console.error(error);
+  return data ?? ([] as Recipe[]);
+};
+
+export const getAllUserRecipesByID = async (user_id: number) => {
+  const user_UUID = await exchangeIDtoUUID(user_id);
+  if (!user_UUID) {
+    console.error("ユーザーのUUIDが取得できませんでした");
+    return [] as Recipe[];
+  }
+  const recipes = await supabase
+    .from("recipes")
+    .select("*")
+    .eq("user_id", user_UUID);
+  if (recipes.error) {
+    console.error("ユーザーのレシピ取得中にエラー", recipes.error);
+  }
+  return recipes.data as Recipe[];
 };
