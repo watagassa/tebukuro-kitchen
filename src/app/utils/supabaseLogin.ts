@@ -1,10 +1,12 @@
 import { supabase } from "./supabase";
-import { profiles } from "../types";
+import { frontProfile } from "../types";
+import { UUID } from "crypto";
+
 export const addProfile = async () => {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  console.log("User :", user);
+
   if (!user) return;
 
   const profileData = {
@@ -28,7 +30,7 @@ export const addProfile = async () => {
     if (userData.error) {
       console.error("supabaseエラー", userData.error);
     } else {
-      console.log("User profile created:", userData.data);
+      console.log("プロフィール追加成功");
     }
   } else {
     const userData = await supabase
@@ -41,7 +43,7 @@ export const addProfile = async () => {
     if (userData.error) {
       console.error("supabaseエラー", userData.error);
     } else {
-      console.log("User profile update:", userData.data);
+      console.log("プロフィール更新成功");
     }
   }
 };
@@ -87,16 +89,58 @@ export const logout = async () => {
   }
 };
 
-// UUIDよりユーザープロフィール取得
+// idよりユーザープロフィール取得
 export const getProfileByID = async (id: number) => {
-  const recipe = await supabase
+  const profile = await supabase
     .from("profiles")
     .select("*")
     .eq("id", id)
     .single();
-  if (recipe.error) {
-    console.error("supabaseエラー", recipe.error);
+  if (profile.error) {
+    console.error("supabaseエラー", profile.error);
   }
   // profilesとして認識させる
-  return recipe.data as profiles;
+  const frontProfile: frontProfile = {
+    name: profile.data.name,
+    avatar_url: profile.data.avatar_url,
+  };
+  return frontProfile;
+};
+
+export const exchangeIDtoUUID = async (id: number) => {
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("user_id")
+    .eq("id", id)
+    .single();
+  if (error) {
+    console.error("supabaseエラー", error);
+    return null;
+  }
+  return data.user_id as UUID;
+};
+
+export const getMyProfile = async () => {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { name: "ゲスト", avatar_url: "/thumbnail.png" };
+
+  const { data: profile, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("user_id", user.id)
+    .single();
+
+  if (error || !profile) {
+    console.error("プロフィールの取得に失敗しました", error);
+    return;
+  }
+
+  const profileData: frontProfile = {
+    name: profile.name,
+    avatar_url: profile.avatar_url,
+  };
+
+  return profileData;
 };
