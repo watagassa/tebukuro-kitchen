@@ -5,7 +5,7 @@ import { createContext, useState } from "react";
 import { number, string } from "zod";
 import Header from "../conponents/Header/Header";
 import AddRecipeCords from "../conponents/AddRecipeCords";
-import { getRecipes_tst, PAGE_SIZE_SWR, searchFetcher_tst, } from "../utils/supabaseFunctionsNew";
+import { GET_RECIPE_SIZE, homeGetRecipes, homeGetRecipesKeyword } from "../utils/supabase/recipe";
 
 export const kWContext = createContext({} as { searchKW: string, setSearchKW: (kW: string) => void });
 
@@ -22,9 +22,8 @@ export default function HomeForm() {
 
         <AddRecipeCords
           materialKey={searchKW === "" ? "Recipe" : searchKW}
-          fetcher={searchKW === "" ? getRecipes_tst : searchFetcher_tst}
+          fetcher={searchKW === "" ? homeGetRecipes : homeGetRecipesKeyword}
           kw={searchKW}
-          pageSize={PAGE_SIZE_SWR}
         />
 
         <div className={` sticky bottom-0 w-full z-20 transition-transform duration-200 `}>

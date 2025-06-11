@@ -8,6 +8,7 @@ import {
 } from "../utils/supabaseFunctionsNew";
 import { useEffect, useState } from "react";
 import { FiHeart } from "react-icons/fi";
+import { mutate, useSWRConfig } from "swr";
 
 type FavoriteButtonProps = {
   recipe: Recipe;
@@ -28,14 +29,38 @@ const FavoriteButton = ({ recipe }: FavoriteButtonProps) => {
     checkFavorite();
   }, [recipe_id]);
 
+  const { cache } = useSWRConfig();
   // クリックイベント: お気に入りの状態を切り替え、localStorageを更新
   const handleFavoriteClick = async () => {
     if (isFavorite) {
       // お気に入りから削除
       await deleteFavorites(recipe_id)
+      console.log("SWR キャッシュキー一覧:");
+  for (const key of cache.keys()) {
+    console.log("key判定",key.startsWith('favorites') || key.startsWith('$inf$favorites'))
+    console.log(key);
+  }
+  await mutate(
+  key =>
+    typeof key === 'string' &&
+    (key.startsWith('favorites') || key.startsWith('$inf$favorites')),
+  undefined,
+  { revalidate: true }
+);
     } else {
       // お気に入りに追加
       await addFavorites(recipe_id)
+      console.log("SWR キャッシュキー一覧:");
+  for (const key of cache.keys()) {
+    console.log(key);
+  }
+  await mutate(
+  key =>
+    typeof key === 'string' &&
+    (key.startsWith('favorites') || key.startsWith('$inf$favorites')),
+  undefined,
+  { revalidate: true }
+);
     }
 
     // isFavoriteの状態を反転

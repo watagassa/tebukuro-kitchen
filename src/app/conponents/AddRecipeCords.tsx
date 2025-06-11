@@ -5,19 +5,19 @@ import useSWRInfinite from 'swr/infinite';
 import { useInView } from 'react-intersection-observer'
 import LoadingComponent from './LoadingDataFetch';
 import { kWContext } from '../home/HomeForm';
+import { GET_RECIPE_SIZE } from '../utils/supabase/recipe';
 
 type propsType = {
     materialKey: string;                            //表示管理用　一意のキーを指定する
     fetcher: (key: string) => Promise<Recipe[]>;    //データ取得用のfetcher関数
     kw?: string;                                    //検索キーワード
-    pageSize: number;                               //1ページあたりのデータ数
 }
 
-const AddRecipeCords = ({ materialKey, fetcher, pageSize }: propsType) => {
+const AddRecipeCords = ({ materialKey, fetcher }: propsType) => {
     const searchKW = useContext(kWContext).searchKW;
     const getKey = (pageIndex: number, previousPageData: Recipe[][] | null) => {
         const key = `${materialKey}-${searchKW}-${pageIndex}`;
-        if (previousPageData && previousPageData.length < pageSize) return null;
+        if (previousPageData && previousPageData.length < GET_RECIPE_SIZE) return null;
         return key;
     }
 
@@ -31,7 +31,7 @@ const AddRecipeCords = ({ materialKey, fetcher, pageSize }: propsType) => {
     );
 
     const isEmpty = data?.[0]?.length === 0
-    const isReachingEnd = isEmpty || (data && data?.[data?.length - 1]?.length < pageSize)
+    const isReachingEnd = isEmpty || (data && data?.[data?.length - 1]?.length < GET_RECIPE_SIZE)
 
     // 画面下の要素にrefを渡し、refが画面に表示されたらisScrollEndがtrueになる
     const { ref, inView: isScrollEnd } = useInView()

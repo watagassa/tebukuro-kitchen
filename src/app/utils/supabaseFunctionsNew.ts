@@ -562,14 +562,19 @@ export const searchFetcher_tst = async (key: string) => {
 };
 
 export const favoritesFetcher = async (key: string): Promise<Recipe[]> => {
-  console.log(`fetcher key: ${key}`);
   const pageIndexStr = key.split("-").pop();
   const pageIndex = Number(pageIndexStr);
   const res = (await supabase
     .from("favorites")
+    // .select("*, recipe:recipes(*)") // 必要に応じてリレーション展開
     .select("recipes(*)")
     .range(pageIndex * PAGE_SIZE_SWR, (pageIndex + 1) * PAGE_SIZE_SWR - 1)
-    .eq("user_id", await getCurrentUserID())) as PostgrestSingleResponse<{ recipes: Recipe }[]>;
+    .eq("user_id", await getCurrentUserID())) as PostgrestSingleResponse<
+    { recipes: Recipe }[]
+  >;
+
+    // .eq("user_id", await getCurrentUserID())
+
 
   if (res.error) {
     console.error("favorites取得中にエラー", res.error);
@@ -577,11 +582,16 @@ export const favoritesFetcher = async (key: string): Promise<Recipe[]> => {
   if (res.data?.length === 0) {
     console.log("お気に入りのレシピはありません");
   }
+
   return res.data?.map((favo) => favo.recipes) ?? ([] as Recipe[]);
+  // return([] as Recipe[]);
+  // res.data?.map((user)=> user.map((favo:any)=> favo.recipes? favo.recipes : console.log("favo.recipesがundefinedです")));
+  // res.data?.map((user)=> user.map((favo:any)=> console.log(favo.recipes)));
+  // return res.data?.map((user)=> user.map((favo:any)=> favo.recipes))?.flat() ?? ([] as Recipe[]);
 };
 
 export const searchfavoritesFetcher = async (key: string): Promise<Recipe[]> => {
-  const [, kw, pageIndexStr] = key.split("-");
+  const [ kw, pageIndexStr] = [key.substring(key.indexOf("-") + 1, key.lastIndexOf("-")), key.split("-").pop()];
   const pageIndex = Number(pageIndexStr);
   const res = (await supabase
     .from("favorites")
