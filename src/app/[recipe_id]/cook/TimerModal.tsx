@@ -1,4 +1,10 @@
-import { SetStateAction, useEffect, useRef, useState } from "react";
+import {
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+} from "react";
 import { createPortal } from "react-dom";
 import { IoMdClose } from "react-icons/io";
 import { num2TimerText, str2TimerText } from "./timerFunc";
@@ -64,12 +70,13 @@ const TimerModal = ({
     } else {
       setTimerDisp(num2TimerText(min, sec, setMin, setSec, true));
     }
-    if (min == 0 && sec == 0 && !playing) {
+
+    if (min === 0 && sec === 0 && !playing) {
       setInUse(false);
     } else {
       setInUse(true);
     }
-  }, [update, setTimerDisp, setInUse, min, playing]);
+  }, [update, setTimerDisp, setInUse, min, sec, playing]);
 
   // アラーム終了時の処理　（終了するまではstart判定はtrueのまま）
   if (alarm.current) {
@@ -78,6 +85,19 @@ const TimerModal = ({
       reset();
     };
   }
+
+  // リセットボタン
+  const reset = useCallback(() => {
+    if (alarm.current) {
+      alarm.current.pause();
+      alarm.current.currentTime = 0;
+      setPlaying(false);
+    }
+    setMin(0);
+    setSec(0);
+    setStart(false);
+    setUpdate((prev) => !prev); // ← こう書くと依存に update を入れなくてOK
+  }, [alarm, setPlaying, setMin, setSec, setStart, setUpdate]);
 
   // タイマーのインターバル処理
   useEffect(() => {
@@ -115,20 +135,7 @@ const TimerModal = ({
         clearInterval(manager);
       }
     };
-  }, [setTimerDisp, start, setStart, min, sec]);
-
-  // リセットボタン
-  const reset = () => {
-    if (alarm.current) {
-      alarm.current.pause();
-      alarm.current.currentTime = 0;
-      setPlaying(false);
-    }
-    setMin(0);
-    setSec(0);
-    setStart(false);
-    setUpdate(!update);
-  };
+  }, [setTimerDisp, start, setStart, min, sec, reset]);
 
   // スタート、ストップボタン
   const start_stop = () => {
@@ -139,12 +146,12 @@ const TimerModal = ({
   // アラームが鳴っている時のストップボタン
   useEffect(() => {
     if (playing && (min == 0 || sec == 0)) reset();
-  }, [start]);
+  }, [start, min, playing, reset, sec]);
 
   // 音声認識でのリセット検出
   useEffect(() => {
     reset();
-  }, [timerReset]);
+  }, [timerReset, reset]);
 
   // 背景押したら閉じるやつ
   const bgClickClose = (e: React.MouseEvent) => {

@@ -14,6 +14,8 @@ export default function MyComponent() {
   }, [page]);
 
   useEffect(() => {
+    const target = loader.current; // ← 安定した参照を保持
+
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) setPage((prev) => prev + 1);
@@ -21,9 +23,9 @@ export default function MyComponent() {
       { threshold: 1.0 }
     );
 
-    if (loader.current) observer.observe(loader.current);
+    if (target) observer.observe(target);
     return () => {
-      if (loader.current) observer.unobserve(loader.current);
+      if (target) observer.unobserve(target);
     };
   }, []);
 

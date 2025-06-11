@@ -11,10 +11,7 @@ import { BiCamera, BiCameraOff, BiPlus } from "react-icons/bi";
 import DescriptInputItem from "./DescriptInputItem";
 import IngredientInputItem from "./IngredientInputItem";
 import Footer from "@/app/conponents/Footer";
-import {
-  inputDescript,
-  InputIngredient,
-} from "../../../types";
+import { inputDescript, InputIngredient } from "../../../types";
 import { updateRecipeImage } from "../../../utils/supabaseFncUpdate";
 import {
   compressImage,
@@ -43,7 +40,12 @@ const Edit = ({ params }: { params: { recipe_id: number } }) => {
     { image: undefined, text: "" },
     { image: undefined, text: "" },
   ]);
-  const { register, handleSubmit, setValue, errors } = useRecipeFormTop();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useRecipeFormTop();
 
   useEffect(() => {
     const init = async () => {
@@ -86,7 +88,7 @@ const Edit = ({ params }: { params: { recipe_id: number } }) => {
     };
     init();
   }, [params.recipe_id, setValue]);
-  
+
   const [showFooter, setshowFooter] = useState(true);
   const [loading, setLoading] = useState(false);
   const handlers = useSwipeable({

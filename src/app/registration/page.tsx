@@ -53,6 +53,7 @@ export default function Registration() {
       if (data.recipe.recipe_image) {
         const imagePath = `${recipe_id}/recipe.jpg`;
         const image = await compressImage(data.recipe.recipe_image); // 画像を圧縮
+
         await uploadImage(image, imagePath);
         const recipeImageUrl = await getImageUrl(imagePath);
         await updateRecipeImage(recipe_id, recipeImageUrl);

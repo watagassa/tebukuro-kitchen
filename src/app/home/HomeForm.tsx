@@ -2,20 +2,24 @@
 
 import Footer from "@/app/conponents/Footer";
 import { createContext, useState } from "react";
-import { number, string } from "zod";
 import Header from "../conponents/Header/Header";
 import AddRecipeCords from "../conponents/AddRecipeCords";
-import { getRecipes_tst, PAGE_SIZE_SWR, searchFetcher_tst, } from "../utils/supabaseFunctionsNew";
+import {
+  getRecipes_tst,
+  PAGE_SIZE_SWR,
+  searchFetcher_tst,
+} from "../utils/supabaseFunctionsNew";
 
-export const kWContext = createContext({} as { searchKW: string, setSearchKW: (kW: string) => void });
+export const kWContext = createContext(
+  {} as { searchKW: string; setSearchKW: (kW: string) => void }
+);
 
 export default function HomeForm() {
-  const [searchKW, setSearchKW] = useState('');
+  const [searchKW, setSearchKW] = useState("");
 
   return (
     <div className="  min-h-screen flex flex-col contain-paint bg-[#FFFBF4]">
       <kWContext.Provider value={{ searchKW, setSearchKW }}>
-
         <div className={`sticky top-0 z-20`}>
           <Header />
         </div>
@@ -27,10 +31,12 @@ export default function HomeForm() {
           pageSize={PAGE_SIZE_SWR}
         />
 
-        <div className={` sticky bottom-0 w-full z-20 transition-transform duration-200 `}>
-          <Footer pathName='/' />
+        <div
+          className={` sticky bottom-0 w-full z-20 transition-transform duration-200 `}
+        >
+          <Footer pathName="/" />
         </div>
-      </ kWContext.Provider>
-    </div >
+      </kWContext.Provider>
+    </div>
   );
 }
