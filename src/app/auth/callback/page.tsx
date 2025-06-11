@@ -30,7 +30,7 @@ export default function AuthCallback() {
     };
 
     processSession();
-  }, []);
+  }, [router, searchParams]);
 
   return <Loading />;
 }

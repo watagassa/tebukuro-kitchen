@@ -26,7 +26,7 @@ const UserRecipeList = ({ user_id }: MyRecipeListProps) => {
       };
       getUserRecipesByID();
     }
-  }, []);
+  }, [user_id]);
 
   return (
     <section className="bg-white rounded-xl mx-2 max-h-[36rem] overflow-y-scroll">

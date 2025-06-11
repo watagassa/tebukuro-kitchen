@@ -28,7 +28,7 @@ const UserProfile = ({ user_id }: UserProfileProps) => {
     };
     console.log("マイプロフィール取得" + profile.name, profile.avatar_url);
     fetchProfile();
-  }, []);
+  }, [profile.avatar_url, profile.name, user_id]);
   return (
     <div className="flex gap-x-3">
       <div className="relative size-16 shrink-0">
