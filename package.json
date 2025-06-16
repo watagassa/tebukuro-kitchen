@@ -7,7 +7,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "fmt": "prettier --config .prettierrc --write ."
+    "fmt": "prettier --config .prettierrc --write .",
+    "prepare": "husky",
+    "postinstall": "husky install"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
@@ -40,6 +47,8 @@
     "eslint": "^8.57.1",
     "eslint-config-next": "14.2.9",
     "eslint-config-prettier": "^10.1.5",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.2",
     "postcss": "^8",
     "prettier": "^3.5.3",
     "tailwindcss": "^3.4.1",
