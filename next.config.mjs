@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 import nextPwa from "next-pwa";
+import withBundleAnalyzer from "@next/bundle-analyzer";
 
 const withPWA = nextPwa({
   dest: "public",
@@ -9,6 +10,7 @@ const withPWA = nextPwa({
 });
 
 const nextConfig = {
+  reactStrictMode: true,
   images: {
     // googleのユーザ画像を表示するための設定
     domains: ["lh3.googleusercontent.com"],
@@ -23,4 +25,6 @@ const nextConfig = {
   },
 };
 
-export default withPWA(nextConfig);
+export default withBundleAnalyzer({
+  enabled: process.env.ANALYZE === "true",
+})(withPWA(nextConfig));

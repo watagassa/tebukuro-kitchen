@@ -34,12 +34,14 @@ const DescriptInputItem = ({
     }
   };
 
-  const handleInputChange =
-    (index: number,e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      const newInputItems = [...inputItems];
-          newInputItems[index].text = e.target.value;
-          setInputItems(newInputItems);
-    };
+  const handleInputChange = (
+    index: number,
+    e: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    const newInputItems = [...inputItems];
+    newInputItems[index].text = e.target.value;
+    setInputItems(newInputItems);
+  };
 
   const handleImageUpload =
     (index: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,7 +83,7 @@ const DescriptInputItem = ({
                 <BiCameraOff className="text-gray-400 text-2xl" />
               )}
               <input
-                {...register(`descript.${index}.image`)}
+                {...register(`descript.${index}.imageFile`)}
                 title="画像"
                 type="file"
                 accept="image/*"
@@ -92,7 +94,7 @@ const DescriptInputItem = ({
             {/* zodのエラー文 */}
             <div className="text-red-500">
               {errors.descript !== undefined ? (
-                <div>{errors.descript[index]?.image?.message}</div>
+                <div>{errors.descript[index]?.imageFile?.message}</div>
               ) : null}
             </div>
             <div className="flex bg-white">
@@ -104,7 +106,7 @@ const DescriptInputItem = ({
                 className="h-16 w-full pt-1 text-[10px] resize-none"
                 placeholder="フライパンに油をひき、卵を割る。白身が白くなったらお米を入れる。"
                 style={{ outline: "none" }}
-                onChange={(e) => handleInputChange(index,e)}
+                onChange={(e) => handleInputChange(index, e)}
               />
             </div>
             {/* zodのエラー文 */}
