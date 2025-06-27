@@ -15,7 +15,7 @@ export async function updateIngredient(
   id: number,
   name: string,
   amount: string,
-  index: number
+  index: number,
 ) {
   const { error } = await supabase
     .from("ingredients")
@@ -55,10 +55,10 @@ export async function updateDescriptsImage(id: number, image_url: string) {
     console.error("supabaseエラー", error.message);
   }
 }
-export async function updateDescripts(id:number,text:string,index:number) {
+export async function updateDescripts(id: number, text: string, index: number) {
   const { error } = await supabase
     .from("descripts")
-    .update({ text:text, index: index })
+    .update({ text: text, index: index })
     .eq("id", id);
   if (error) {
     console.error("descriptsの更新中にエラー", error);

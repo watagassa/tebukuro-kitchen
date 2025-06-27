@@ -8,7 +8,7 @@ import { DescriptType, IngredientType, RecipeType } from "./typesUnion";
 export const FncRecipeSet = (
   state: string,
   recipeType: RecipeType,
-  setRecipe: Dispatch<SetStateAction<Recipe>>
+  setRecipe: Dispatch<SetStateAction<Recipe>>,
 ) => {
   switch (recipeType) {
     case "id":
@@ -36,22 +36,22 @@ export const FncRecipeSet = (
 export const FncIngredientSet = (
   state: string | number,
   recipeType: IngredientType,
-  setIngredient: Dispatch<SetStateAction<Ingredient>>
+  setIngredient: Dispatch<SetStateAction<Ingredient>>,
 ) => {
   typeof state === "number"
     ? setIngredient((prev) => ({ ...prev, recipe_id: state }))
     : recipeType === "name"
-    ? setIngredient((prev) => ({ ...prev, name: state }))
-    : setIngredient((prev) => ({ ...prev, amount: state }));
+      ? setIngredient((prev) => ({ ...prev, name: state }))
+      : setIngredient((prev) => ({ ...prev, amount: state }));
 };
 export const FncDescriptSet = (
-    state: string | number,
-    recipeType: DescriptType,
-    setIngredient: Dispatch<SetStateAction<Descript>>
-  ) => {
-    typeof state === "number"
-      ? setIngredient((prev) => ({ ...prev, recipe_id: state }))
-      : recipeType === "image_url"
+  state: string | number,
+  recipeType: DescriptType,
+  setIngredient: Dispatch<SetStateAction<Descript>>,
+) => {
+  typeof state === "number"
+    ? setIngredient((prev) => ({ ...prev, recipe_id: state }))
+    : recipeType === "image_url"
       ? setIngredient((prev) => ({ ...prev, image_url: state }))
       : setIngredient((prev) => ({ ...prev, text: state }));
-  };
+};

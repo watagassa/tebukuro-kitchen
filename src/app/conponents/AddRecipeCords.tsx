@@ -29,7 +29,7 @@ const AddRecipeCords = ({ materialKey, fetcher, pageSize }: propsType) => {
       revalidateOnFocus: false, // windowをフォーカスすると再検証しない
       revalidateOnMount: false, // マウント時に再検証しない
       revalidateFirstPage: false, // 2ページ目以降を読み込むとき毎回1ページ目を再検証しない
-    }
+    },
   );
 
   const isEmpty = data?.[0]?.length === 0;
@@ -50,7 +50,7 @@ const AddRecipeCords = ({ materialKey, fetcher, pageSize }: propsType) => {
   return (
     <div className="flex-1">
       <div
-        className={`bg-[#FFFBF4] border-none flex-grow grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 auto-rows-min gap-5 p-5`}
+        className={`grid flex-grow auto-rows-min grid-cols-2 gap-5 border-none bg-[#FFFBF4] p-5 sm:grid-cols-3 lg:grid-cols-4`}
       >
         {data?.flat().map((recipe: Recipe, index) => (
           <div key={index}>

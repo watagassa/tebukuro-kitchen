@@ -36,7 +36,7 @@ const DescriptInputItem = ({
 
   const handleInputChange = (
     index: number,
-    e: React.ChangeEvent<HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     const newInputItems = [...inputItems];
     newInputItems[index].text = e.target.value;
@@ -62,7 +62,7 @@ const DescriptInputItem = ({
       <div className="grid grid-cols-2 gap-4 p-4">
         {inputItems.map((inputItem, index) => (
           <div key={index}>
-            <div className="bg-gray-100 h-32 shadow-md flex justify-center items-center mb-3 relative">
+            <div className="relative mb-3 flex h-32 items-center justify-center bg-gray-100 shadow-md">
               {inputItem.image ? (
                 <>
                   <Image
@@ -73,14 +73,14 @@ const DescriptInputItem = ({
                   />
                   <button
                     title="画像"
-                    className="size-5 rounded-full shadow-lg absolute top-0 right-0 bg-gray-400 m-2 flex justify-center items-center"
+                    className="absolute right-0 top-0 m-2 flex size-5 items-center justify-center rounded-full bg-gray-400 shadow-lg"
                   >
                     <BiPlus className="rotate-45 text-2xl text-white" />
                   </button>
                 </>
               ) : null}
               {!inputItem.image && (
-                <BiCameraOff className="text-gray-400 text-2xl" />
+                <BiCameraOff className="text-2xl text-gray-400" />
               )}
               <input
                 {...register(`descript.${index}.imageFile`)}
@@ -88,7 +88,7 @@ const DescriptInputItem = ({
                 type="file"
                 accept="image/*"
                 onChange={handleImageUpload(index)}
-                className="absolute inset-0 opacity-0 cursor-pointer"
+                className="absolute inset-0 cursor-pointer opacity-0"
               />
             </div>
             {/* zodのエラー文 */}
@@ -98,12 +98,12 @@ const DescriptInputItem = ({
               ) : null}
             </div>
             <div className="flex bg-white">
-              <p className="flex-shrink-0 bg-orange-400 text-white size-4 flex items-center justify-center font-semibold text-xs rounded-sm m-1">
+              <p className="m-1 flex size-4 flex-shrink-0 items-center justify-center rounded-sm bg-orange-400 text-xs font-semibold text-white">
                 {index + 1} {/* 番号表示 */}
               </p>
               <textarea
                 {...register(`descript.${index}.text`)}
-                className="h-16 w-full pt-1 text-[10px] resize-none"
+                className="h-16 w-full resize-none pt-1 text-[10px]"
                 placeholder="フライパンに油をひき、卵を割る。白身が白くなったらお米を入れる。"
                 style={{ outline: "none" }}
                 onChange={(e) => handleInputChange(index, e)}
@@ -122,7 +122,7 @@ const DescriptInputItem = ({
         type="button"
         onClick={addInput}
         disabled={inputItems.length >= maxInputs}
-        className="flex mx-auto my-4 text-orange-400"
+        className="mx-auto my-4 flex text-orange-400"
       >
         <BiPlus className="text-2xl" />
         <p>項目を増やす</p>
