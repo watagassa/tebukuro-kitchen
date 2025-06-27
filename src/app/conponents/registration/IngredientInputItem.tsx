@@ -34,20 +34,20 @@ const IngredientInputItem = ({
       {fields.map((field, index) => (
         <div
           key={field.id}
-          className="flex justify-between items-start gap-2 mb-2"
+          className="mb-2 flex items-start justify-between gap-2"
         >
           <section className="flex-1">
             <input
               {...register(`ingredient.${index}.name`)}
               type="text"
               placeholder="材料名"
-              className="w-full p-2 h-10 border border-orange-200 rounded-md"
+              className="h-10 w-full rounded-md border border-orange-200 p-2"
               inputMode="text"
               autoCorrect="off"
             />
 
             {/* zodのエラー文 */}
-            <div className="text-red-500 text-sm">
+            <div className="text-sm text-red-500">
               {errors?.ingredient?.[index]?.name?.message}
             </div>
           </section>
@@ -57,12 +57,12 @@ const IngredientInputItem = ({
               {...register(`ingredient.${index}.amount`)}
               type="text"
               placeholder="分量"
-              className="w-full p-2 h-10 border border-orange-200 rounded-md"
+              className="h-10 w-full rounded-md border border-orange-200 p-2"
               inputMode="text"
               autoCorrect="off"
             />
             {/* zodのエラー文 */}
-            <div className="text-red-500 text-sm]">
+            <div className="text-sm] text-red-500">
               {errors?.ingredient?.[index]?.amount?.message}
             </div>
           </section>
@@ -71,7 +71,7 @@ const IngredientInputItem = ({
           {fields.length > 1 && (
             <button
               onClick={() => remove(index)}
-              className="text-red-500 mt-2 self-start"
+              className="mt-2 self-start text-red-500"
             >
               <BiTrash className="text-2xl" />
             </button>
@@ -84,7 +84,7 @@ const IngredientInputItem = ({
           type="button"
           onClick={addInput}
           disabled={fields.length >= maxInputs}
-          className="flex items-center mx-auto my-5 px-10 py-1 rounded-sm text-orange-400 border border-dashed border-orange-400"
+          className="mx-auto my-5 flex items-center rounded-sm border border-dashed border-orange-400 px-10 py-1 text-orange-400"
         >
           <BiPlus className="text-lg" />
           <p className="text-sm">材料を追加</p>

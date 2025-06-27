@@ -37,7 +37,7 @@ export const Homefetcher_SWR_NEW = async (key: string): Promise<Recipe[]> => {
         count: 10,
         exclude_ids: fetchedIds, // 取得済みID
         keyword: kw,
-      }
+      },
     );
     if (data) {
       const newIds = data.map((r: Recipe) => r.id);
@@ -52,7 +52,7 @@ export const Homefetcher_SWR_NEW = async (key: string): Promise<Recipe[]> => {
 };
 
 export const FavoriteFetcher_SWR_NEW = async (
-  key: string
+  key: string,
 ): Promise<Recipe[]> => {
   const kw = key.split("-")[1];
   // console.log("fetcher kw", kw);

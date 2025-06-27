@@ -56,19 +56,19 @@ const Edit = ({ params }: { params: { recipe_id: number } }) => {
       setValue("recipe.recipe_name", recipe[0].name);
       setValue(
         "recipe.time",
-        recipe[0].time != undefined ? recipe[0].time : ""
+        recipe[0].time != undefined ? recipe[0].time : "",
       );
       setValue(
         "recipe.how_many",
-        recipe[0].howmany != undefined ? recipe[0].howmany : ""
+        recipe[0].howmany != undefined ? recipe[0].howmany : "",
       );
       setValue(
         "recipe.recipe_comment",
-        recipe[0].comment != undefined ? recipe[0].comment : ""
+        recipe[0].comment != undefined ? recipe[0].comment : "",
       );
 
       setSelectedImage(
-        recipe[0].image_url != undefined ? recipe[0].image_url : ""
+        recipe[0].image_url != undefined ? recipe[0].image_url : "",
       );
 
       const ingData: InputIngredient[] = [];
@@ -134,45 +134,45 @@ const Edit = ({ params }: { params: { recipe_id: number } }) => {
   return (
     <div
       {...handlers}
-      className="min-h-screen flex flex-col contain-paint bg-[#FFFBF4] text-black"
+      className="flex min-h-screen flex-col bg-[#FFFBF4] text-black contain-paint"
     >
       {loading === false ? (
         <form onSubmit={handleSubmit(onSubmit)}>
           <div>
-            <main className="pr-4 pl-4">
-              <p className="text-center font-semibold text-lg pt-4">
+            <main className="pl-4 pr-4">
+              <p className="pt-4 text-center text-lg font-semibold">
                 レシピを編集
               </p>
-              <section className="bg-gray-100 h-56 w-9/12 mx-auto rounded-xl mt-10 mb-12 shadow-lg flex-col flex gap-y-4 justify-center items-center relative">
+              <section className="relative mx-auto mb-12 mt-10 flex h-56 w-9/12 flex-col items-center justify-center gap-y-4 rounded-xl bg-gray-100 shadow-lg">
                 {selectedImage ? (
                   <>
                     <Image
                       src={selectedImage}
                       alt=""
-                      className="w-full h-full object-cover rounded-xl"
+                      className="h-full w-full rounded-xl object-cover"
                       fill
                     />
                     <button
                       type="button"
                       title="a"
-                      className="w-6 h-6 rounded-full shadow-lg absolute top-0 right-0 bg-gray-400 m-2 flex justify-center items-center"
+                      className="absolute right-0 top-0 m-2 flex h-6 w-6 items-center justify-center rounded-full bg-gray-400 shadow-lg"
                     >
                       <BiPlus className="rotate-45 text-2xl text-white" />
                     </button>
                   </>
                 ) : (
                   <>
-                    <BiCameraOff className="text-gray-400 text-6xl" />
+                    <BiCameraOff className="text-6xl text-gray-400" />
                     <p className="text-gray-400">
                       料理の写真を選択してください
                     </p>
                   </>
                 )}
-                <div className="absolute right-[-16px] bottom-[-16px]">
+                <div className="absolute bottom-[-16px] right-[-16px]">
                   <button
                     type="button"
                     title="b"
-                    className="w-12 h-12 rounded-full shadow-lg bg-white flex justify-center items-center"
+                    className="flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-lg"
                   >
                     <BiCamera
                       className="text-2xl"
@@ -184,7 +184,7 @@ const Edit = ({ params }: { params: { recipe_id: number } }) => {
                     title="料理の写真"
                     type="file"
                     accept="image/*"
-                    className="absolute inset-0 opacity-0 cursor-pointer"
+                    className="absolute inset-0 cursor-pointer opacity-0"
                     onChange={handleImageChange}
                   />
                 </div>
@@ -194,9 +194,9 @@ const Edit = ({ params }: { params: { recipe_id: number } }) => {
                 {errors.recipe?.recipe_image?.message}
               </div>
               <section className="items-center border-b border-gray-400 bg-[#FEF9EC]">
-                <section className="items-center  border-gray-400 bg-[#FEF9EC]">
+                <section className="items-center border-gray-400 bg-[#FEF9EC]">
                   <section className="flex">
-                    <FaPen className="ml-3 text-gray-400 text-2xl" />
+                    <FaPen className="ml-3 text-2xl text-gray-400" />
                     <input
                       {...register("recipe.recipe_name")}
                       type="text"
@@ -213,11 +213,11 @@ const Edit = ({ params }: { params: { recipe_id: number } }) => {
                 </section>
               </section>
               <section
-                className="items-center w-1/5 border-b border-gray-400 bg-[#FEF9EC] mt-3"
+                className="mt-3 w-1/5 items-center border-b border-gray-400 bg-[#FEF9EC]"
                 style={{ width: "200px" }}
               >
                 <section className="flex">
-                  <FaPen className="ml-3 text-gray-400 text-2xl" />
+                  <FaPen className="ml-3 text-2xl text-gray-400" />
                   <input
                     {...register("recipe.time")}
                     type="text"
@@ -225,7 +225,7 @@ const Edit = ({ params }: { params: { recipe_id: number } }) => {
                     id="time"
                     placeholder="時間  /例  約10分"
                     style={{ height: "40px", outline: "none" }}
-                    className="pt-1 bg-[#FEF9EC] pl-2"
+                    className="bg-[#FEF9EC] pl-2 pt-1"
                   />
                 </section>
                 {/* zodのエラー文 */}
@@ -236,21 +236,21 @@ const Edit = ({ params }: { params: { recipe_id: number } }) => {
               <section>
                 <div className="relative inline-block">
                   <Image
-                    className="py-4 pl-1 translate-y-4"
+                    className="translate-y-4 py-4 pl-1"
                     alt={""}
                     src="/Vector.png"
                     height={30}
                     width={80}
                   />
                   <p
-                    className="absolute inset-0 flex items-center justify-center font-semibold translate-y-4 text-gray-600"
+                    className="absolute inset-0 flex translate-y-4 items-center justify-center font-semibold text-gray-600"
                     style={{ left: "-16px" }}
                   >
                     材料
                   </p>
                 </div>
 
-                <div className="items-center border-b border-gray-400 bg-[#FEF9EC] mt-3">
+                <div className="mt-3 items-center border-b border-gray-400 bg-[#FEF9EC]">
                   <input
                     {...register("recipe.how_many")}
                     name="recipe.how_many"
@@ -278,7 +278,7 @@ const Edit = ({ params }: { params: { recipe_id: number } }) => {
               </section>
 
               <section className="mx-4">
-                <p className="font-semibold text-lg pb-1 mb-3 border-b border-black mt-4">
+                <p className="mb-3 mt-4 border-b border-black pb-1 text-lg font-semibold">
                   作り方
                 </p>
                 <DescriptInputItem
@@ -290,7 +290,7 @@ const Edit = ({ params }: { params: { recipe_id: number } }) => {
                 />
               </section>
               <section className="mx-4">
-                <p className="font-semibold text-lg pb-1 mb-3 border-b border-black mt-4">
+                <p className="mb-3 mt-4 border-b border-black pb-1 text-lg font-semibold">
                   料理の紹介
                 </p>
                 <textarea
@@ -309,14 +309,14 @@ const Edit = ({ params }: { params: { recipe_id: number } }) => {
               </div>
               <button
                 type="submit"
-                className="flex justify-center text-white bg-orange-400 hover:bg-orange-400 font-semibold rounded-xl text-lg py-3 w-64 shadow-md mx-auto mt-8"
+                className="mx-auto mt-8 flex w-64 justify-center rounded-xl bg-orange-400 py-3 text-lg font-semibold text-white shadow-md hover:bg-orange-400"
               >
                 レシピを保存する
               </button>
-              <div className="bg-[#FFFBF4] w-full h-8"></div>
+              <div className="h-8 w-full bg-[#FFFBF4]"></div>
             </main>
             <div
-              className={`sticky bottom-0 w-full z-20 transition-transform duration-200 ${
+              className={`sticky bottom-0 z-20 w-full transition-transform duration-200 ${
                 showFooter ? "translate-y-0" : "translate-y-full"
               }`}
             >

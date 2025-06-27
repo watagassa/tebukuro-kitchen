@@ -45,7 +45,7 @@ export const getPageRecipes = async (
   pageNumber: number,
   pageRecipe: Recipe[],
   setPageRecipe: Dispatch<SetStateAction<Recipe[]>>,
-  setAllRecipesRetrieved: Dispatch<SetStateAction<boolean>>
+  setAllRecipesRetrieved: Dispatch<SetStateAction<boolean>>,
 ) => {
   const recipes = await supabase
     .from("recipes")
@@ -98,7 +98,7 @@ export const addRecipe = async (recipe: RecipeObjectSchemaType) => {
 // レシピ更新
 export const updateRecipe = async (
   id: number,
-  recipe: RecipeObjectSchemaType
+  recipe: RecipeObjectSchemaType,
 ) => {
   const { error } = await supabase
     .from("recipes")
@@ -144,7 +144,7 @@ export const addIngredient = async (
   recipe_id: number,
   index: number,
   name: string,
-  amount: string
+  amount: string,
 ) => {
   const { error } = await supabase
     .from("ingredients")
@@ -164,7 +164,7 @@ export const upsertIngredient = async (
   recipe_id: number,
   index: number,
   name: string,
-  amount: string
+  amount: string,
 ) => {
   const { error } = await supabase
     .from("ingredients")
@@ -177,7 +177,7 @@ export const upsertIngredient = async (
       },
       {
         onConflict: "recipe_id,index",
-      }
+      },
     )
     .select(); // 挿入されたデータを取得するために select() を使用
   if (error) {
@@ -187,7 +187,7 @@ export const upsertIngredient = async (
 // 複数個の材料作成
 export const addSomeIngredient = async (
   recipe_id: number,
-  inputIngredients: IngredientSchemaType
+  inputIngredients: IngredientSchemaType,
 ) => {
   inputIngredients.forEach((e, index) => {
     addIngredient(recipe_id, index, e.name, e.amount);
@@ -195,7 +195,7 @@ export const addSomeIngredient = async (
 };
 export const updateSomeIngredient = async (
   recipe_id: number,
-  inputIngredients: IngredientSchemaType
+  inputIngredients: IngredientSchemaType,
 ) => {
   inputIngredients.forEach((e, index) => {
     upsertIngredient(recipe_id, index, e.name, e.amount);
@@ -230,7 +230,7 @@ export const addDescript = async (
   recipe_id: number,
   index: number,
   image_url?: string,
-  text?: string
+  text?: string,
 ) => {
   await supabase.from("descripts").insert({
     recipe_id: recipe_id,
@@ -244,7 +244,7 @@ export const upsertDescript = async (
   recipe_id: number,
   index: number,
   image_url?: string,
-  text?: string
+  text?: string,
 ) => {
   await supabase.from("descripts").upsert(
     {
@@ -255,13 +255,13 @@ export const upsertDescript = async (
     },
     {
       onConflict: "recipe_id,index",
-    }
+    },
   );
 };
 // 複数個の作り方を作成
 export const addSomeDescript = async (
   recipe_id: number,
-  descripts: DescriptSchemaType
+  descripts: DescriptSchemaType,
 ) => {
   descripts.map(async (e, index) => {
     if (e.imageFile !== undefined) {
@@ -280,7 +280,7 @@ export const addSomeDescript = async (
 // 複数個の作り方を更新
 export const updateSomeDescript = async (
   recipe_id: number,
-  descripts: DescriptSchemaType
+  descripts: DescriptSchemaType,
 ) => {
   for (const [index, e] of descripts.entries()) {
     if (e.imageFile !== undefined) {
@@ -301,7 +301,7 @@ export const deleteDescripts = async (id: number) => {
 // レシピ画像アップロード用
 export const uploadImage = async (
   file: File,
-  filePath: string
+  filePath: string,
   // recipe_id: number
 ) => {
   const { error } = await supabase.storage
@@ -314,7 +314,7 @@ export const uploadImage = async (
 // レシピ画像更新用
 export const updateImage = async (
   file: File,
-  filePath: string
+  filePath: string,
   // recipe_id: number
 ) => {
   const { error } = await supabase.storage
@@ -406,7 +406,7 @@ export const getDetailRecipebyId = async (id: number) => {
 
         console.log(firstIndex - secondIndex);
         return firstIndex - secondIndex;
-      }
+      },
     );
   }
   console.log("sortDes", detailRecipe.data?.descripts);
@@ -418,7 +418,7 @@ export const getDetailRecipebyId = async (id: number) => {
         const secondIndex = Number(secondItem.index ?? Number.MAX_SAFE_INTEGER);
         console.log(firstIndex - secondIndex);
         return firstIndex - secondIndex;
-      }
+      },
     );
     console.log("sortING", detailRecipe.data?.ingredients);
   }
@@ -583,7 +583,7 @@ export const favoritesFetcher = async (key: string): Promise<Recipe[]> => {
 };
 
 export const searchfavoritesFetcher = async (
-  key: string
+  key: string,
 ): Promise<Recipe[]> => {
   const [, kw, pageIndexStr] = key.split("-");
   const pageIndex = Number(pageIndexStr);

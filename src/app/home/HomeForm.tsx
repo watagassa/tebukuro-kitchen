@@ -11,14 +11,14 @@ import {
 } from "../utils/supabaseFunctionsNew";
 
 export const kWContext = createContext(
-  {} as { searchKW: string; setSearchKW: (kW: string) => void }
+  {} as { searchKW: string; setSearchKW: (kW: string) => void },
 );
 
 export default function HomeForm() {
   const [searchKW, setSearchKW] = useState("");
 
   return (
-    <div className="  min-h-screen flex flex-col contain-paint bg-[#FFFBF4]">
+    <div className="flex min-h-screen flex-col bg-[#FFFBF4] contain-paint">
       <kWContext.Provider value={{ searchKW, setSearchKW }}>
         <div className={`sticky top-0 z-20`}>
           <Header />
@@ -32,7 +32,7 @@ export default function HomeForm() {
         />
 
         <div
-          className={` sticky bottom-0 w-full z-20 transition-transform duration-200 `}
+          className={`sticky bottom-0 z-20 w-full transition-transform duration-200`}
         >
           <Footer pathName="/" />
         </div>

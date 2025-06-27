@@ -165,30 +165,30 @@ const TimerModal = ({
       {timerModalOpen && (
         <ModalContainer>
           <div className={timerModalOpen ? "block" : "hidden"}>
-            <div className="bg-black bg-opacity-50 fixed inset-x-0 top-0 bottom-0">
+            <div className="fixed inset-x-0 bottom-0 top-0 bg-black bg-opacity-50">
               <div
                 onClick={bgClickClose}
-                className="flex justify-center items-center h-full"
+                className="flex h-full items-center justify-center"
               >
-                <div className="bg-white mx-3 sm:mx-5 md:mx-20 shadow-lg text-black rounded-2xl p-3 sm:p-4">
-                  <div className="flex w-full justify-end mb-2 sm:mb-3">
+                <div className="mx-3 rounded-2xl bg-white p-3 text-black shadow-lg sm:mx-5 sm:p-4 md:mx-20">
+                  <div className="mb-2 flex w-full justify-end sm:mb-3">
                     <IoMdClose
                       onClick={modalClose}
-                      className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 m-1 sm:m-2"
+                      className="m-1 h-6 w-6 sm:m-2 sm:h-8 sm:w-8 md:h-10 md:w-10"
                     />
                   </div>
-                  <div className="font-sans font-bold text-7xl sm:text-[84px] md:text-8xl text-center mb-4 sm:mb-5">
+                  <div className="mb-4 text-center font-sans text-7xl font-bold sm:mb-5 sm:text-[84px] md:text-8xl">
                     {timerDisp}
                   </div>
-                  <div className="w-full font-bold mb-2">
-                    <div className="flex justify-between mx-2 sm:mx-4 md:mx-5 mb-4 sm:mb-5 leading-none">
+                  <div className="mb-2 w-full font-bold">
+                    <div className="mx-2 mb-4 flex justify-between leading-none sm:mx-4 sm:mb-5 md:mx-5">
                       <button
                         onClick={() => {
                           setMin(min + 60);
                           setUpdate(!update);
                           if (start) setStart(false);
                         }}
-                        className="bg-orange-400 text-white rounded-full w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 text-sm sm:text-base"
+                        className="h-12 w-12 rounded-full bg-orange-400 text-sm text-white sm:h-14 sm:w-14 sm:text-base md:h-16 md:w-16"
                       >
                         +60分
                       </button>
@@ -198,7 +198,7 @@ const TimerModal = ({
                           setUpdate(!update);
                           if (start) setStart(false);
                         }}
-                        className="bg-orange-400 text-white rounded-full w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 text-sm sm:text-base"
+                        className="h-12 w-12 rounded-full bg-orange-400 text-sm text-white sm:h-14 sm:w-14 sm:text-base md:h-16 md:w-16"
                       >
                         +10分
                       </button>
@@ -208,7 +208,7 @@ const TimerModal = ({
                           setUpdate(!update);
                           if (start) setStart(false);
                         }}
-                        className="bg-orange-400 text-white rounded-full w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 text-sm sm:text-base"
+                        className="h-12 w-12 rounded-full bg-orange-400 text-sm text-white sm:h-14 sm:w-14 sm:text-base md:h-16 md:w-16"
                       >
                         +1分
                       </button>
@@ -218,21 +218,21 @@ const TimerModal = ({
                           setUpdate(!update);
                           if (start) setStart(false);
                         }}
-                        className="bg-orange-400 text-white rounded-full w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 text-sm sm:text-base"
+                        className="h-12 w-12 rounded-full bg-orange-400 text-sm text-white sm:h-14 sm:w-14 sm:text-base md:h-16 md:w-16"
                       >
                         +10秒
                       </button>
                     </div>
-                    <div className="flex justify-between mx-2 sm:mx-4 md:mx-5 mb-4 sm:mb-5">
+                    <div className="mx-2 mb-4 flex justify-between sm:mx-4 sm:mb-5 md:mx-5">
                       <button
                         onClick={() => start_stop()}
-                        className="text-base sm:text-xl md:text-2xl tracking-tighter leading-none bg-orange-400 text-white rounded-full w-32 h-14 sm:w-36 sm:h-16 md:w-40 md:h-20 mr-2 sm:mr-3"
+                        className="mr-2 h-14 w-32 rounded-full bg-orange-400 text-base leading-none tracking-tighter text-white sm:mr-3 sm:h-16 sm:w-36 sm:text-xl md:h-20 md:w-40 md:text-2xl"
                       >
                         {start ? "ストップ" : "スタート"}
                       </button>
                       <button
                         onClick={() => reset()}
-                        className="text-base sm:text-xl md:text-2xl tracking-tighter bg-orange-100 text-orange-400 rounded-full w-32 h-14 sm:w-36 sm:h-16 md:w-40 md:h-20"
+                        className="h-14 w-32 rounded-full bg-orange-100 text-base tracking-tighter text-orange-400 sm:h-16 sm:w-36 sm:text-xl md:h-20 md:w-40 md:text-2xl"
                       >
                         リセット
                       </button>
@@ -247,19 +247,19 @@ const TimerModal = ({
 
       {/* 左下のミニタイマー */}
       {inUse ? (
-        <div className="left-1/2 -translate-x-1/2 z-10 fixed top-[85px]">
-          <div className="w-48 bg-orange-400 text-white text-2xl text-center rounded-full px-1 py-0.5 shadow-lg">
+        <div className="fixed left-1/2 top-[85px] z-10 -translate-x-1/2">
+          <div className="w-48 rounded-full bg-orange-400 px-1 py-0.5 text-center text-2xl text-white shadow-lg">
             {timerDisp}
           </div>
-          <div className="flex justify-between mt-2">
+          <div className="mt-2 flex justify-between">
             <div
-              className="bg-orange-400 rounded-full shadow-lg ml-4 py-1 px-2 font-semibold text-sm cursor-pointer text-white"
+              className="ml-4 cursor-pointer rounded-full bg-orange-400 px-2 py-1 text-sm font-semibold text-white shadow-lg"
               onClick={() => start_stop()}
             >
               {start ? "ストップ" : "スタート"}
             </div>
             <div
-              className="bg-orange-400 rounded-full shadow-lg mr-4 py-1 px-2 font-semibold text-sm cursor-pointer text-white"
+              className="mr-4 cursor-pointer rounded-full bg-orange-400 px-2 py-1 text-sm font-semibold text-white shadow-lg"
               onClick={() => reset()}
             >
               リセット

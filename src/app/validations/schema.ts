@@ -21,7 +21,7 @@ const imageSchema = z
     },
     {
       message: `ファイルサイズは最大${MAX_IMAGE_SIZE}MBです`,
-    }
+    },
   )
   .refine(
     (file) => {
@@ -30,7 +30,7 @@ const imageSchema = z
     },
     {
       message: ".jpgもしくは.jpegのみ可能です",
-    }
+    },
   )
   .optional(); // 任意
 //  必須にしたい場合
@@ -49,7 +49,7 @@ const IngredientSchema = z
         .string()
         .min(1, "必須です")
         .max(20, `${MAX_TEXT[0]}文字以下にしてください`),
-    })
+    }),
   )
   .min(1, { message: "必須です" });
 
@@ -59,7 +59,7 @@ const DescriptSchema = z
       text: z.string().min(0).max(45, `${MAX_TEXT[2]}文字以下にしてください`),
       imageString: z.string().optional(),
       imageFile: imageSchema,
-    })
+    }),
   )
   .min(1, { message: "必須です" });
 

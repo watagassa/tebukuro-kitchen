@@ -4,19 +4,19 @@ import UserRecipeList from "./UserRecipeList";
 
 const UserId = () => {
   return (
-    <div className="bg-[#FFFBF4] min-h-screen flex flex-col text-black">
-      <header className="bg-orange-400 sticky w-full flex items-center justify-center p-6 border-b border-gray-400 shadow-md">
-        <p className="text-center text-xl font-semibold pl-10 pr-4 text-balance text-white">
+    <div className="flex min-h-screen flex-col bg-[#FFFBF4] text-black">
+      <header className="sticky flex w-full items-center justify-center border-b border-gray-400 bg-orange-400 p-6 shadow-md">
+        <p className="text-balance pl-10 pr-4 text-center text-xl font-semibold text-white">
           マイページ
         </p>
       </header>
-      <section className="flex p-3 bg-white justify-between">
+      <section className="flex justify-between bg-white p-3">
         <UserProfile />
-        <p className="relative shrink-0 my-auto bg-orange-400 text-white px-3 py-2 rounded-3xl text-xs font-semibold ml-auto mr-2">
+        <p className="relative my-auto ml-auto mr-2 shrink-0 rounded-3xl bg-orange-400 px-3 py-2 text-xs font-semibold text-white">
           ログアウト
         </p>
       </section>
-      <p className="font-semibold text-xl mt-8 mb-4 pl-2">マイレシピ一覧</p>
+      <p className="mb-4 mt-8 pl-2 text-xl font-semibold">マイレシピ一覧</p>
       <UserRecipeList />
       <div className="mt-auto">
         <Footer pathName="/users" />
