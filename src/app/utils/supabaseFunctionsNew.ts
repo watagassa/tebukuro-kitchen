@@ -14,6 +14,7 @@ import imageCompression from "browser-image-compression";
 export const getAllRecipes = async () => {
   const recipes = await supabase.from("recipes").select("*");
   if (recipes.error) {
+    return;
   }
   // 強制的にRecipe[]として認識させる
   return recipes.data as Recipe[];
