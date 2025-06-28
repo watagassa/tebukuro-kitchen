@@ -48,16 +48,16 @@ const FavoriteButton = ({ recipe }: FavoriteButtonProps) => {
   }
 
   return (
-    <div className="text-center space-y-1" onClick={handleFavoriteClick}>
+    <div className="space-y-1 text-center" onClick={handleFavoriteClick}>
       <FiHeart
         fill={isFavorite ? "#fa003f" : "#FFFBF4"}
         stroke={isFavorite ? "#fa003f" : "#6b7280"}
-        className="size-9 mx-auto"
+        className="mx-auto size-9"
       />
       <p
         className={clsx(
-          "text-xs font-light break-keep",
-          isFavorite ? "text-[#fa003f]" : "text-gray-500"
+          "break-keep text-xs font-light",
+          isFavorite ? "text-[#fa003f]" : "text-gray-500",
         )}
       >
         お気に入り

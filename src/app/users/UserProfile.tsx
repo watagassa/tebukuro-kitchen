@@ -39,7 +39,7 @@ const UserProfile = ({ user_id }: UserProfileProps) => {
           className="rounded-full object-cover"
         />
       </div>
-      <div className="font-semibold my-auto">
+      <div className="my-auto font-semibold">
         <p className="pb-1 text-xl text-black">{profile.name}</p>
         {/* <p className="text-xs text-[#797575]">@1124awerq</p> */}
       </div>

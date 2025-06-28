@@ -6,7 +6,7 @@ export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const hasToken = request.cookies.getAll().some((c) =>
     // sb-＜何文字でもOK＞-auth-token か sb-*-auth-token.数字 のいずれかにマッチ
-    /^sb-[^-]+-auth-token(?:\.\d+)?$/.test(c.name)
+    /^sb-[^-]+-auth-token(?:\.\d+)?$/.test(c.name),
   );
   const protectedPaths = ["/edit", "/users", "/registration", "/favorites"];
   const isProtected = protectedPaths.some((p) => path.startsWith(p));

@@ -36,7 +36,7 @@ export const num2TimerText = (
   sec: number,
   setMin: React.Dispatch<React.SetStateAction<number>>,
   setSec: React.Dispatch<React.SetStateAction<number>>,
-  init: boolean 
+  init: boolean,
   /* 
     init : 初期化True or 更新False
     初期化の時は値変更ごとにstateを更新する。

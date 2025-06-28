@@ -72,29 +72,29 @@ export default function Registration() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col contain-paint bg-orange-primary text-black">
+    <div className="flex min-h-screen flex-col bg-orange-primary text-black contain-paint">
       <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <main className="p-4">
-          <p className="text-center text-orange-700 font-semibold text-xl pt-4">
+          <p className="pt-4 text-center text-xl font-semibold text-orange-700">
             レシピを登録
           </p>
-          <div className="text-xs text-orange-600 mb-4 italic">
-            <span className="text-red-500 font-bold">*</span> は必須項目です
+          <div className="mb-4 text-xs italic text-orange-600">
+            <span className="font-bold text-red-500">*</span> は必須項目です
           </div>
 
           {/* 画像アップロード */}
-          <section className="bg-gray-100 h-56 w-9/12 mx-auto rounded-xl mt-4 mb-12 shadow-lg flex-col flex gap-y-4 justify-center items-center relative">
+          <section className="relative mx-auto mb-12 mt-4 flex h-56 w-9/12 flex-col items-center justify-center gap-y-4 rounded-xl bg-gray-100 shadow-lg">
             {selectedImage ? (
               <>
                 <Image
                   src={selectedImage}
                   alt=""
-                  className="object-cover rounded-xl"
+                  className="rounded-xl object-cover"
                   fill
                 />
                 <button
                   type="button"
-                  className="w-6 h-6 rounded-full shadow-lg absolute top-0 right-0 bg-gray-400 m-2 flex justify-center items-center"
+                  className="absolute right-0 top-0 m-2 flex h-6 w-6 items-center justify-center rounded-full bg-gray-400 shadow-lg"
                   onClick={() => setSelectedImage(null)}
                 >
                   <BiPlus className="rotate-45 text-2xl text-white" />
@@ -102,37 +102,37 @@ export default function Registration() {
               </>
             ) : (
               <>
-                <TbCameraPlus className="text-gray-400 text-6xl" />
+                <TbCameraPlus className="text-6xl text-gray-400" />
                 <p className="text-gray-400">料理の写真を選択してください</p>
                 <input
                   {...register("recipe.recipe_image")}
                   type="file"
                   accept="image/*"
-                  className="absolute inset-0 opacity-0 cursor-pointer"
+                  className="absolute inset-0 cursor-pointer opacity-0"
                   onChange={handleImageChange}
                 />
               </>
             )}
             {/* zodのエラー文 */}
-            <div className="text-red-500 text-sm">
+            <div className="text-sm text-red-500">
               {errors.recipe?.recipe_image?.message}
             </div>
           </section>
 
           <section className="mb-4">
-            <label htmlFor="recipe_name" className="text-orange-700 mb-2">
-              タイトル<span className="text-red-500 ml-1">*</span>
+            <label htmlFor="recipe_name" className="mb-2 text-orange-700">
+              タイトル<span className="ml-1 text-red-500">*</span>
             </label>
             <input
               {...register("recipe.recipe_name")}
               type="text"
               id="recipe_name"
               placeholder="基本のチャーハン"
-              className="w-full p-2 border border-orange-200 h-10 rounded-md"
+              className="h-10 w-full rounded-md border border-orange-200 p-2"
               autoCapitalize="off"
               autoCorrect="off"
             />
-            <div className="text-red-500 text-sm">
+            <div className="text-sm text-red-500">
               {errors.recipe?.recipe_name?.message}
             </div>
           </section>
@@ -144,19 +144,19 @@ export default function Registration() {
             <textarea
               {...register("recipe.recipe_comment")}
               id="recipe_comment"
-              className="w-full border border-orange-200 rounded-md p-2"
+              className="w-full rounded-md border border-orange-200 p-2"
               placeholder="忙しい日でも簡単に作れる、香ばしい風味漂う絶品チャーハンです。"
               rows={3}
               autoCapitalize="off"
               autoCorrect="off"
             ></textarea>
             {/* zodのエラー文 */}
-            <div className="text-red-500 text-sm">
+            <div className="text-sm text-red-500">
               {errors.recipe?.recipe_comment?.message}
             </div>
           </section>
 
-          <div className="flex gap-2 mb-6">
+          <div className="mb-6 flex gap-2">
             <section className="flex-1">
               <label htmlFor="time" className="text-orange-700">
                 調理時間
@@ -166,12 +166,12 @@ export default function Registration() {
                 type="text"
                 id="time"
                 placeholder="約10分"
-                className="w-full p-2 border border-orange-200 rounded-md h-10"
+                className="h-10 w-full rounded-md border border-orange-200 p-2"
                 autoCapitalize="off"
                 autoCorrect="off"
               />
               {/* zodのエラー文 */}
-              <div className="text-red-500 text-sm">
+              <div className="text-sm text-red-500">
                 {errors.recipe?.time?.message}
               </div>
             </section>
@@ -184,20 +184,20 @@ export default function Registration() {
                 {...register("recipe.how_many")}
                 id="how_many"
                 placeholder="2人分"
-                className="w-full p-2 h-10 border border-orange-200 rounded-md"
+                className="h-10 w-full rounded-md border border-orange-200 p-2"
                 autoCapitalize="off"
                 autoCorrect="off"
               />
               {/* zodのエラー文 */}
-              <div className="text-red-500 text-sm">
+              <div className="text-sm text-red-500">
                 {errors.recipe?.how_many?.message}
               </div>
             </section>
           </div>
 
           <section className="mb-6">
-            <p className="font-semibold text-orange-600 text-lg border-b border-orange-600">
-              材料<span className="text-red-500 ml-1">*</span>
+            <p className="border-b border-orange-600 text-lg font-semibold text-orange-600">
+              材料<span className="ml-1 text-red-500">*</span>
             </p>
             <IngredientInputItem
               errors={errors}
@@ -207,7 +207,7 @@ export default function Registration() {
           </section>
 
           <section>
-            <p className="font-semibold text-orange-600 text-lg border-b border-orange-600">
+            <p className="border-b border-orange-600 text-lg font-semibold text-orange-600">
               作り方
             </p>
             <DescriptInputItem
@@ -219,12 +219,12 @@ export default function Registration() {
 
           <button
             type="submit"
-            className="flex justify-center text-white bg-orange-400 hover:bg-orange-400 font-semibold rounded-xl text-lg py-3 w-64 shadow-md mx-auto my-8"
+            className="mx-auto my-8 flex w-64 justify-center rounded-xl bg-orange-400 py-3 text-lg font-semibold text-white shadow-md hover:bg-orange-400"
           >
             レシピを登録する
           </button>
         </main>
-        <div className="sticky bottom-0 w-full z-20">
+        <div className="sticky bottom-0 z-20 w-full">
           <Footer pathName="/registration" />
         </div>
       </form>

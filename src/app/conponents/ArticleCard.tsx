@@ -13,9 +13,9 @@ const ArticleCard = (props: ArticleCardProps) => {
   return (
     <Link
       href={`/${recipe.id}${from ? `?from=${from}` : ""}`}
-      className="border-[0.1px] border-gray-400 rounded-[32px] bg-white"
+      className="rounded-[32px] border-[0.1px] border-gray-400 bg-white"
     >
-      <div className="relative rounded-t-[32px] overflow-hidden aspect-[6/5] flex justify-center items-center bg-gray-100">
+      <div className="relative flex aspect-[6/5] items-center justify-center overflow-hidden rounded-t-[32px] bg-gray-100">
         {recipe.image_url ? (
           <Image
             src={recipe.image_url}
@@ -30,7 +30,7 @@ const ArticleCard = (props: ArticleCardProps) => {
         )}
       </div>
 
-      <p className="min-h-11 rounded-b-lg font-semibold text-sm pt-2 text-black flex justify-center">
+      <p className="flex min-h-11 justify-center rounded-b-lg pt-2 text-sm font-semibold text-black">
         {recipe.name}
       </p>
     </Link>

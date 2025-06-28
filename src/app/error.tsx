@@ -6,12 +6,12 @@ const Error = ({ error, reset }: { error: Error; reset: () => void }) => {
     console.error(error);
   }, [error]);
   return (
-    <div className=" border-gray-800 text-gray-800 p-4 mt-4 rounded max-w-md mx-auto">
-      <h3 className="text-2xl font-bold mb-2">エラーが発生しました</h3>
+    <div className="mx-auto mt-4 max-w-md rounded border-gray-800 p-4 text-gray-800">
+      <h3 className="mb-2 text-2xl font-bold">エラーが発生しました</h3>
       <button
         //   再読み込み
         onClick={() => reset()}
-        className="bg-black text-white mt-2 px-4 py-2 rounded hover:bg-orange-500 transition ease-in-out duration-200"
+        className="mt-2 rounded bg-black px-4 py-2 text-white transition duration-200 ease-in-out hover:bg-orange-500"
       >
         再読み込み
       </button>
