@@ -7,7 +7,7 @@ import LoadingComponent from "./LoadingDataFetch";
 import { kWContext } from "../home/HomeForm";
 
 type propsType = {
-  materialKey: string; //表示管理用　一意のキーを指定する
+  materialKey: string; //表示管理用 一意のキーを指定する
   fetcher: (key: string) => Promise<Recipe[]>; //データ取得用のfetcher関数
   kw?: string; //検索キーワード
   pageSize: number; //1ページあたりのデータ数
