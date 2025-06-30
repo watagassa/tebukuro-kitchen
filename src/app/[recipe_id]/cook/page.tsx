@@ -90,6 +90,7 @@ const Cook = ({
 
   const [keyword, setKeyword] = useState(""); // 動画検索ワード YtModal(youtube)用
 
+  // タイマー関連
   const [inputTime, setInputTime] = useState(""); // 音声で認識したタイマーの時間
   const [timerStart, setTimerStart] = useState(false); // タイマーがスタートされているかどうか
   const [timerDisp, setTimerDisp] = useState(""); // タイマーのテキスト
