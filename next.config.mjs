@@ -9,6 +9,10 @@ const withPWA = nextPwa({
   skipWaiting: true,
 });
 
+if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
+  throw new Error("環境変数 NEXT_PUBLIC_SUPABASE_URL が設定されていません");
+}
+
 const nextConfig = {
   reactStrictMode: true,
   images: {
