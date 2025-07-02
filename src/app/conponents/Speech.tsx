@@ -10,11 +10,11 @@ type screenController = {
   next: (
     num: number,
     length: number,
-    setPage: React.Dispatch<React.SetStateAction<number>>
+    setPage: React.Dispatch<React.SetStateAction<number>>,
   ) => void;
   back: (
     num: number,
-    setPage: React.Dispatch<React.SetStateAction<number>>
+    setPage: React.Dispatch<React.SetStateAction<number>>,
   ) => void;
 };
 
@@ -65,7 +65,7 @@ const Speech = ({
   const commands = [
     {
       command: /.*(進んで|進む|次へ|次).*/,
-      //　*印は、雑音に影響されないよう命令の前後の文言を許容するため。起こる恐れのあるバグが不明のため、要検証
+      // *印は、雑音に影響されないよう命令の前後の文言を許容するため。起こる恐れのあるバグが不明のため、要検証
       callback: () => {
         next(num, length, setPage);
         resetTranscript();
@@ -209,8 +209,8 @@ const Speech = ({
       {/* <p className="text-black fixed top-32 bg-black bg-opacity-20">
         response : {response}
       </p> */}
-      <div className="w-full flex justify-center items-center font-mono">
-        <span className="z-10 flex overflow-hidden justify-end whitespace-nowrap max-w-[80vw] h-6 mb-16 text-white fixed bottom-0 bg-black bg-opacity-30">
+      <div className="flex w-full items-center justify-center font-mono">
+        <span className="fixed bottom-0 z-10 mb-16 flex h-6 max-w-[80vw] justify-end overflow-hidden whitespace-nowrap bg-black bg-opacity-30 text-white">
           {transcript}
         </span>
       </div>

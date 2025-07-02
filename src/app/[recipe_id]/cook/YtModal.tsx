@@ -4,7 +4,7 @@ import youtube from "@/app/utils/youtube";
 import React, { useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 
-// 動画取得用のtype　ほぼエラー対策用
+// 動画取得用のtype ほぼエラー対策用
 type Thumbnail = {
   url: string;
   width: number;
@@ -68,26 +68,26 @@ const YtModal = ({
 
   return (
     <>
-      <div className="bg-black bg-opacity-50 fixed inset-x-0 -top-10 bottom-0">
+      <div className="fixed inset-x-0 -top-10 bottom-0 bg-black bg-opacity-50">
         <div
           onClick={bgClickClose}
-          className="flex justify-center items-center h-full"
+          className="flex h-full items-center justify-center"
         >
           <div>
             <div className="flex w-full justify-end">
-              <IoMdClose onClick={modalClose} className="w-10 h-10 m-2" />
+              <IoMdClose onClick={modalClose} className="m-2 h-10 w-10" />
             </div>
             <div>
               {video === null ? (
-                <div className="w-[90vw] h-[30vh] bg-white text-black text-center flex flex-col justify-center">
+                <div className="flex h-[30vh] w-[90vw] flex-col justify-center bg-white text-center text-black">
                   動画をロード中です
                   <div className="flex justify-center">
-                    <div className="mt-5 w-10 h-10 rounded-full animate-spin border-orange-400 border-4 border-t-transparent"></div>
+                    <div className="mt-5 h-10 w-10 animate-spin rounded-full border-4 border-orange-400 border-t-transparent"></div>
                   </div>
                 </div>
               ) : (
                 <iframe
-                  className="w-[90vw] h-[30vh]"
+                  className="h-[30vh] w-[90vw]"
                   src={`https://www.youtube.com/embed/${video?.id.videoId}?autoplay=1&mute=1`}
                   title="YouTube video player"
                 ></iframe>
