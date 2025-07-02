@@ -12,7 +12,7 @@ const Favorites = () => {
   const [kW] = useState("");
 
   return (
-    <div className="  min-h-screen flex flex-col contain-paint bg-[#FFFBF4]">
+    <div className="flex min-h-screen flex-col bg-[#FFFBF4] contain-paint">
       <div className={`sticky top-0 z-20`}>
         <Headertst />
       </div>
@@ -25,7 +25,7 @@ const Favorites = () => {
       />
 
       <div
-        className={` sticky bottom-0 w-full z-20 transition-transform duration-200 `}
+        className={`sticky bottom-0 z-20 w-full transition-transform duration-200`}
       >
         <Footer pathName="/" />
       </div>

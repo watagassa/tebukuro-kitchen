@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const tesx = () => {
-  return (
-    <div>commit test</div>
-  )
-}
+  return <div>commit test</div>;
+};
 
-export default tesx
+export default tesx;

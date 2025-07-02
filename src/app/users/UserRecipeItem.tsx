@@ -27,9 +27,9 @@ const UserRecipeItem = ({
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   return (
-    <section className="flex justify-between px-2 py-3 border-b-2">
-      <div className="flex items-start gap-3 w-full">
-        <div className="relative w-20 md:w-32 aspect-[5/4] shrink-0">
+    <section className="flex justify-between border-b-2 px-2 py-3">
+      <div className="flex w-full items-start gap-3">
+        <div className="relative aspect-[5/4] w-20 shrink-0 md:w-32">
           <Image
             // undefinedの場合はアプリロゴを表示する（仮）
             src={image_url != undefined ? image_url : "/apple-touch-icon.png"}
@@ -39,19 +39,19 @@ const UserRecipeItem = ({
           />
         </div>
 
-        <div className="flex flex-col justify-between flex-grow h-full">
-          <p className="font-semibold mt-auto text-base break-words">{name}</p>
+        <div className="flex h-full flex-grow flex-col justify-between">
+          <p className="mt-auto break-words text-base font-semibold">{name}</p>
           {!user_id && (
-            <div className="flex gap-4 text-xs self-end pt-1 md:pt-3">
+            <div className="flex gap-4 self-end pt-1 text-xs md:pt-3">
               <Link
                 href={`/users/edit/${id}`}
-                className="bg-white text-orange-400 border-orange-400 border-2 px-4 py-1 rounded-3xl"
+                className="rounded-3xl border-2 border-orange-400 bg-white px-4 py-1 text-orange-400"
               >
                 編集
               </Link>
               <button
                 onClick={() => setDeleteModalOpen(true)}
-                className="bg-orange-400 text-white px-4 py-1 rounded-3xl"
+                className="rounded-3xl bg-orange-400 px-4 py-1 text-white"
               >
                 削除
               </button>

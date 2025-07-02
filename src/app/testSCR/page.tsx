@@ -20,7 +20,7 @@ export default function MyComponent() {
       (entries) => {
         if (entries[0].isIntersecting) setPage((prev) => prev + 1);
       },
-      { threshold: 1.0 }
+      { threshold: 1.0 },
     );
 
     if (target) observer.observe(target);

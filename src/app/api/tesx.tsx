@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const tesx = () => {
-  return (
-    <div>tesx</div>
-  )
-}
+  return <div>tesx</div>;
+};
 
-export default tesx
+export default tesx;

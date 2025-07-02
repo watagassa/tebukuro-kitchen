@@ -42,7 +42,7 @@ export default function RecipeId({
 
   if (!list) {
     return (
-      <div className="flex justify-center items-center bg-orange-primary h-screen">
+      <div className="flex h-screen items-center justify-center bg-orange-primary">
         <LoadingDataFetch />
       </div>
     );
@@ -59,12 +59,12 @@ export default function RecipeId({
         />
       )}
 
-      <main className="pb-10 min-h-[calc(100vh-150px)] ">
-        <figure className="flex justify-center items-center border-b border-gray-400 shadow-md aspect-[3/2] bg-gray-100 relative">
+      <main className="min-h-[calc(100vh-150px)] pb-10">
+        <figure className="relative flex aspect-[3/2] items-center justify-center border-b border-gray-400 bg-gray-100 shadow-md">
           {inView && (
             <Link
               href={from === "favorites" ? "/favorites" : "/"}
-              className="absolute top-4 left-4 text-3xl z-10 bg-white rounded-full p-1 shadow-lg cursor-pointer flex items-center justify-center"
+              className="absolute left-4 top-4 z-10 flex cursor-pointer items-center justify-center rounded-full bg-white p-1 text-3xl shadow-lg"
             >
               <IoIosArrowBack />
             </Link>
@@ -90,7 +90,7 @@ export default function RecipeId({
               <p ref={ref} className="text-2xl font-semibold text-orange-700">
                 {list.name}
               </p>
-              <div className="flex items-center gap-2 mt-2">
+              <div className="mt-2 flex items-center gap-2">
                 <Image
                   src={list.profiles.avatar_url}
                   alt={list.profiles.name}
@@ -115,23 +115,23 @@ export default function RecipeId({
           </div>
 
           {list.time && (
-            <div className="inline-flex items-center gap-1 rounded-full bg-orange-100 min-h-6 px-2 max-w h-auto mt-3">
-              <WiTime4 className="size-4 text-orange-500 shrink-0" />
-              <p className="text-xs text-orange-700 break-words">{list.time}</p>
+            <div className="max-w mt-3 inline-flex h-auto min-h-6 items-center gap-1 rounded-full bg-orange-100 px-2">
+              <WiTime4 className="size-4 shrink-0 text-orange-500" />
+              <p className="break-words text-xs text-orange-700">{list.time}</p>
             </div>
           )}
 
           {list.comment && (
-            <p className="text-sm text-gray-600 pt-3">{list.comment}</p>
+            <p className="pt-3 text-sm text-gray-600">{list.comment}</p>
           )}
         </div>
 
-        <div className="lg:flex items-start text-black">
-          <section className="pb-7 flex-1 lg:max-w-md mx-4">
-            <div className="font-semibold text-lg text-orange-600  pb-1 border-b border-orange-600">
+        <div className="items-start text-black lg:flex">
+          <section className="mx-4 flex-1 pb-7 lg:max-w-md">
+            <div className="border-b border-orange-600 pb-1 text-lg font-semibold text-orange-600">
               {list.howmany ? <p>材料（{list.howmany}）</p> : <p>材料</p>}
             </div>
-            <div className="border-orange-200 border mt-4 rounded-xl bg-orange-secondary divide-y divide-dashed divide-neutral-400">
+            <div className="mt-4 divide-y divide-dashed divide-neutral-400 rounded-xl border border-orange-200 bg-orange-secondary">
               {list.ingredients.map((ingredient: Ingredient) => (
                 <IngredientItem
                   key={ingredient.id}
@@ -145,7 +145,7 @@ export default function RecipeId({
           </section>
 
           <section className="mx-4 flex-1">
-            <p className="font-semibold text-lg text-orange-600 pb-1 mb-4 border-b border-orange-600">
+            <p className="mb-4 border-b border-orange-600 pb-1 text-lg font-semibold text-orange-600">
               作り方
             </p>
             <div className="space-y-3">
@@ -166,7 +166,7 @@ export default function RecipeId({
           href={`./${params.recipe_id}/cook${
             from === "favorites" ? "?from=favorites" : ""
           }`}
-          className="flex justify-center items-center gap-1 text-white bg-orange-400 hover:bg-orange-500 font-semibold rounded-xl py-3 w-64 shadow-md mx-auto mt-8"
+          className="mx-auto mt-8 flex w-64 items-center justify-center gap-1 rounded-xl bg-orange-400 py-3 font-semibold text-white shadow-md hover:bg-orange-500"
         >
           <PiMicrophoneBold className="size-[18px]" />
           調理を開始する

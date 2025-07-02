@@ -28,14 +28,14 @@ const Circle = ({ length, page }: { length: number; page: number }) => {
     <div className="text-black">
       {page + 1 <= 10 ? (
         <>
-          <span className="m-2 text-white bg-orange-400 p-1 px-2 rounded-full">
+          <span className="m-2 rounded-full bg-orange-400 p-1 px-2 text-white">
             {page + 1}
           </span>
           / {length}
         </>
       ) : (
         <>
-          <span className="m-2 text-white bg-orange-400 p-1 px-1 rounded-full">
+          <span className="m-2 rounded-full bg-orange-400 p-1 px-1 text-white">
             {page + 1}
           </span>
           / {length}
@@ -98,14 +98,14 @@ const Cook = ({
   // 音声認識コンポーネントでのページ操作用関数
   const back = (
     num: number,
-    setPage: React.Dispatch<React.SetStateAction<number>>
+    setPage: React.Dispatch<React.SetStateAction<number>>,
   ) => {
     num == 0 ? setPage(num) : setPage(num - 1);
   };
   const next = (
     num: number,
     page: number,
-    setPage: React.Dispatch<React.SetStateAction<number>>
+    setPage: React.Dispatch<React.SetStateAction<number>>,
   ) => {
     num == page - 1 ? setPage(num) : setPage(num + 1);
   };
@@ -121,7 +121,7 @@ const Cook = ({
 
   return (
     <>
-      <div className="bg-white fixed inset-x-0 top-0 bottom-0 -z-50">
+      <div className="fixed inset-x-0 bottom-0 top-0 -z-50 bg-white">
         <div className="relative">
           <RecipeHeader
             bgColor="bg-orange-400"
@@ -133,9 +133,9 @@ const Cook = ({
           {title != "" ? ( //ヘッダーのタイトルのロードが完了したら表示（より自然に）
             <button
               onClick={() => setGuideModalOpen(!guideModalOpen)}
-              className="absolute top-0.5 right-1 bg-transparent font-bold p-3 text-white z-50"
+              className="absolute right-1 top-0.5 z-50 bg-transparent p-3 font-bold text-white"
             >
-              <IoChatbubbleEllipsesOutline className="w-6 h-6 mx-auto" />
+              <IoChatbubbleEllipsesOutline className="mx-auto h-6 w-6" />
               ガイド
             </button>
           ) : (
@@ -159,9 +159,9 @@ const Cook = ({
           setTimerReset={setTimerReset}
         />
 
-        <div className="flex justify-center content-center">
+        <div className="flex content-center justify-center">
           {imageSrc != "" ? (
-            <div className="relative w-[100vw] h-[42vh] image-mid:h-[25vh] image-sml:h-[20vh]">
+            <div className="relative h-[42vh] w-[100vw] image-mid:h-[25vh] image-sml:h-[20vh]">
               <Image
                 src={imageSrc}
                 alt={title}
@@ -171,19 +171,19 @@ const Cook = ({
               />
             </div>
           ) : (
-            <div className="shadow-lg content-center bg-gray-100 w-[100vw] h-[42vh] image-mid:h-[25vh] image-sml:h-[20vh]">
+            <div className="h-[42vh] w-[100vw] content-center bg-gray-100 shadow-lg image-mid:h-[25vh] image-sml:h-[20vh]">
               <div className="w-full">
                 <FiCameraOff size={40} stroke="#737373" className="mx-auto" />
               </div>
             </div>
           )}
         </div>
-        <div className="mt-6 mb-10 ml-4 image-mid:mb-2 image-mid:mt-5 image-sml:mb-0 image-sml:mt-2">
+        <div className="mb-10 ml-4 mt-6 image-mid:mb-2 image-mid:mt-5 image-sml:mb-0 image-sml:mt-2">
           <Circle length={length} page={page} />
         </div>
         <div
           id="desc"
-          className="mx-5 font-mono font-black text-left text-black text-2xl break-words"
+          className="mx-5 break-words text-left font-mono text-2xl font-black text-black"
         >
           {descript[page]?.text ?? "読み込み中・・・"}
         </div>
@@ -244,34 +244,34 @@ const Cook = ({
         </div>
 
         {/* フッター */}
-        <div className="z-20 bg-orange-400 w-full fixed bottom-0 h-14 flex justify-center text-white">
-          <div className="text-white flex justify-between fixed bottom-0 z-30 w-full h-14">
+        <div className="fixed bottom-0 z-20 flex h-14 w-full justify-center bg-orange-400 text-white">
+          <div className="fixed bottom-0 z-30 flex h-14 w-full justify-between text-white">
             {page == 0 ? (
-              <div className="w-20 h-14">
-                <div className="w-6 h-6 mx-7"></div>
+              <div className="h-14 w-20">
+                <div className="mx-7 h-6 w-6"></div>
               </div>
             ) : (
               <button
                 onClick={() => setPage(page - 1)}
-                className="w-20 h-14 bg-transparent font-bold"
+                className="h-14 w-20 bg-transparent font-bold"
               >
-                <FaArrowLeft className="w-6 h-6 mx-7" />
+                <FaArrowLeft className="mx-7 h-6 w-6" />
                 戻って
               </button>
             )}
             <button
               onClick={() => setIngModalOpen(!ingModalOpen)}
-              className="bg-transparent font-bold hidden button:block"
+              className="hidden bg-transparent font-bold button:block"
             >
-              <PiNoteDuotone className="w-6 h-6 mx-7" />
+              <PiNoteDuotone className="mx-7 h-6 w-6" />
               材料は?
             </button>
             <button
               onClick={() => setTimerModalOpen(!timerModalOpen)}
-              className="bg-transparent font-bold hidden button:block"
+              className="hidden bg-transparent font-bold button:block"
             >
-              <MdOutlineTimer className="w-6 h-6 mx-7" />
-              <p className="text-xs tracking-tighter leading-none">
+              <MdOutlineTimer className="mx-7 h-6 w-6" />
+              <p className="text-xs leading-none tracking-tighter">
                 〜分〜秒
                 <br />
                 セット
@@ -279,15 +279,15 @@ const Cook = ({
             </button>
             {page == length - 1 ? (
               <Link href={recipePage} className="font-bold">
-                <FaDoorOpen className="w-6 h-6 mx-7 my-1 mb-0" />
+                <FaDoorOpen className="mx-7 my-1 mb-0 h-6 w-6" />
                 <div className="text-center">終了</div>
               </Link>
             ) : (
               <button
                 onClick={() => setPage(page + 1)}
-                className="w-20 h-14 bg-transparent font-bold"
+                className="h-14 w-20 bg-transparent font-bold"
               >
-                <FaArrowRight className="w-6 h-6 mx-7" />
+                <FaArrowRight className="mx-7 h-6 w-6" />
                 進んで
               </button>
             )}
