@@ -11,18 +11,15 @@ type ArticleCardProps = {
 const ArticleCard = (props: ArticleCardProps) => {
   const { recipe, from } = props;
   return (
-    <Link
-      href={`/${recipe.id}${from ? `?from=${from}` : ""}`}
-      className="rounded-[32px] border-[0.1px] border-gray-400 bg-white"
-    >
-      <div className="relative flex aspect-[6/5] items-center justify-center overflow-hidden rounded-t-[32px] bg-gray-100">
+    <Link href={`/${recipe.id}${from ? `?from=${from}` : ""}`}>
+      <div className="relative flex aspect-[12/9] items-center justify-center overflow-hidden rounded-t-xl border-l border-r border-t border-orange-200 bg-gray-100">
         {recipe.image_url ? (
           <Image
             src={recipe.image_url}
             alt={recipe.name}
             fill
             sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
-            className="rounded-t-[32px] object-cover"
+            className="rounded-t-lg object-cover"
             onError={() => console.error("Image failed to load")}
           />
         ) : (
@@ -30,7 +27,7 @@ const ArticleCard = (props: ArticleCardProps) => {
         )}
       </div>
 
-      <p className="flex min-h-11 justify-center rounded-b-lg pt-2 text-sm font-semibold text-black">
+      <p className="flex min-h-11 items-center rounded-b-xl border-b border-l border-r border-orange-200 bg-white pl-2 text-left text-sm font-semibold text-orange-700">
         {recipe.name}
       </p>
     </Link>
