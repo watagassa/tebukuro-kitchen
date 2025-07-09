@@ -5,22 +5,24 @@ import useSWRInfinite from "swr/infinite";
 import { useInView } from "react-intersection-observer";
 import LoadingComponent from "./LoadingDataFetch";
 import { kWContext } from "../home/HomeForm";
+import Error from "next/error";
+import { PAGE_SIZE_SWR } from "../utils/supabaseFunctionsNew";
 
 type propsType = {
-  materialKey: string; //表示管理用　一意のキーを指定する
+  materialKey: string; //表示管理用 一意のキーを指定する
   fetcher: (key: string) => Promise<Recipe[]>; //データ取得用のfetcher関数
-  kw?: string; //検索キーワード
-  pageSize: number; //1ページあたりのデータ数
 };
 
-const AddRecipeCords = ({ materialKey, fetcher, pageSize }: propsType) => {
-  const searchKW = useContext(kWContext).searchKW;
+const AddRecipeCords = ({ materialKey, fetcher }: propsType) => {
+  const kw = useContext(kWContext).searchKW;
+  const { ref, inView: isScrollEnd } = useInView();
+
   const getKey = (pageIndex: number, previousPageData: Recipe[][] | null) => {
-    const key = `${materialKey}-${searchKW}-${pageIndex}`;
-    if (previousPageData && previousPageData.length < pageSize) return null;
+    const key = `${materialKey}-${kw}-${pageIndex}`;
+    if (previousPageData && previousPageData.length < PAGE_SIZE_SWR)
+      return null;
     return key;
   };
-
   const { data, error, isValidating, size, setSize } = useSWRInfinite<Recipe[]>(
     getKey,
     fetcher,
@@ -29,28 +31,21 @@ const AddRecipeCords = ({ materialKey, fetcher, pageSize }: propsType) => {
       revalidateOnFocus: false, // windowをフォーカスすると再検証しない
       revalidateOnMount: false, // マウント時に再検証しない
       revalidateFirstPage: false, // 2ページ目以降を読み込むとき毎回1ページ目を再検証しない
-    }
+    },
   );
 
   const isEmpty = data?.[0]?.length === 0;
   const isReachingEnd =
-    isEmpty || (data && data?.[data?.length - 1]?.length < pageSize);
+    isEmpty || (data && data?.[data?.length - 1]?.length < PAGE_SIZE_SWR);
 
-  // 画面下の要素にrefを渡し、refが画面に表示されたらisScrollEndがtrueになる
-  const { ref, inView: isScrollEnd } = useInView();
-  if (isScrollEnd && !isValidating && !isReachingEnd) {
-    setSize(size + 1);
-  }
-
-  if (error) {
-    console.error(error);
-    return <div>error</div>;
-  }
+  if (isScrollEnd && !isValidating && !isReachingEnd) setSize(size + 1);
+  if (error)
+    return <Error statusCode={500} title="データの取得に失敗しました" />;
 
   return (
-    <div className="flex-1">
+    <div className="flex-1 border-none">
       <div
-        className={`bg-[#FFFBF4] border-none flex-grow grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 auto-rows-min gap-5 p-5`}
+        className={`grid flex-grow auto-rows-min grid-cols-2 gap-5 border-none bg-[#FFFBF4] p-5 sm:grid-cols-3 lg:grid-cols-4`}
       >
         {data?.flat().map((recipe: Recipe, index) => (
           <div key={index}>
