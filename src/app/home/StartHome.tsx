@@ -3,7 +3,7 @@ import HomeForm from "./HomeForm";
 import { randomFetcher } from "../utils/supabase/recipe";
 
 export default async function StartHome() {
-  const key = `Recipe--0`;
+  const key = `Recipe--0`; //デフォルトのキー
 
   const fallbackData = await randomFetcher();
 
