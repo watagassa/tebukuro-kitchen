@@ -6,7 +6,7 @@ import Header from "../conponents/Header/Header";
 import AddRecipeCords from "../conponents/AddRecipeCords";
 import { favoriteFetcher, searchFavFeatcher } from "../utils/supabase/recipe";
 
-export const kWContext = createContext(
+export const kWFavContext = createContext(
   {} as { searchKW: string; setSearchKW: (kW: string) => void },
 );
 
@@ -15,7 +15,7 @@ export default function HomeForm() {
 
   return (
     <div className="flex min-h-screen flex-col bg-[#FFFBF4] contain-paint">
-      <kWContext.Provider value={{ searchKW, setSearchKW }}>
+      <kWFavContext.Provider value={{ searchKW, setSearchKW }}>
         <div className={`sticky top-0 z-20`}>
           <Header />
         </div>
@@ -30,7 +30,7 @@ export default function HomeForm() {
         >
           <Footer pathName="/" />
         </div>
-      </kWContext.Provider>
+      </kWFavContext.Provider>
     </div>
   );
 }

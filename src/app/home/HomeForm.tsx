@@ -4,7 +4,7 @@ import Footer from "@/app/conponents/Footer";
 import { createContext, useState } from "react";
 import Header from "../conponents/Header/Header";
 import AddRecipeCords from "../conponents/AddRecipeCords";
-import { favoriteFetcher, randomFetcher } from "../utils/supabase/recipe";
+import { randomFetcher, searchFeatcher } from "../utils/supabase/recipe";
 
 export const kWContext = createContext(
   {} as { searchKW: string; setSearchKW: (kW: string) => void },
@@ -22,7 +22,7 @@ export default function HomeForm() {
 
         <AddRecipeCords
           materialKey={"Recipe"}
-          fetcher={searchKW === "" ? randomFetcher : favoriteFetcher}
+          fetcher={searchKW === "" ? randomFetcher : searchFeatcher}
         />
 
         <div
