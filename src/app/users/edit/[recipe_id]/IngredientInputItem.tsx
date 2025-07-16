@@ -9,24 +9,24 @@ interface IngredientInputItem {
   register: UseFormRegister<RecipeSchemaType>;
   inputs: InputIngredient[];
   setInputs: Dispatch<SetStateAction<InputIngredient[]>>;
-  setValue: UseFormSetValue<RecipeSchemaType>
+  setValue: UseFormSetValue<RecipeSchemaType>;
 }
 const IngredientInputItem = ({
   errors,
   register,
   inputs,
   setInputs,
-  setValue
+  setValue,
 }: IngredientInputItem) => {
   const maxInputs = 5;
 
-  useEffect(()=>{
-    inputs.map((input, index)=> {
-      setValue(`ingredient.${index}.name`,input.name)
-      setValue(`ingredient.${index}.amount`,input.amount)
-      console.log(input,index)
-    })
-  },[inputs, setValue])
+  useEffect(() => {
+    inputs.map((input, index) => {
+      setValue(`ingredient.${index}.name`, input.name);
+      setValue(`ingredient.${index}.amount`, input.amount);
+      console.log(input, index);
+    });
+  }, [inputs, setValue]);
 
   const addInput = () => {
     if (inputs.length < maxInputs) {
@@ -34,18 +34,22 @@ const IngredientInputItem = ({
     }
   };
 
-  const handleInputNameChange =
-    (index: number,e: React.ChangeEvent<HTMLInputElement>) => {
-      const newInputItems = [...inputs];
-          newInputItems[index].name = e.target.value;
-          setInputs(newInputItems);
-    };
-  const handleInputAmountChange =
-    (index: number,e: React.ChangeEvent<HTMLInputElement>) => {
-      const newInputItems = [...inputs];
-          newInputItems[index].amount = e.target.value;
-          setInputs(newInputItems);
-    };
+  const handleInputNameChange = (
+    index: number,
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const newInputItems = [...inputs];
+    newInputItems[index].name = e.target.value;
+    setInputs(newInputItems);
+  };
+  const handleInputAmountChange = (
+    index: number,
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const newInputItems = [...inputs];
+    newInputItems[index].amount = e.target.value;
+    setInputs(newInputItems);
+  };
 
   // 削除関数（試作）
   //   const removeInput = (index: number) => {
@@ -56,8 +60,8 @@ const IngredientInputItem = ({
   return (
     <div className="mt-4">
       {inputs.map((_, index) => (
-        <div key={index} className="flex gap-4 items-center ">
-          <div className="w-full border-b border-gray-400 pl-3 bg-[#FEF9EC]">
+        <div key={index} className="flex items-center gap-4">
+          <div className="w-full border-b border-gray-400 bg-[#FEF9EC] pl-3">
             <input
               {...register(`ingredient.${index}.name`)}
               type="text"
@@ -66,7 +70,7 @@ const IngredientInputItem = ({
               style={{ outline: "none" }}
               placeholder="材料  /例  たまご"
               onChange={(e) => handleInputNameChange(index, e)}
-              className="w-full  border-gray-400 pl-3 bg-[#FEF9EC] h-[40px]"
+              className="h-[40px] w-full border-gray-400 bg-[#FEF9EC] pl-3"
             />
 
             {/* zodのエラー文 */}
@@ -88,7 +92,7 @@ const IngredientInputItem = ({
               style={{ outline: "none" }}
               placeholder="分量  /例  2個"
               onChange={(e) => handleInputAmountChange(index, e)}
-              className="w-full border-gray-400 pl-3 bg-[#FEF9EC] h-[40px]"
+              className="h-[40px] w-full border-gray-400 bg-[#FEF9EC] pl-3"
             />
             {/* zodのエラー文 */}
             {errors?.ingredient !== undefined ? (
@@ -111,7 +115,7 @@ const IngredientInputItem = ({
         type="button"
         onClick={addInput}
         disabled={inputs.length >= maxInputs}
-        className="flex mx-auto my-4 text-orange-400"
+        className="mx-auto my-4 flex text-orange-400"
       >
         <BiPlus className="text-2xl" />
         <p>項目を増やす</p>

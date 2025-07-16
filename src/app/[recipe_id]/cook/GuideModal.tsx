@@ -11,32 +11,32 @@ const IngModal = ({ modalClose }: { modalClose: () => void }) => {
 
   return (
     <>
-      <div className="bg-black bg-opacity-50 fixed inset-x-0 top-0 bottom-0">
+      <div className="fixed inset-x-0 bottom-0 top-0 bg-black bg-opacity-50">
         <div
           onClick={bgClickClose}
-          className="flex justify-center items-center h-full"
+          className="flex h-full items-center justify-center"
         >
-          <div className="bg-white shadow-lg text-black rounded-2xl p-3 mx-5 w-full max-w-sm sm:max-w-md md:max-w-lg">
+          <div className="mx-5 w-full max-w-sm rounded-2xl bg-white p-3 text-black shadow-lg sm:max-w-md md:max-w-lg">
             <div className="flex w-full justify-end">
               <IoMdClose
                 onClick={modalClose}
-                className="w-6 h-6 cursor-pointer"
+                className="h-6 w-6 cursor-pointer"
               />
             </div>
-            <div className="font-bold text-lg text-center mb-2 border-b border-orange-400">
+            <div className="mb-2 border-b border-orange-400 text-center text-lg font-bold">
               音声認識ガイド
             </div>
             <div className="text-sm">
               <div className="font-bold text-orange-400">「進んで」</div>
-              <div className="ml-4 mb-3">1ページ進みます。</div>
+              <div className="mb-3 ml-4">1ページ進みます。</div>
               <div className="font-bold text-orange-400">「戻って」</div>
-              <div className="ml-4 mb-3">1ページ戻ります。</div>
+              <div className="mb-3 ml-4">1ページ戻ります。</div>
               <div className="font-bold text-orange-400">「材料は?」</div>
-              <div className="ml-4 mb-3">材料を表示します。</div>
+              <div className="mb-3 ml-4">材料を表示します。</div>
               <div className="font-bold text-orange-400">
                 「~ってどうするの?」
               </div>
-              <div className="ml-4 mb-3">
+              <div className="mb-3 ml-4">
                 切り方の動画を再生します。
                 <div className="text-xs text-gray-500">
                   {"（例）「いちょう切りってどうするの？」"}
@@ -45,13 +45,13 @@ const IngModal = ({ modalClose }: { modalClose: () => void }) => {
               <div className="font-bold text-orange-400">
                 「タイマーxxセット」
               </div>
-              <div className="ml-4 mb-3">
+              <div className="mb-3 ml-4">
                 タイマーをxxの時間セットして、表示します。
                 <div className="text-xs text-gray-500">
                   {"（例）「タイマー3分セット」"}
                 </div>
               </div>
-              <div className="font-bold text-lg text-orange-400">
+              <div className="text-lg font-bold text-orange-400">
                 「閉じて」
               </div>
               <div className="ml-4">表示を閉じます。</div>

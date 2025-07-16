@@ -22,10 +22,10 @@ const Login = () => {
   }, []);
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-10">
-      <div className="relative bg-white h-96 p-6 text-center shadow-lg w-80 rounded-md">
+    <div className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="relative h-96 w-80 rounded-md bg-white p-6 text-center shadow-lg">
         {/* イラスト画像 */}
-        <div className="w-[240px] h-[230px] relative -mt-10 mx-auto">
+        <div className="relative mx-auto -mt-10 h-[230px] w-[240px]">
           <Image
             src="/icon.png"
             alt="アイコン"
@@ -37,46 +37,29 @@ const Login = () => {
         {/* 閉じるボタン */}
         <Link
           href="/"
-          className="absolute top-3 right-3 text-gray-600 hover:text-black"
+          className="absolute right-3 top-3 text-gray-600 hover:text-black"
         >
           <AiOutlineClose size={24} />
         </Link>
 
         {/* サブタイトル */}
-        <p className="text-black text-md font-bold mb-2">
+        <p className="text-md mb-2 font-bold text-black">
           この機能はログインが必要です
         </p>
 
         {/* Googleログインボタン */}
         <button
           onClick={signInWithGoogle}
-          className="
-            mt-4
-            w-full
-            h-12
-            text-base
-            hover:bg-gray-200
-            bg-white
-            border-2 border-solid border-black border-opacity-25
-            hover:border-opacity-50
-            rounded-md
-            cursor-pointer
-            transition
-            duration-300
-            flex
-            items-center
-            justify-center
-            gap-2
-          "
+          className="mt-4 flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-md border-2 border-solid border-black border-opacity-25 bg-white text-base transition duration-300 hover:border-opacity-50 hover:bg-gray-200"
         >
-          <FcGoogle className="w-6 h-6" />
+          <FcGoogle className="h-6 w-6" />
           <span>Googleでログイン</span>
         </button>
 
         {/* キャンセルボタン */}
         <Link
           href="/"
-          className="bg-gray-300 w-20 py-2 text-sm text-black hover:bg-gray-400 font-bold mt-6"
+          className="mt-6 w-20 bg-gray-300 py-2 text-sm font-bold text-black hover:bg-gray-400"
         >
           キャンセル
         </Link>

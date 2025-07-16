@@ -4,17 +4,17 @@ import UserRecipeList from "../../UserRecipeList";
 
 const UserId = ({ params }: { params: { user_id: number } }) => {
   return (
-    <div className="bg-[#FFFBF4] min-h-screen flex flex-col">
-      <header className="bg-orange-400 sticky w-full flex items-center justify-center p-6 border-b border-gray-400 shadow-md">
-        <p className="text-center text-xl font-semibold pl-10 pr-4 text-balance text-white">
+    <div className="flex min-h-screen flex-col bg-[#FFFBF4]">
+      <header className="sticky flex w-full items-center justify-center border-b border-gray-400 bg-orange-400 p-6 shadow-md">
+        <p className="text-balance pl-10 pr-4 text-center text-xl font-semibold text-white">
           マイページ
         </p>
       </header>
-      <section className="flex p-3 bg-white justify-between">
+      <section className="flex justify-between bg-white p-3">
         <UserProfile user_id={params.user_id} />
       </section>
-      <p className="font-semibold text-xl mt-8 mb-4 pl-2">レシピ一覧</p>
-      <section className="bg-white rounded-xl mx-2">
+      <p className="mb-4 mt-8 pl-2 text-xl font-semibold">レシピ一覧</p>
+      <section className="mx-2 rounded-xl bg-white">
         <UserRecipeList user_id={params.user_id} />
       </section>
       <div className="mt-auto">

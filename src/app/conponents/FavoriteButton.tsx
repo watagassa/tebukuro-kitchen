@@ -46,8 +46,10 @@ const FavoriteButton = ({ recipe }: FavoriteButtonProps) => {
       // お気に入りに追加
       if (await isLoggedIn()) {
         await addFavorites(recipe_id);
-      }else{
-        router.push(`/login?callbackUrl=${encodeURIComponent(`/${recipe_id}`)}`);
+      } else {
+        router.push(
+          `/login?callbackUrl=${encodeURIComponent(`/${recipe_id}`)}`,
+        );
       }
     }
 

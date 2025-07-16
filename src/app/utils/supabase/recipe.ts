@@ -8,11 +8,11 @@ const searchFetchedIds: number[] = [];
 let favoriteFetchedIds: number[] = [];
 let searchFavFeatchedIds: number[] = [];
 
-export const free_favoriteFetchedId=()=>favoriteFetchedIds = [];
-export const free_searchFavFeatchedIds=()=>searchFavFeatchedIds = [];
+export const free_favoriteFetchedId = () => (favoriteFetchedIds = []);
+export const free_searchFavFeatchedIds = () => (searchFavFeatchedIds = []);
 
-export const randomFetcher = async()=>{
-  const {data,error } = await supabase.rpc("get_random_recipes_exclude", {
+export const randomFetcher = async () => {
+  const { data, error } = await supabase.rpc("get_random_recipes_exclude", {
     count: 10,
     exclude_ids: ramdomFetchedIds, // 取得済みID
   });
@@ -22,11 +22,11 @@ export const randomFetcher = async()=>{
     ramdomFetchedIds.push(...newIds);
   }
   return data ?? ([] as Recipe[]);
-}
+};
 
-export const searchFeatcher = async(key : string)=>{
+export const searchFeatcher = async (key: string) => {
   const kw = key.substring(key.indexOf("-") + 1, key.lastIndexOf("-"));
-  const { data ,error } = await supabase.rpc("get_random_recipes_exclude", {
+  const { data, error } = await supabase.rpc("get_random_recipes_exclude", {
     count: 10,
     exclude_ids: searchFetchedIds, // 取得済みID
     keyword: kw,
@@ -36,9 +36,9 @@ export const searchFeatcher = async(key : string)=>{
     const newIds = data.map((r: Recipe) => r.id);
     searchFetchedIds.push(...newIds);
   }
-  if(error) throw error;
+  if (error) throw error;
   return data ?? ([] as Recipe[]);
-}
+};
 
 export const favoriteFetcher = async (): Promise<Recipe[]> => {
   const { data, error } = await supabase.rpc("get_favorite_recipes_by_uuid", {
