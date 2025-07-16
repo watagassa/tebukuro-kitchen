@@ -1,12 +1,11 @@
-import React, { useContext } from "react";
 import { Recipe } from "../types";
 import ArticleCard from "./ArticleCard";
 import useSWRInfinite from "swr/infinite";
 import { useInView } from "react-intersection-observer";
 import LoadingComponent from "./LoadingDataFetch";
-import { kWContext } from "../home/HomeForm";
 import Error from "next/error";
 import { PAGE_SIZE_SWR } from "../utils/supabaseFunctionsNew";
+import { useSeachKW } from "./Header/SearchBar";
 
 type propsType = {
   materialKey: string; //表示管理用 一意のキーを指定する
@@ -14,11 +13,11 @@ type propsType = {
 };
 
 const AddRecipeCords = ({ materialKey, fetcher }: propsType) => {
-  const kw = useContext(kWContext).searchKW;
+  const SearchKW = useSeachKW((state) => state.searchKW);
   const { ref, inView: isScrollEnd } = useInView();
 
   const getKey = (pageIndex: number, previousPageData: Recipe[][] | null) => {
-    const key = `${materialKey}-${kw}-${pageIndex}`;
+    const key = `${materialKey}-${SearchKW}-${pageIndex}`;
     if (previousPageData && previousPageData.length < PAGE_SIZE_SWR)
       return null;
     return key;
