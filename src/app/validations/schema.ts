@@ -1,7 +1,7 @@
 import { z } from "zod";
 const MAX_TEXT = [20, 30, 45, 50, 300];
 const MAX_IMAGE_SIZE = 30; // 30MB
-const IMAGE_TYPES = ["image/jpg", "image/jpeg"];
+const IMAGE_TYPES = ["image/jpg", "image/jpeg", "image/png"];
 
 const sizeInMB = (sizeInBytes: number, decimalsNum = 2) => {
   const result = sizeInBytes / (1024 * 1024);
@@ -10,9 +10,21 @@ const sizeInMB = (sizeInBytes: number, decimalsNum = 2) => {
 
 const imageSchema = z
   // z.inferでSchemaを定義したときに型がつくようにするため
-  .custom<File[]>()
+  .custom<File[] | File | undefined | FileList>()
   // このあとのrefine()で扱いやすくするために整形
-  .transform((file) => file?.[0])
+  .transform((file) => {
+    if (!file) return undefined;
+
+    // FileList なら先頭を取り出すか空なら undefined
+    if (file instanceof FileList) {
+      return file.length > 0 ? file[0] : undefined;
+    }
+    // 既存の配列チェック
+    if (Array.isArray(file)) {
+      return file.length > 0 ? file[0] : undefined;
+    }
+    return file;
+  })
   // ファイルサイズを制限したい場合
   .refine(
     (file) => {
@@ -21,7 +33,7 @@ const imageSchema = z
     },
     {
       message: `ファイルサイズは最大${MAX_IMAGE_SIZE}MBです`,
-    }
+    },
   )
   .refine(
     (file) => {
@@ -30,7 +42,7 @@ const imageSchema = z
     },
     {
       message: ".jpgもしくは.jpegのみ可能です",
-    }
+    },
   )
   .optional(); // 任意
 //  必須にしたい場合
@@ -49,7 +61,7 @@ const IngredientSchema = z
         .string()
         .min(1, "必須です")
         .max(20, `${MAX_TEXT[0]}文字以下にしてください`),
-    })
+    }),
   )
   .min(1, { message: "必須です" });
 
@@ -59,7 +71,7 @@ const DescriptSchema = z
       text: z.string().min(0).max(45, `${MAX_TEXT[2]}文字以下にしてください`),
       imageString: z.string().optional(),
       imageFile: imageSchema,
-    })
+    }),
   )
   .min(1, { message: "必須です" });
 

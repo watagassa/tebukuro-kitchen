@@ -25,7 +25,6 @@ const DescriptInputItem = ({
 }: DescriptInputItemProps) => {
   const maxInputs = 6;
   const { fields, append, remove, update } = fieldArray;
-
   const addInput = () => {
     if (fields.length < maxInputs) {
       append({ text: "", imageString: "", imageFile: undefined });
@@ -45,16 +44,17 @@ const DescriptInputItem = ({
           imageFile: file,
         });
       };
+
       reader.readAsDataURL(file);
     };
 
   return (
     <>
-      <div className="grid grid-cols-2 gap-4 mt-4">
+      <div className="mt-4 grid grid-cols-2 gap-4">
         {fields.map((field, index) => (
           <section key={field.id}>
             <section className="relative">
-              <div className="bg-gray-100 h-32 shadow-md flex justify-center items-center mb-3 relative">
+              <div className="relative mb-3 flex h-32 items-center justify-center bg-gray-100 shadow-md">
                 {field.imageString ? (
                   <>
                     <Image
@@ -66,8 +66,8 @@ const DescriptInputItem = ({
                   </>
                 ) : (
                   <div className="flex flex-col items-center">
-                    <TbCameraPlus className="text-gray-400 text-3xl" />
-                    <p className="text-gray-400 pt-1 text-xs">
+                    <TbCameraPlus className="text-3xl text-gray-400" />
+                    <p className="pt-1 text-xs text-gray-400">
                       手順の写真を追加
                     </p>
                   </div>
@@ -77,32 +77,33 @@ const DescriptInputItem = ({
                   type="file"
                   accept="image/*"
                   onChange={handleImageUpload(index)}
-                  className="absolute inset-0 opacity-0 cursor-pointer"
+                  className="absolute inset-0 cursor-pointer opacity-0"
                 />
                 {fields.length > 1 && (
                   <button
                     type="button"
                     onClick={() => remove(index)}
-                    className="text-red-500 hover:text-red-700 absolute top-0 right-0 rounded-full shadow p-1 m-1 bg-orange-primary"
+                    className="absolute right-0 top-0 m-1 rounded-full bg-orange-primary p-1 text-red-500 shadow hover:text-red-700"
+                    title="手順を削除"
                   >
                     <BiTrash className="text-xl" />
                   </button>
                 )}
               </div>
               {/* zodのエラー文 */}
-              <div className="text-red-500 text-sm">
+              <div className="text-sm text-red-500">
                 {errors.descript?.[index]?.imageFile?.message}
               </div>
             </section>
 
             <section>
-              <div className="flex items-start bg-white border border-orange-200 rounded-md p-1 focus-within:outline focus-within:outline-2 focus-within:outline-orange-600">
-                <p className="flex-shrink-0 bg-orange-400 text-white size-4 flex items-center justify-center font-semibold text-xs rounded-full ">
+              <div className="flex items-start rounded-md border border-orange-200 bg-white p-1 focus-within:outline focus-within:outline-2 focus-within:outline-orange-600">
+                <p className="flex size-4 flex-shrink-0 items-center justify-center rounded-full bg-orange-400 text-xs font-semibold text-white">
                   {index + 1}
                 </p>
                 <textarea
                   {...register(`descript.${index}.text`)}
-                  className="h-16 w-full text-xs bg-white outline-none resize-none ml-1"
+                  className="ml-1 h-16 w-full resize-none bg-white text-xs outline-none"
                   placeholder="フライパンに油をひき、卵を割る。白身が白くなったらお米を入れる。"
                   inputMode="text"
                   autoCorrect="off"
@@ -110,7 +111,7 @@ const DescriptInputItem = ({
               </div>
 
               {/* zodのエラー文 */}
-              <div className="text-red-500 text-sm">
+              <div className="text-sm text-red-500">
                 {errors.descript?.[index]?.text?.message}
               </div>
             </section>
@@ -123,7 +124,7 @@ const DescriptInputItem = ({
           type="button"
           onClick={addInput}
           disabled={fields.length >= maxInputs}
-          className="flex items-center mx-auto my-5 px-10 py-1 rounded-sm text-orange-400 border border-dashed border-orange-400"
+          className="mx-auto my-5 flex items-center rounded-sm border border-dashed border-orange-400 px-10 py-1 text-orange-400"
         >
           <BiPlus className="text-lg" />
           <p className="text-sm">作り方を追加</p>
