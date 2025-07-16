@@ -1,10 +1,20 @@
-import { kWContext } from "@/app/home/HomeForm";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { FiSearch } from "react-icons/fi";
+import { create } from "zustand";
+
+type SearchStore = {
+  searchKW: string | null;
+  setSearchKW: (kW: string) => void;
+};
+
+export const useSeachKW = create<SearchStore>((set) => ({
+  searchKW: "",
+  setSearchKW: (kW: string) => set({ searchKW: kW }),
+}));
 
 const SearchBar = () => {
-  const setSearchKW = useContext(kWContext).setSearchKW;
-  const [input, setInput] = useState<string>("");
+  const { searchKW, setSearchKW } = useSeachKW();
+  const [input, setInput] = useState<string>(searchKW || "");
 
   const SeachRecipe = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== "Enter") return;

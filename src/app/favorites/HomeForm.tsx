@@ -1,36 +1,30 @@
 "use client";
 
 import Footer from "@/app/conponents/Footer";
-import { createContext, useState } from "react";
 import Header from "../conponents/Header/Header";
 import AddRecipeCords from "../conponents/AddRecipeCords";
 import { favoriteFetcher, searchFavFeatcher } from "../utils/supabase/recipe";
-
-export const kWContext = createContext(
-  {} as { searchKW: string; setSearchKW: (kW: string) => void },
-);
+import { useSeachKW } from "../conponents/Header/SearchBar";
 
 export default function HomeForm() {
-  const [searchKW, setSearchKW] = useState("");
+  const searchKW = useSeachKW((state) => state.searchKW);
 
   return (
     <div className="flex min-h-screen flex-col bg-[#FFFBF4] contain-paint">
-      <kWContext.Provider value={{ searchKW, setSearchKW }}>
-        <div className={`sticky top-0 z-20`}>
-          <Header />
-        </div>
+      <div className={`sticky top-0 z-20`}>
+        <Header />
+      </div>
 
-        <AddRecipeCords
-          materialKey="favorites"
-          fetcher={searchKW === "" ? favoriteFetcher : searchFavFeatcher}
-        />
+      <AddRecipeCords
+        materialKey="favorites"
+        fetcher={searchKW === "" ? favoriteFetcher : searchFavFeatcher}
+      />
 
-        <div
-          className={`sticky bottom-0 z-20 w-full transition-transform duration-200`}
-        >
-          <Footer pathName="/" />
-        </div>
-      </kWContext.Provider>
+      <div
+        className={`sticky bottom-0 z-20 w-full transition-transform duration-200`}
+      >
+        <Footer pathName="/" />
+      </div>
     </div>
   );
 }
