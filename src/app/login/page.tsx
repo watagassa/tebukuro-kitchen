@@ -20,9 +20,6 @@ const Login = ({
   const [isLogin, setLogin] = useState<boolean>(false);
   const callbackUrl = searchParams.callbackUrl;
   const cancelRedirect = searchParams.cancelRedirect;
-  console.log("callbackUrl", callbackUrl);
-  console.log("cancelRedirect", cancelRedirect);
-  console.log(cancelRedirect ? callbackUrl : "/");
 
   useEffect(() => {
     isLoggedIn().then((res) => {
