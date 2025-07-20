@@ -11,8 +11,18 @@ import {
   signInWithGoogle,
 } from "../utils/supabaseLogin";
 
-const Login = () => {
+const Login = ({
+  searchParams,
+}: {
+  params: string;
+  searchParams: { cancelRedirect?: boolean; callbackUrl: string };
+}) => {
   const [isLogin, setLogin] = useState<boolean>(false);
+  const callbackUrl = searchParams.callbackUrl;
+  const cancelRedirect = searchParams.cancelRedirect;
+  console.log("callbackUrl", callbackUrl);
+  console.log("cancelRedirect", cancelRedirect);
+  console.log(cancelRedirect ? callbackUrl : "/");
 
   useEffect(() => {
     isLoggedIn().then((res) => {
@@ -36,7 +46,7 @@ const Login = () => {
 
         {/* 閉じるボタン */}
         <Link
-          href="/"
+          href={cancelRedirect ? callbackUrl : "/"}
           className="absolute right-3 top-3 text-gray-600 hover:text-black"
         >
           <AiOutlineClose size={24} />
@@ -58,7 +68,7 @@ const Login = () => {
 
         {/* キャンセルボタン */}
         <Link
-          href="/"
+          href={cancelRedirect ? callbackUrl : "/"}
           className="mt-6 w-20 bg-gray-300 py-2 text-sm font-bold text-black hover:bg-gray-400"
         >
           キャンセル
