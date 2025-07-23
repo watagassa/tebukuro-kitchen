@@ -48,7 +48,7 @@ const FavoriteButton = ({ recipe }: FavoriteButtonProps) => {
         await addFavorites(recipe_id);
       } else {
         router.push(
-          `/login?callbackUrl=${encodeURIComponent(`/${recipe_id}`)}`,
+          `/login?cancelRedirect=true&callbackUrl=${encodeURIComponent(`/${recipe_id}`)}`,
         );
       }
     }
