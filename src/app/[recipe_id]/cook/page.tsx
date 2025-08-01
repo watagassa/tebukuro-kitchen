@@ -123,6 +123,22 @@ const Cook = ({
   return (
     <>
       <div className="fixed inset-x-0 bottom-0 top-0 -z-50 bg-white">
+        <Speech
+          next={next}
+          back={back}
+          num={page}
+          length={length}
+          setPage={setPage}
+          setIngModalOpen={setIngModalOpen}
+          setYtModalOpen={setYtModalOpen}
+          setKeyword={setKeyword}
+          setGuideModalOpen={setGuideModalOpen}
+          setTimerModalOpen={setTimerModalOpen}
+          setInputTime={setInputTime}
+          setTimerStart={setTimerStart}
+          timerReset={timerReset}
+          setTimerReset={setTimerReset}
+        />
         <div className="relative">
           <RecipeHeader
             bgColor="bg-orange-400"
@@ -143,22 +159,6 @@ const Cook = ({
             <span></span>
           )}
         </div>
-        <Speech
-          next={next}
-          back={back}
-          num={page}
-          length={length}
-          setPage={setPage}
-          setIngModalOpen={setIngModalOpen}
-          setYtModalOpen={setYtModalOpen}
-          setKeyword={setKeyword}
-          setGuideModalOpen={setGuideModalOpen}
-          setTimerModalOpen={setTimerModalOpen}
-          setInputTime={setInputTime}
-          setTimerStart={setTimerStart}
-          timerReset={timerReset}
-          setTimerReset={setTimerReset}
-        />
 
         <div className="flex content-center justify-center">
           {imageSrc != "" ? (

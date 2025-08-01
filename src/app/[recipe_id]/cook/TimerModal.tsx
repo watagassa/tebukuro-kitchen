@@ -171,13 +171,13 @@ const TimerModal = ({
                 className="flex h-full items-center justify-center"
               >
                 <div className="mx-3 rounded-2xl bg-white p-3 text-black shadow-lg sm:mx-5 sm:p-4 md:mx-20">
-                  <div className="mb-2 flex w-full justify-end sm:mb-3">
+                  <div className="mb-1 flex w-full justify-end sm:mb-3">
                     <IoMdClose
                       onClick={modalClose}
-                      className="m-1 h-6 w-6 sm:m-2 sm:h-8 sm:w-8 md:h-10 md:w-10"
+                      className="m-1 h-6 w-6 text-gray-400 sm:m-2 sm:h-8 sm:w-8 md:h-10 md:w-10"
                     />
                   </div>
-                  <div className="mb-4 text-center font-sans text-7xl font-bold sm:mb-5 sm:text-[84px] md:text-8xl">
+                  <div className="mb-4 text-center font-sans text-8xl font-black sm:mb-5 sm:text-[84px] md:text-8xl">
                     {timerDisp}
                   </div>
                   <div className="mb-2 w-full font-bold">
@@ -226,13 +226,13 @@ const TimerModal = ({
                     <div className="mx-2 mb-4 flex justify-between sm:mx-4 sm:mb-5 md:mx-5">
                       <button
                         onClick={() => start_stop()}
-                        className="mr-2 h-14 w-32 rounded-full bg-orange-400 text-base leading-none tracking-tighter text-white sm:mr-3 sm:h-16 sm:w-36 sm:text-xl md:h-20 md:w-40 md:text-2xl"
+                        className="mr-2 h-14 w-28 rounded-full bg-orange-400 text-base leading-none tracking-tighter text-white sm:mr-3 sm:h-16 sm:w-36 sm:text-xl md:h-20 md:w-40 md:text-2xl"
                       >
                         {start ? "ストップ" : "スタート"}
                       </button>
                       <button
                         onClick={() => reset()}
-                        className="h-14 w-32 rounded-full bg-orange-100 text-base tracking-tighter text-orange-400 sm:h-16 sm:w-36 sm:text-xl md:h-20 md:w-40 md:text-2xl"
+                        className="h-14 w-28 rounded-full bg-orange-100 text-base tracking-tighter text-orange-400 sm:h-16 sm:w-36 sm:text-xl md:h-20 md:w-40 md:text-2xl"
                       >
                         リセット
                       </button>
@@ -248,7 +248,7 @@ const TimerModal = ({
       {/* 左下のミニタイマー */}
       {inUse ? (
         <div className="fixed left-1/2 top-[85px] z-10 -translate-x-1/2">
-          <div className="w-48 rounded-full bg-orange-400 px-1 py-0.5 text-center text-2xl text-white shadow-lg">
+          <div className="w-48 rounded-full bg-orange-400 px-1 py-0.5 text-center font-sans text-2xl text-white shadow-lg">
             {timerDisp}
           </div>
           <div className="mt-2 flex justify-between">

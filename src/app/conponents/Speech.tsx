@@ -5,6 +5,7 @@ import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
 import { useEffect } from "react";
+import { FiMic } from "react-icons/fi";
 
 type screenController = {
   next: (
@@ -210,6 +211,14 @@ const Speech = ({
         response : {response}
       </p> */}
       <div className="flex w-full items-center justify-center font-mono">
+        {transcript && (
+          <div className="fixed bottom-20 z-10 mb-16 flex max-w-[80vw] rounded-sm border border-orange-200 bg-orange-50 p-2 pl-1">
+            <FiMic className="mr-1 h-5 w-5 text-orange-400" />
+            <span className="my-auto flex max-w-[65vw] justify-end overflow-hidden whitespace-nowrap text-sm text-gray-400">
+              {transcript}
+            </span>
+          </div>
+        )}
         <span className="fixed bottom-0 z-10 mb-16 flex h-6 max-w-[80vw] justify-end overflow-hidden whitespace-nowrap bg-black bg-opacity-30 text-white">
           {transcript}
         </span>
