@@ -226,13 +226,13 @@ const TimerModal = ({
                     <div className="mx-2 mb-4 flex justify-between sm:mx-4 sm:mb-5 md:mx-5">
                       <button
                         onClick={() => start_stop()}
-                        className="mr-2 h-14 w-32 rounded-full bg-orange-400 text-base leading-none tracking-tighter text-white sm:mr-3 sm:h-16 sm:w-36 sm:text-xl md:h-20 md:w-40 md:text-2xl"
+                        className="mr-2 h-14 w-28 rounded-full bg-orange-400 text-base leading-none tracking-tighter text-white sm:mr-3 sm:h-16 sm:w-36 sm:text-xl md:h-20 md:w-40 md:text-2xl"
                       >
                         {start ? "ストップ" : "スタート"}
                       </button>
                       <button
                         onClick={() => reset()}
-                        className="h-14 w-32 rounded-full bg-orange-100 text-base tracking-tighter text-orange-400 sm:h-16 sm:w-36 sm:text-xl md:h-20 md:w-40 md:text-2xl"
+                        className="h-14 w-28 rounded-full bg-orange-100 text-base tracking-tighter text-orange-400 sm:h-16 sm:w-36 sm:text-xl md:h-20 md:w-40 md:text-2xl"
                       >
                         リセット
                       </button>
