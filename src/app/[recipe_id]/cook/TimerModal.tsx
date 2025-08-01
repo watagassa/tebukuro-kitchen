@@ -171,13 +171,13 @@ const TimerModal = ({
                 className="flex h-full items-center justify-center"
               >
                 <div className="mx-3 rounded-2xl bg-white p-3 text-black shadow-lg sm:mx-5 sm:p-4 md:mx-20">
-                  <div className="mb-2 flex w-full justify-end sm:mb-3">
+                  <div className="mb-1 flex w-full justify-end sm:mb-3">
                     <IoMdClose
                       onClick={modalClose}
-                      className="m-1 h-6 w-6 sm:m-2 sm:h-8 sm:w-8 md:h-10 md:w-10"
+                      className="m-1 h-6 w-6 text-gray-400 sm:m-2 sm:h-8 sm:w-8 md:h-10 md:w-10"
                     />
                   </div>
-                  <div className="mb-4 text-center font-sans text-7xl font-bold sm:mb-5 sm:text-[84px] md:text-8xl">
+                  <div className="mb-4 text-center font-sans text-8xl font-black sm:mb-5 sm:text-[84px] md:text-8xl">
                     {timerDisp}
                   </div>
                   <div className="mb-2 w-full font-bold">
