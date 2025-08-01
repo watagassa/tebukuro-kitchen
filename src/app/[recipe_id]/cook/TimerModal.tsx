@@ -248,7 +248,7 @@ const TimerModal = ({
       {/* 左下のミニタイマー */}
       {inUse ? (
         <div className="fixed left-1/2 top-[85px] z-10 -translate-x-1/2">
-          <div className="w-48 rounded-full bg-orange-400 px-1 py-0.5 text-center text-2xl text-white shadow-lg">
+          <div className="w-48 rounded-full bg-orange-400 px-1 py-0.5 text-center font-sans text-2xl text-white shadow-lg">
             {timerDisp}
           </div>
           <div className="mt-2 flex justify-between">
