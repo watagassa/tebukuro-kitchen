@@ -34,7 +34,7 @@ const About = () => {
         新しい料理体験を
       </h1>
 
-      {/*　説明文　*/}
+      {/*説明文*/}
       <div className="flex w-full max-w-md flex-col items-start">
         <p className="text-md mt-1 leading-relaxed text-black">
           手が塞がっていても大丈夫。

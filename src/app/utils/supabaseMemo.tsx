@@ -1,4 +1,4 @@
-//　// よく使うSupabaseのメモ
+//// よく使うSupabaseのメモ
 
 // //レシピを持ってくるためのプログラム
 // const [recipes, setRecipes] = useState<any>([]);

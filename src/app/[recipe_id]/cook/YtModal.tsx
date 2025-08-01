@@ -4,7 +4,7 @@ import youtube from "@/app/utils/youtube";
 import React, { useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 
-// 動画取得用のtype　ほぼエラー対策用
+// 動画取得用のtype ほぼエラー対策用
 type Thumbnail = {
   url: string;
   width: number;

@@ -22,7 +22,7 @@ import IngModal from "./IngModal";
 import TimerModal from "./TimerModal";
 import YtModal from "./YtModal";
 
-//丸を描画する　length=丸の数　page=塗りつぶし判定用ページ数
+//丸を描画する length=丸の数 page=塗りつぶし判定用ページ数
 const Circle = ({ length, page }: { length: number; page: number }) => {
   return (
     <div className="text-black">
@@ -60,10 +60,10 @@ const Cook = ({
   params: { recipe_id: number };
   searchParams: { from?: string };
 }) => {
-  const [title, setTitle] = useState<string>(""); // 料理画面　上部タイトル
-  const [howMany, setHowMany] = useState<string>(""); // 材料表示　何人前
-  const [descript, setDescript] = useState<Descript[]>([]); // レシピの説明文　データベースから取得
-  const [ingredient, setIngredient] = useState<Ingredient[]>([]); // 材料　データベースから取得
+  const [title, setTitle] = useState<string>(""); // 料理画面 上部タイトル
+  const [howMany, setHowMany] = useState<string>(""); // 材料表示 何人前
+  const [descript, setDescript] = useState<Descript[]>([]); // レシピの説明文 データベースから取得
+  const [ingredient, setIngredient] = useState<Ingredient[]>([]); // 材料 データベースから取得
 
   // データベースからデータの取得
   useEffect(() => {
@@ -88,8 +88,9 @@ const Cook = ({
   const [guideModalOpen, setGuideModalOpen] = useState(false);
   const [timerModalOpen, setTimerModalOpen] = useState(false);
 
-  const [keyword, setKeyword] = useState(""); // 動画検索ワード　YtModal(youtube)用
+  const [keyword, setKeyword] = useState(""); // 動画検索ワード YtModal(youtube)用
 
+  // タイマー関連
   const [inputTime, setInputTime] = useState(""); // 音声で認識したタイマーの時間
   const [timerStart, setTimerStart] = useState(false); // タイマーがスタートされているかどうか
   const [timerDisp, setTimerDisp] = useState(""); // タイマーのテキスト
@@ -122,6 +123,22 @@ const Cook = ({
   return (
     <>
       <div className="fixed inset-x-0 bottom-0 top-0 -z-50 bg-white">
+        <Speech
+          next={next}
+          back={back}
+          num={page}
+          length={length}
+          setPage={setPage}
+          setIngModalOpen={setIngModalOpen}
+          setYtModalOpen={setYtModalOpen}
+          setKeyword={setKeyword}
+          setGuideModalOpen={setGuideModalOpen}
+          setTimerModalOpen={setTimerModalOpen}
+          setInputTime={setInputTime}
+          setTimerStart={setTimerStart}
+          timerReset={timerReset}
+          setTimerReset={setTimerReset}
+        />
         <div className="relative">
           <RecipeHeader
             bgColor="bg-orange-400"
@@ -142,22 +159,6 @@ const Cook = ({
             <span></span>
           )}
         </div>
-        <Speech
-          next={next}
-          back={back}
-          num={page}
-          length={length}
-          setPage={setPage}
-          setIngModalOpen={setIngModalOpen}
-          setYtModalOpen={setYtModalOpen}
-          setKeyword={setKeyword}
-          setGuideModalOpen={setGuideModalOpen}
-          setTimerModalOpen={setTimerModalOpen}
-          setInputTime={setInputTime}
-          setTimerStart={setTimerStart}
-          timerReset={timerReset}
-          setTimerReset={setTimerReset}
-        />
 
         <div className="flex content-center justify-center">
           {imageSrc != "" ? (

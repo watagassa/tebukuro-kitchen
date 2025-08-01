@@ -31,6 +31,7 @@ export default function Registration() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
     ingredientFieldArray,
     descriptFieldArray,
@@ -42,6 +43,10 @@ export default function Registration() {
       const reader = new FileReader();
       reader.onload = () => setSelectedImage(reader.result as string);
       reader.readAsDataURL(file);
+      setValue("recipe.recipe_image", file, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
     }
   };
 
@@ -94,6 +99,8 @@ export default function Registration() {
                 />
                 <button
                   type="button"
+                  title="画像を削除"
+                  aria-label="画像を削除"
                   className="absolute right-0 top-0 m-2 flex h-6 w-6 items-center justify-center rounded-full bg-gray-400 shadow-lg"
                   onClick={() => setSelectedImage(null)}
                 >
@@ -105,11 +112,12 @@ export default function Registration() {
                 <TbCameraPlus className="text-6xl text-gray-400" />
                 <p className="text-gray-400">料理の写真を選択してください</p>
                 <input
-                  {...register("recipe.recipe_image")}
                   type="file"
                   accept="image/*"
                   className="absolute inset-0 cursor-pointer opacity-0"
                   onChange={handleImageChange}
+                  title="料理の写真を選択してください"
+                  placeholder="料理の写真を選択してください"
                 />
               </>
             )}

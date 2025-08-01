@@ -1,6 +1,7 @@
 import Footer from "@/app/conponents/Footer";
 import UserProfile from "./UserProfile";
 import UserRecipeList from "./UserRecipeList";
+import UserLogoutButton from "./UserLogoutButton";
 
 const UserId = () => {
   return (
@@ -12,9 +13,7 @@ const UserId = () => {
       </header>
       <section className="flex justify-between bg-white p-3">
         <UserProfile />
-        <p className="relative my-auto ml-auto mr-2 shrink-0 rounded-3xl bg-orange-400 px-3 py-2 text-xs font-semibold text-white">
-          ログアウト
-        </p>
+        <UserLogoutButton />
       </section>
       <p className="mb-4 mt-8 pl-2 text-xl font-semibold">マイレシピ一覧</p>
       <UserRecipeList />

@@ -1,11 +1,11 @@
 import { SWRConfig } from "swr";
 import HomeForm from "./HomeForm";
-import { Homefetcher_SWR } from "../utils/supabaseFunctionsNew";
+import { randomFetcher } from "../utils/supabase/recipe";
 
-export default async function StartHome(materialKey: { materialKey: string }) {
-  const key = `${materialKey}--0`;
+export default async function StartHome() {
+  const key = `Recipe--0`; //デフォルトのキー
 
-  const fallbackData = await Homefetcher_SWR(key);
+  const fallbackData = await randomFetcher();
 
   if (!fallbackData) {
     return <div>データが取得できませんでした</div>;

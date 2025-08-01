@@ -1,19 +1,16 @@
 import { SWRConfig } from "swr";
 import HomeForm from "./HomeForm";
-import { Homefetcher_SWR } from "../utils/supabaseFunctionsNew";
+import { favoriteFetcher } from "../utils/supabase/recipe";
 
 export default async function page() {
-  const materialKey = "favorites";
-  const key = `${materialKey}--0`;
-
-  const fallbackData = await Homefetcher_SWR(key);
+  const key = "favorites--0";
+  const fallbackData = await favoriteFetcher();
 
   if (!fallbackData) {
     return <div>データが取得できませんでした</div>;
   }
 
   const fallback = { [key]: fallbackData };
-
   return (
     <SWRConfig value={{ fallback }}>
       <HomeForm />

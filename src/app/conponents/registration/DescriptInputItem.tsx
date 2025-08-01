@@ -25,7 +25,6 @@ const DescriptInputItem = ({
 }: DescriptInputItemProps) => {
   const maxInputs = 6;
   const { fields, append, remove, update } = fieldArray;
-
   const addInput = () => {
     if (fields.length < maxInputs) {
       append({ text: "", imageString: "", imageFile: undefined });
@@ -45,6 +44,7 @@ const DescriptInputItem = ({
           imageFile: file,
         });
       };
+
       reader.readAsDataURL(file);
     };
 
@@ -84,6 +84,7 @@ const DescriptInputItem = ({
                     type="button"
                     onClick={() => remove(index)}
                     className="absolute right-0 top-0 m-1 rounded-full bg-orange-primary p-1 text-red-500 shadow hover:text-red-700"
+                    title="手順を削除"
                   >
                     <BiTrash className="text-xl" />
                   </button>
