@@ -46,20 +46,12 @@ const IngModal = ({
           onClick={bgClickClose}
           className="flex h-full items-center justify-center"
         >
-          <div className="mx-10 w-80 rounded-xl bg-white text-gray-400 shadow-lg">
+          <div className="mx-10 w-80 rounded-3xl bg-white text-black shadow-lg">
             <div className="flex w-full justify-end">
-              <span className="relative left-9 top-9 text-sm text-gray-400">
-                閉じて
-              </span>
-              <IoMdClose
-                onClick={modalClose}
-                className="relative right-1 top-1 m-1 mr-3 h-7 w-7"
-              />
+              <IoMdClose onClick={modalClose} className="m-2 h-10 w-10" />
             </div>
-            <div className="mx-3 mb-5 border-b-2 border-orange-600 pb-1 text-xl font-bold">
-              <span className="text-orange-600">
-                {howMany ? `材料（${howMany}）` : "材料"}
-              </span>
+            <div className="mx-5 mb-5 border-b-2 border-orange-400 text-xl font-bold">
+              {`材料${howMany == "" ? "" : `${howMany}人前`}`}
             </div>
             <div className="mb-5">
               {ingredient.map((ing: Ingredient) => (
@@ -68,7 +60,7 @@ const IngModal = ({
                   className={`my-1 flex justify-between ${
                     ing.index == ingredient.length - 1
                       ? ""
-                      : "border-b-2 border-dotted border-gray-300"
+                      : "border-b-2 border-dotted border-gray-500"
                   } `}
                 >
                   {highLightWord.includes(ing.index ?? -1) ? (
