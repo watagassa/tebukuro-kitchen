@@ -51,7 +51,7 @@ const IngModal = ({
               <IoMdClose onClick={modalClose} className="m-2 h-10 w-10" />
             </div>
             <div className="mx-5 mb-5 border-b-2 border-orange-400 text-xl font-bold">
-              {`材料${howMany == "" ? "" : `${howMany}人前`}`}
+              {`材料${howMany == "" ? "" : `（${howMany}）`}`}
             </div>
             <div className="mb-5">
               {ingredient.map((ing: Ingredient) => (
