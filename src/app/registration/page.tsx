@@ -122,12 +122,12 @@ export default function Registration() {
               </>
             )}
             {/* zodのエラー文 */}
-            <div className="text-sm text-red-500">
+            <div className="text-xs text-red-500">
               {errors.recipe?.recipe_image?.message}
             </div>
           </section>
 
-          <section className="mb-4">
+          <section className="mb-4 space-y-1">
             <label htmlFor="recipe_name" className="mb-2 text-orange-700">
               タイトル<span className="ml-1 text-red-500">*</span>
             </label>
@@ -140,7 +140,7 @@ export default function Registration() {
               autoCapitalize="off"
               autoCorrect="off"
             />
-            <div className="text-sm text-red-500">
+            <div className="text-xs text-red-500">
               {errors.recipe?.recipe_name?.message}
             </div>
           </section>
@@ -152,20 +152,20 @@ export default function Registration() {
             <textarea
               {...register("recipe.recipe_comment")}
               id="recipe_comment"
-              className="w-full rounded-md border border-orange-200 p-2"
+              className="mt-1 w-full rounded-md border border-orange-200 p-2"
               placeholder="忙しい日でも簡単に作れる、香ばしい風味漂う絶品チャーハンです。"
               rows={3}
               autoCapitalize="off"
               autoCorrect="off"
             ></textarea>
             {/* zodのエラー文 */}
-            <div className="text-sm text-red-500">
+            <div className="text-xs text-red-500">
               {errors.recipe?.recipe_comment?.message}
             </div>
           </section>
 
           <div className="mb-6 flex gap-2">
-            <section className="flex-1">
+            <section className="flex-1 space-y-1">
               <label htmlFor="time" className="text-orange-700">
                 調理時間
               </label>
@@ -179,12 +179,12 @@ export default function Registration() {
                 autoCorrect="off"
               />
               {/* zodのエラー文 */}
-              <div className="text-sm text-red-500">
+              <div className="text-xs text-red-500">
                 {errors.recipe?.time?.message}
               </div>
             </section>
 
-            <section className="flex-1">
+            <section className="flex-1 space-y-1">
               <label htmlFor="how_many" className="text-orange-700">
                 人数
               </label>
@@ -197,7 +197,7 @@ export default function Registration() {
                 autoCorrect="off"
               />
               {/* zodのエラー文 */}
-              <div className="text-sm text-red-500">
+              <div className="text-xs text-red-500">
                 {errors.recipe?.how_many?.message}
               </div>
             </section>

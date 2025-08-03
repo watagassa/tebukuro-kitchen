@@ -53,7 +53,7 @@ const DescriptInputItem = ({
       <div className="mt-4 grid grid-cols-2 gap-4">
         {fields.map((field, index) => (
           <section key={field.id}>
-            <section className="relative">
+            <section className="relative space-y-1">
               <div className="relative mb-3 flex h-32 items-center justify-center bg-gray-100 shadow-md">
                 {field.imageString ? (
                   <>
@@ -91,12 +91,12 @@ const DescriptInputItem = ({
                 )}
               </div>
               {/* zodのエラー文 */}
-              <div className="text-sm text-red-500">
+              <div className="text-xs text-red-500">
                 {errors.descript?.[index]?.imageFile?.message}
               </div>
             </section>
 
-            <section>
+            <section className="space-y-1">
               <div className="flex items-start rounded-md border border-orange-200 bg-white p-1 focus-within:outline focus-within:outline-2 focus-within:outline-orange-600">
                 <p className="flex size-4 flex-shrink-0 items-center justify-center rounded-full bg-orange-400 text-xs font-semibold text-white">
                   {index + 1}
@@ -111,7 +111,7 @@ const DescriptInputItem = ({
               </div>
 
               {/* zodのエラー文 */}
-              <div className="text-sm text-red-500">
+              <div className="text-xs text-red-500">
                 {errors.descript?.[index]?.text?.message}
               </div>
             </section>

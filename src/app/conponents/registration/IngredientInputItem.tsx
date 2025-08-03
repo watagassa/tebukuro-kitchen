@@ -36,7 +36,7 @@ const IngredientInputItem = ({
           key={field.id}
           className="mb-2 flex items-start justify-between gap-2"
         >
-          <section className="flex-1">
+          <section className="flex-1 space-y-1">
             <input
               {...register(`ingredient.${index}.name`)}
               type="text"
@@ -47,12 +47,12 @@ const IngredientInputItem = ({
             />
 
             {/* zodのエラー文 */}
-            <div className="text-sm text-red-500">
+            <div className="text-xs text-red-500">
               {errors?.ingredient?.[index]?.name?.message}
             </div>
           </section>
 
-          <section className="flex-1">
+          <section className="flex-1 space-y-1">
             <input
               {...register(`ingredient.${index}.amount`)}
               type="text"
@@ -62,7 +62,7 @@ const IngredientInputItem = ({
               autoCorrect="off"
             />
             {/* zodのエラー文 */}
-            <div className="text-sm] text-red-500">
+            <div className="text-xs text-red-500">
               {errors?.ingredient?.[index]?.amount?.message}
             </div>
           </section>
