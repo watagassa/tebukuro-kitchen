@@ -6,12 +6,11 @@ import Image from "next/image";
 import { SubmitHandler } from "react-hook-form";
 import { useSwipeable } from "react-swipeable";
 import { FaPen } from "react-icons/fa";
-import { BiCamera, BiCameraOff, BiPlus } from "react-icons/bi";
+import { BiPlus } from "react-icons/bi";
 // import Link from "next/link";
 import DescriptInputItem from "./DescriptInputItem";
 import IngredientInputItem from "./IngredientInputItem";
 import Footer from "@/app/conponents/Footer";
-import { inputDescript, InputIngredient } from "../../../types";
 import { updateRecipeImage } from "../../../utils/supabaseFncUpdate";
 import {
   compressImage,
@@ -29,23 +28,26 @@ import {
   getByIngredientId,
   getByDescriptId,
 } from "../../../utils/supabaseFunctionsNew";
+import { TbCameraPlus } from "react-icons/tb";
 
 const Edit = ({ params }: { params: { recipe_id: number } }) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [inputIngredients, setInputIngredients] = useState<InputIngredient[]>([
-    { name: "", amount: "" },
-    { name: "", amount: "" },
-  ]);
-  const [inputDescripts, setInputDescripts] = useState<inputDescript[]>([
-    { image: undefined, text: "" },
-    { image: undefined, text: "" },
-  ]);
+
   const {
     register,
     handleSubmit,
     setValue,
     formState: { errors },
+    reset,
+    ingredientFieldArray,
+    descriptFieldArray,
   } = useRecipeFormTop();
+
+  const urlToFile = async (url: string, filename: string): Promise<File> => {
+    const res = await fetch(url);
+    const blob = await res.blob();
+    return new File([blob], filename, { type: blob.type });
+  };
 
   useEffect(() => {
     const init = async () => {
@@ -53,41 +55,44 @@ const Edit = ({ params }: { params: { recipe_id: number } }) => {
       const ingredients = await getByIngredientId(params.recipe_id);
       const descripts = await getByDescriptId(params.recipe_id);
 
-      setValue("recipe.recipe_name", recipe[0].name);
-      setValue(
-        "recipe.time",
-        recipe[0].time != undefined ? recipe[0].time : "",
-      );
-      setValue(
-        "recipe.how_many",
-        recipe[0].howmany != undefined ? recipe[0].howmany : "",
-      );
-      setValue(
-        "recipe.recipe_comment",
-        recipe[0].comment != undefined ? recipe[0].comment : "",
-      );
+      const ingData = ingredients.map((ing) => ({
+        name: ing.name,
+        amount: ing.amount,
+      }));
 
-      setSelectedImage(
-        recipe[0].image_url != undefined ? recipe[0].image_url : "",
-      );
-
-      const ingData: InputIngredient[] = [];
-      ingredients.map((ing) => {
-        ingData.push({ name: ing.name, amount: ing.amount });
-      });
-      setInputIngredients(ingData);
-
-      const descData: inputDescript[] = [];
-      descripts.map((desc) => {
-        descData.push({
-          image: desc.image_url != undefined ? desc.image_url : "",
+      const descData = await Promise.all(
+        descripts.map(async (desc, index) => ({
           text: desc.text,
-        });
+          imageString: desc.image_url || "",
+          imageFile: desc.image_url
+            ? await urlToFile(desc.image_url, `${index}.jpg`)
+            : undefined,
+        })),
+      );
+
+      const recipeImageFile = recipe[0].image_url
+        ? await urlToFile(recipe[0].image_url, "recipe.jpg")
+        : undefined;
+
+      // フォームの全体を初期化
+      reset({
+        recipe: {
+          recipe_name: recipe[0].name,
+          time: recipe[0].time ?? "",
+          how_many: recipe[0].howmany ?? "",
+          recipe_comment: recipe[0].comment ?? "",
+          recipe_image: recipeImageFile, // File型は初期化しない（再アップロードが必要なので）
+        },
+        ingredient: ingData,
+        descript: descData,
       });
-      setInputDescripts(descData);
+
+      // 画像URLは state で管理（フォームとは別に）
+      setSelectedImage(recipe[0].image_url ?? "");
     };
+
     init();
-  }, [params.recipe_id, setValue]);
+  }, [params.recipe_id, reset]);
 
   const [showFooter, setshowFooter] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -103,12 +108,17 @@ const Edit = ({ params }: { params: { recipe_id: number } }) => {
       const reader = new FileReader();
       reader.onload = () => setSelectedImage(reader.result as string);
       reader.readAsDataURL(file);
+      setValue("recipe.recipe_image", file, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
     }
   };
 
   const onSubmit: SubmitHandler<RecipeSchemaType> = async (data) => {
     setLoading(true);
     await updateRecipe(params.recipe_id, data.recipe);
+    console.log("data.recipe.recipe_image", data.recipe.recipe_image);
     if (params.recipe_id !== undefined) {
       if (data.recipe.recipe_image !== undefined) {
         const imagePath = `${params.recipe_id}/recipe.jpg`;
@@ -143,56 +153,47 @@ const Edit = ({ params }: { params: { recipe_id: number } }) => {
               <p className="pt-4 text-center text-lg font-semibold">
                 レシピを編集
               </p>
-              <section className="relative mx-auto mb-12 mt-10 flex h-56 w-9/12 flex-col items-center justify-center gap-y-4 rounded-xl bg-gray-100 shadow-lg">
+              {/* 画像アップロード */}
+              <section className="relative mx-auto mb-12 mt-4 flex h-56 w-9/12 flex-col items-center justify-center gap-y-4 rounded-xl bg-gray-100 shadow-lg">
                 {selectedImage ? (
                   <>
                     <Image
                       src={selectedImage}
                       alt=""
-                      className="h-full w-full rounded-xl object-cover"
+                      className="rounded-xl object-cover"
                       fill
                     />
                     <button
                       type="button"
-                      title="a"
+                      title="画像を削除"
+                      aria-label="画像を削除"
                       className="absolute right-0 top-0 m-2 flex h-6 w-6 items-center justify-center rounded-full bg-gray-400 shadow-lg"
+                      onClick={() => setSelectedImage(null)}
                     >
                       <BiPlus className="rotate-45 text-2xl text-white" />
                     </button>
                   </>
                 ) : (
                   <>
-                    <BiCameraOff className="text-6xl text-gray-400" />
+                    <TbCameraPlus className="text-6xl text-gray-400" />
                     <p className="text-gray-400">
                       料理の写真を選択してください
                     </p>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="absolute inset-0 cursor-pointer opacity-0"
+                      onChange={handleImageChange}
+                      title="料理の写真を選択してください"
+                      placeholder="料理の写真を選択してください"
+                    />
                   </>
                 )}
-                <div className="absolute bottom-[-16px] right-[-16px]">
-                  <button
-                    type="button"
-                    title="b"
-                    className="flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-lg"
-                  >
-                    <BiCamera
-                      className="text-2xl"
-                      style={{ color: "orange" }}
-                    />
-                  </button>
-                  <input
-                    {...register("recipe.recipe_image")}
-                    title="料理の写真"
-                    type="file"
-                    accept="image/*"
-                    className="absolute inset-0 cursor-pointer opacity-0"
-                    onChange={handleImageChange}
-                  />
+                {/* zodのエラー文 */}
+                <div className="text-sm text-red-500">
+                  {errors.recipe?.recipe_image?.message}
                 </div>
               </section>
-              {/* zodのエラー文 */}
-              <div className="text-red-500">
-                {errors.recipe?.recipe_image?.message}
-              </div>
               <section className="items-center border-b border-gray-400 bg-[#FEF9EC]">
                 <section className="items-center border-gray-400 bg-[#FEF9EC]">
                   <section className="flex">
@@ -271,8 +272,7 @@ const Edit = ({ params }: { params: { recipe_id: number } }) => {
                 <IngredientInputItem
                   errors={errors}
                   register={register}
-                  inputs={inputIngredients}
-                  setInputs={setInputIngredients}
+                  fieldArray={ingredientFieldArray}
                   setValue={setValue}
                 />
               </section>
@@ -284,8 +284,7 @@ const Edit = ({ params }: { params: { recipe_id: number } }) => {
                 <DescriptInputItem
                   errors={errors}
                   register={register}
-                  inputItems={inputDescripts}
-                  setInputItems={setInputDescripts}
+                  fieldArray={descriptFieldArray}
                   setValue={setValue}
                 />
               </section>

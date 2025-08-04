@@ -278,11 +278,36 @@ export const addSomeDescript = async (
     }
   });
 };
+export const deleteAllDescripts = async (recipe_id: number) => {
+  const { error } = await supabase
+    .from("descripts")
+    .delete()
+    .eq("recipe_id", recipe_id);
+  if (error) {
+    console.error("supabaseエラー", error.message);
+  }
+};
+export const deleteAllDescriptImages = async (recipe_id: number) => {
+  // レシピの説明画像を削除
+  const { data: files, error: listError } = await supabase.storage
+    .from("images")
+    .list(`${recipe_id}/Descripts`, { limit: 1000 });
+  if (listError) {
+    console.error("画像リスト取得中にエラー", listError);
+    return;
+  }
+  if (!files || files.length === 0) {
+    console.log("削除対象のフォルダは空です。");
+    return;
+  }
+};
 // 複数個の作り方を更新
 export const updateSomeDescript = async (
   recipe_id: number,
   descripts: DescriptSchemaType,
 ) => {
+  await deleteAllDescriptImages(recipe_id);
+  await deleteAllDescripts(recipe_id);
   for (const [index, e] of descripts.entries()) {
     if (e.imageFile !== undefined) {
       const descriptImagePath = `${recipe_id}/Descripts/${index}.jpg`;
@@ -343,6 +368,7 @@ export const deleteImage = async (id: number) => {
   await deleteImageByPath(`${id}/`); // レシピの画像
   await deleteImageByPath(`${id}/Descripts/`); // 説明の画像
 };
+
 // path指定で画像の削除
 export const deleteImageByPath = async (folderPath: string) => {
   // フォルダ内のファイル一覧を取得
