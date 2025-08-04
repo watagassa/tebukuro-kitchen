@@ -1,30 +1,49 @@
 "use client";
-import Image from "next/image";
 
+import Image from "next/image";
 import {
   FieldErrors,
   UseFormRegister,
   UseFieldArrayReturn,
+  UseFormSetValue,
 } from "react-hook-form";
-import { BiPlus } from "react-icons/bi";
+import { BiPlus, BiTrash } from "react-icons/bi";
 import { TbCameraPlus } from "react-icons/tb";
-import { BiTrash } from "react-icons/bi";
 
 import { RecipeSchemaType } from "@/app/validations/schema";
+import { inputDescript } from "@/app/types";
+import { useEffect } from "react";
 
 interface DescriptInputItemProps {
   errors: FieldErrors<RecipeSchemaType>;
   register: UseFormRegister<RecipeSchemaType>;
   fieldArray: UseFieldArrayReturn<RecipeSchemaType, "descript", "id">;
+  setValue: UseFormSetValue<RecipeSchemaType>;
+  initialData?: inputDescript[]; // ← ここが追加ポイント
 }
 
 const DescriptInputItem = ({
   errors,
   register,
   fieldArray,
+  initialData,
 }: DescriptInputItemProps) => {
   const maxInputs = 6;
   const { fields, append, remove, update } = fieldArray;
+
+  // 初期データを1回だけフィールドに追加
+  useEffect(() => {
+    if (initialData && initialData.length > 0 && fields.length === 0) {
+      initialData.forEach((item) => {
+        append({
+          text: item.text || "",
+          imageFile: undefined,
+          imageString: item.image || "",
+        });
+      });
+    }
+  }, [initialData, fields, append]);
+
   const addInput = () => {
     if (fields.length < maxInputs) {
       append({ text: "", imageString: "", imageFile: undefined });
@@ -56,14 +75,12 @@ const DescriptInputItem = ({
             <section className="relative">
               <div className="relative mb-3 flex h-32 items-center justify-center bg-gray-100 shadow-md">
                 {field.imageString ? (
-                  <>
-                    <Image
-                      src={field.imageString}
-                      alt=""
-                      className="object-cover"
-                      fill
-                    />
-                  </>
+                  <Image
+                    src={field.imageString}
+                    alt=""
+                    className="object-cover"
+                    fill
+                  />
                 ) : (
                   <div className="flex flex-col items-center">
                     <TbCameraPlus className="text-3xl text-gray-400" />
@@ -90,7 +107,6 @@ const DescriptInputItem = ({
                   </button>
                 )}
               </div>
-              {/* zodのエラー文 */}
               <div className="text-sm text-red-500">
                 {errors.descript?.[index]?.imageFile?.message}
               </div>
@@ -110,7 +126,6 @@ const DescriptInputItem = ({
                 />
               </div>
 
-              {/* zodのエラー文 */}
               <div className="text-sm text-red-500">
                 {errors.descript?.[index]?.text?.message}
               </div>
@@ -133,4 +148,5 @@ const DescriptInputItem = ({
     </>
   );
 };
+
 export default DescriptInputItem;
