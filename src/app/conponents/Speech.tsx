@@ -219,9 +219,9 @@ const Speech = ({
             </span>
           </div>
         )}
-        <span className="fixed bottom-0 z-10 mb-16 flex h-6 max-w-[80vw] justify-end overflow-hidden whitespace-nowrap bg-black bg-opacity-30 text-white">
+        {/* <span className="fixed bottom-0 z-10 mb-16 flex h-6 max-w-[80vw] justify-end overflow-hidden whitespace-nowrap bg-black bg-opacity-30 text-white">
           {transcript}
-        </span>
+        </span> */}
       </div>
     </>
   );
