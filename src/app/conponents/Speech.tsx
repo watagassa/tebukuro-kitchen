@@ -141,12 +141,13 @@ const Speech = ({
       matchInterim: true,
     },
     {
-      command: /(.*)セット.*/,
+      command: /タイマー(.*)セット.*/,
       callback: (material: string) => {
         setInputTime(material.replace(/\s+/g, "")); //スペース削除
-        // setResponse(material.replace(/\s+/g, ""));
         resetTranscript();
-        setResponse(`タイマーを"${material}"に設定しました`);
+        setResponse(
+          `タイマーを"${material.replace(/\s+/g, "")}"に設定しました`,
+        );
         SpeechRecognition.startListening({ continuous: true });
       },
       matchInterim: true,
@@ -217,12 +218,11 @@ const Speech = ({
   return (
     <>
       <div className="flex w-full items-center justify-center font-mono">
-        {true && (
+        {transcript && (
           <div className="fixed bottom-20 z-10 mb-16 flex max-w-[80vw] rounded-sm border border-orange-200 bg-orange-50 p-2 pl-1 shadow-md">
             <FiMic className="mr-1 h-5 w-5 text-orange-400" />
             <span className="my-auto flex max-w-[65vw] justify-end overflow-hidden whitespace-nowrap text-sm text-black">
-              {transcript +
-                "こんにちはこんにちはこんにちはこんにちはこんにちは"}
+              {transcript}
             </span>
           </div>
         )}
