@@ -36,7 +36,6 @@ export const searchFeatcher = async (key: string) => {
     const newIds = data.map((r: Recipe) => r.id);
     searchFetchedIds.push(...newIds);
   }
-  if (error) throw error;
   return data ?? ([] as Recipe[]);
 };
 
@@ -140,7 +139,7 @@ export const searchFavFeatcher = async (key: string): Promise<Recipe[]> => {
 //   return data ?? ([] as Recipe[]);
 // };
 
-export const getAllUserRecipesByID = async (user_id: number) => {
+export const getAllUserRecipesByID = async (user_id: string) => {
   const user_UUID = await exchangeIDtoUUID(user_id);
   if (!user_UUID) {
     console.error("ユーザーのUUIDが取得できませんでした");
