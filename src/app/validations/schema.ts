@@ -55,15 +55,15 @@ const IngredientSchema = z
     z.object({
       name: z
         .string()
-        .min(1, "必須です")
+        .min(1, "必須項目です")
         .max(30, `${MAX_TEXT[1]}文字以下にしてください`),
       amount: z
         .string()
-        .min(1, "必須です")
+        .min(1, "必須項目です")
         .max(20, `${MAX_TEXT[0]}文字以下にしてください`),
     }),
   )
-  .min(1, { message: "必須です" });
+  .min(1, { message: "必須項目です" });
 
 const DescriptSchema = z
   .array(
@@ -73,12 +73,12 @@ const DescriptSchema = z
       imageFile: imageSchema,
     }),
   )
-  .min(1, { message: "必須です" });
+  .min(1, { message: "必須項目です" });
 
 export const RecipeObjectSchema = z.object({
   recipe_name: z
     .string()
-    .min(1, "必須です")
+    .min(1, "必須項目です")
     .max(50, `${MAX_TEXT[3]}文字以下にしてください`),
   recipe_image: imageSchema,
   recipe_comment: z
