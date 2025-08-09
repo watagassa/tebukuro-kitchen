@@ -38,7 +38,7 @@ export async function middleware(request: NextRequest) {
 
     if (error || !recipe || recipe.user_id !== user?.id) {
       // ユーザーIDが一致しなければリダイレクト（または403ページなど）
-      //return NextResponse.redirect(new URL("/403", request.url)); // 403ページがあればそちらに
+      return NextResponse.redirect(new URL("/", request.url)); // 403ページがあればそちらに
     }
   }
   return NextResponse.next();
