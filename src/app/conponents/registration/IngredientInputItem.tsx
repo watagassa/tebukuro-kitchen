@@ -4,24 +4,38 @@ import {
   FieldErrors,
   UseFormRegister,
   UseFieldArrayReturn,
+  UseFormSetValue,
 } from "react-hook-form";
-import { BiPlus } from "react-icons/bi";
-import { BiTrash } from "react-icons/bi";
+import { BiPlus, BiTrash } from "react-icons/bi";
+import { useEffect } from "react";
 import { RecipeSchemaType } from "@/app/validations/schema";
+import { InputIngredient } from "@/app/types";
 
 interface IngredientInputItemProps {
   errors: FieldErrors<RecipeSchemaType>;
   register: UseFormRegister<RecipeSchemaType>;
+  setValue: UseFormSetValue<RecipeSchemaType>;
   fieldArray: UseFieldArrayReturn<RecipeSchemaType, "ingredient", "id">;
+  initialData?: InputIngredient[]; // ← 初期データ
 }
 
 const IngredientInputItem = ({
   errors,
   register,
   fieldArray,
+  initialData,
 }: IngredientInputItemProps) => {
   const maxInputs = 5;
   const { fields, append, remove } = fieldArray;
+
+  // 初期データを1回だけセット
+  useEffect(() => {
+    if (initialData && initialData.length > 0 && fields.length === 0) {
+      initialData.forEach((item) => {
+        append({ name: item.name || "", amount: item.amount || "" });
+      });
+    }
+  }, [initialData, fields, append]);
 
   const addInput = () => {
     if (fields.length < maxInputs) {
@@ -45,7 +59,6 @@ const IngredientInputItem = ({
               inputMode="text"
               autoCorrect="off"
             />
-
             {/* zodのエラー文 */}
             <div className="text-xs text-red-500">
               {errors?.ingredient?.[index]?.name?.message}
@@ -67,11 +80,12 @@ const IngredientInputItem = ({
             </div>
           </section>
 
-          {/* 削除用ボタン */}
           {fields.length > 1 && (
             <button
+              type="button"
               onClick={() => remove(index)}
               className="mt-2 self-start text-red-500"
+              title="材料を削除"
             >
               <BiTrash className="text-2xl" />
             </button>

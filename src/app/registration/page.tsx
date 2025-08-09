@@ -209,6 +209,7 @@ export default function Registration() {
             </p>
             <IngredientInputItem
               errors={errors}
+              setValue={setValue}
               register={register}
               fieldArray={ingredientFieldArray}
             />
@@ -221,6 +222,7 @@ export default function Registration() {
             <DescriptInputItem
               errors={errors}
               register={register}
+              setValue={setValue}
               fieldArray={descriptFieldArray}
             />
           </section>
