@@ -1,5 +1,4 @@
 import { Ingredient } from "@/app/types";
-import React from "react";
 import { IoMdClose } from "react-icons/io";
 
 // ハイライトする材料の配列番号を検出する関数
@@ -28,9 +27,7 @@ const IngModal = ({
 }) => {
   // 背景押したら閉じるやつ
   const bgClickClose = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      modalClose();
-    }
+    if (e.target === e.currentTarget) modalClose();
   };
 
   // ハイライトする配列番号の取得
@@ -40,49 +37,53 @@ const IngModal = ({
   }
 
   return (
-    <>
-      <div className="fixed inset-x-0 bottom-0 top-0 bg-black bg-opacity-50">
-        <div
-          onClick={bgClickClose}
-          className="flex h-full items-center justify-center"
-        >
-          <div className="mx-10 w-80 rounded-3xl bg-white text-black shadow-lg">
-            <div className="flex w-full justify-end">
-              <IoMdClose onClick={modalClose} className="m-2 h-10 w-10" />
+    <div className="fixed inset-0 bg-black bg-opacity-50">
+      <div
+        onClick={bgClickClose}
+        className="flex h-full items-center justify-center"
+      >
+        <div className="mx-10 w-full max-w-sm rounded-2xl bg-white p-3 text-gray-400 shadow-lg sm:max-w-md md:max-w-lg">
+          <div className="mb-4 flex items-end justify-between border-b-2 border-orange-600 pb-1">
+            <div className="text-xl font-bold text-orange-600">
+              {howMany ? `材料（${howMany}）` : "材料"}
             </div>
-            <div className="mx-5 mb-5 border-b-2 border-orange-400 text-xl font-bold">
-              {`材料${howMany == "" ? "" : `${howMany}`}`}
-            </div>
-            <div className="mb-5">
-              {ingredient.map((ing: Ingredient) => (
-                <div
-                  key={ing.index}
-                  className={`my-1 flex justify-between ${
-                    ing.index == ingredient.length - 1
-                      ? ""
-                      : "border-b-2 border-dotted border-gray-500"
-                  } `}
-                >
-                  {highLightWord.includes(ing.index ?? -1) ? (
-                    <span
-                      key={ing.index}
-                      className="mb-1 ml-3 font-bold text-orange-400"
-                    >
-                      {ing.name}
-                    </span>
-                  ) : (
-                    <span key={ing.index} className="mb-1 ml-3 text-black">
-                      {ing.name}
-                    </span>
-                  )}
-                  <span className="mr-3 text-black">{ing.amount}</span>
-                </div>
-              ))}
-            </div>
+            <button
+              onClick={modalClose}
+              className="flex flex-col items-center text-xs text-neutral-400 hover:text-neutral-600"
+            >
+              <IoMdClose className="size-7" />
+              <span className="text-sm">閉じて</span>
+            </button>
+          </div>
+          <div className="mb-2 space-y-2">
+            {ingredient.map((ing: Ingredient) => (
+              <div
+                key={ing.index}
+                className={`flex justify-between ${
+                  ing.index === ingredient.length - 1
+                    ? ""
+                    : "border-b-2 border-dotted border-neutral-300"
+                } `}
+              >
+                {highLightWord.includes(ing.index ?? -1) ? (
+                  <span
+                    key={ing.index}
+                    className="mb-1 font-bold text-orange-400"
+                  >
+                    {ing.name}
+                  </span>
+                ) : (
+                  <span key={ing.index} className="mb-1 text-black">
+                    {ing.name}
+                  </span>
+                )}
+                <span className="text-black">{ing.amount}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
