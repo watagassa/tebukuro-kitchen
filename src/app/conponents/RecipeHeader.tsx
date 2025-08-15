@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { IoIosArrowBack } from "react-icons/io";
+import { MdOutlineQuestionMark } from "react-icons/md";
 
 type RecipeHeaderProps = {
   bgColor: string;
@@ -7,13 +8,22 @@ type RecipeHeaderProps = {
   title: string;
   link: string;
   iconFill: string;
+  guideModalOpen?: boolean;
+  setGuideModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const RecipeHeader = (props: RecipeHeaderProps) => {
-  const { bgColor, textColor, title, link, iconFill } = props;
+const RecipeHeader = ({
+  bgColor,
+  textColor,
+  title,
+  link,
+  iconFill,
+  guideModalOpen,
+  setGuideModalOpen,
+}: RecipeHeaderProps) => {
   return (
     <header
-      className={`sticky top-0 flex w-full items-center border-b border-gray-400 p-5 shadow-md ${bgColor} z-40`}
+      className={`sticky top-0 flex w-full items-center border-b border-gray-400 p-5 shadow-md ${bgColor} z-40 min-h-[69px]`}
     >
       <Link href={link} className="absolute left-5 text-3xl">
         <IoIosArrowBack fill={iconFill} />
@@ -23,6 +33,17 @@ const RecipeHeader = (props: RecipeHeaderProps) => {
       >
         {title}
       </p>
+
+      {typeof guideModalOpen === "boolean" &&
+        typeof setGuideModalOpen === "function" && (
+          <button
+            onClick={() => setGuideModalOpen(!guideModalOpen)}
+            className="absolute right-5 bg-transparent font-bold text-white"
+          >
+            <MdOutlineQuestionMark className="mx-auto h-6 w-6" />
+            <p>ガイド</p>
+          </button>
+        )}
     </header>
   );
 };
