@@ -16,47 +16,57 @@ export const getMyPage = async()=>{
     if(!user)throw idError
     const user_id:pageElements["user_id"] = user.id;
 
-    const {data:profileData,error:profileError} = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("user_id", user_id)
-        .single();
-    if (profileError || !profileData) throw profileError || new Error("取得したプロフィール情報が空です");
-    const profile:pageElements["profile"] = {
-        name:profileData.name,
-        avatar_url:profileData.avatar_url
+    try{
+        const {data:profileData,error:profileError} = await supabase
+            .from("profiles")
+            .select("*")
+            .eq("user_id", user_id)
+            .single();
+        if (profileError || !profileData) throw profileError || new Error("取得したプロフィール情報が空です");
+        const profile:pageElements["profile"] = {
+            name:profileData.name,
+            avatar_url:profileData.avatar_url
+        }
+
+        const {data:recipesData,error:recipesError} = await supabase
+            .from("recipes")
+            .select("*")
+            .eq("user_id", user_id);
+        if(recipesError) throw recipesError;
+        const created_recipes:pageElements["created_recipes"] = recipesData as Recipe[];
+
+        return {user_id,profile,created_recipes} as pageElements;
+
+    }catch(error){
+        throw new Error(`マイページの取得に失敗しました: ${error instanceof Error ? error.message : '不明なエラー'}`);
     }
-
-    const {data:recipesData,error:recipesError} = await supabase
-        .from("recipes")
-        .select("*")
-        .eq("user_id", user_id);
-    if(recipesError) throw recipesError;
-    const created_recipes:pageElements["created_recipes"] = recipesData as Recipe[];
-
-    return {user_id,profile,created_recipes} as pageElements;
 }
 
 export const getOtherUserPage = async (user_id :string)=>{
-    const {data:profileData,error:profileError} = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", user_id)
-    .single();
-    if(profileError || !profileData) throw profileError || new Error("取得したプロフィール情報が空です");
-    const profile:pageElements["profile"] = {
-        name:profileData.name,
-        avatar_url:profileData.avatar_url
-    };
+    try{
+        const id = Number(user_id)
+        const {data:profileData,error:profileError} = await supabase
+            .from("profiles")
+            .select("*")
+            .eq("id", id)
+            .single();
+        if(profileError || !profileData) throw profileError || new Error("取得したプロフィール情報が空です");
+        const profile:pageElements["profile"] = {
+            name:profileData.name,
+            avatar_url:profileData.avatar_url
+        };
 
-    const user_UUID = await exchangeIDtoUUID(user_id);
-    if(!user_UUID)throw new Error('ユーザーのUUIDが取得できませんでした');
-    const {data:recipesData,error:recipesError}= await supabase
-    .from("recipes")
-    .select("*")
-    .eq("user_id", user_UUID);
-    if(recipesError)throw recipesError;
-    const created_recipes:pageElements["created_recipes"] = recipesData as Recipe[];
+        const user_UUID = await exchangeIDtoUUID(user_id);
+        const {data:recipesData,error:recipesError}= await supabase
+            .from("recipes")
+            .select("*")
+            .eq("user_id", user_UUID);
+        if(recipesError)throw recipesError;
+        const created_recipes:pageElements["created_recipes"] = recipesData as Recipe[];
 
-    return {user_id,profile,created_recipes} as pageElements;
+        return {user_id,profile,created_recipes} as pageElements;
+
+    }catch(error){
+        throw new Error(`ユーザーページの取得に失敗しました: ${error instanceof Error ? error.message : '不明なエラー'}`);
+    }
 }

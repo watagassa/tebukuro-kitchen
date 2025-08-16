@@ -9,7 +9,7 @@ export async function middleware(request: NextRequest) {
     /^sb-[^-]+-auth-token(?:\.\d+)?$/.test(c.name),
   );
   const protectedPaths = ["/edit", "/users", "/registration", "/favorites"];
-  const isProtected = protectedPaths.some((p) => path.startsWith(p));
+  const isProtected = protectedPaths.some((p) => path.endsWith(p));
 
   console.log("Path:", path);
   console.log("User:", hasToken);
