@@ -12,7 +12,7 @@ export const free_favoriteFetchedId = () => (favoriteFetchedIds = []);
 export const free_searchFavFeatchedIds = () => (searchFavFeatchedIds = []);
 
 export const randomFetcher = async () => {
-  const { data, error } = await supabase.rpc("get_random_recipes_exclude", {
+  const { data, error } = await supabase.rpc("get_random_recipes", {
     count: 10,
     exclude_ids: ramdomFetchedIds, // 取得済みID
   });
@@ -26,7 +26,7 @@ export const randomFetcher = async () => {
 
 export const searchFeatcher = async (key: string) => {
   const kw = key.substring(key.indexOf("-") + 1, key.lastIndexOf("-"));
-  const { data, error } = await supabase.rpc("get_random_recipes_exclude", {
+  const { data, error } = await supabase.rpc("get_random_recipes_keyword", {
     count: 10,
     exclude_ids: searchFetchedIds, // 取得済みID
     keyword: kw,
@@ -41,7 +41,7 @@ export const searchFeatcher = async (key: string) => {
 };
 
 export const favoriteFetcher = async (): Promise<Recipe[]> => {
-  const { data, error } = await supabase.rpc("get_favorite_recipes_by_uuid", {
+  const { data, error } = await supabase.rpc("get_favorite_recipes", {
     count: 10,
     exclude_ids: favoriteFetchedIds, // 取得済みID
     target_user_id: await getCurrentUserID(),
@@ -56,7 +56,7 @@ export const favoriteFetcher = async (): Promise<Recipe[]> => {
 
 export const searchFavFeatcher = async (key: string): Promise<Recipe[]> => {
   const kw = key.substring(key.indexOf("-") + 1, key.lastIndexOf("-"));
-  const { data, error } = await supabase.rpc("get_favorite_recipes_by_uuid", {
+  const { data, error } = await supabase.rpc("get_favorite_recipes", {
     count: 10,
     exclude_ids: searchFavFeatchedIds, // 取得済みID
     target_user_id: await getCurrentUserID(),
