@@ -1,6 +1,6 @@
 "use client";
 
-import { Recipe } from "@/app/types";
+import { RecipeOldType } from "@/app/types";
 import {
   addFavorites,
   isFavorited,
@@ -17,7 +17,7 @@ import { cache } from "swr/_internal";
 import { free_favoriteFetchedId } from "../utils/supabase/recipe";
 
 type FavoriteButtonProps = {
-  recipe: Recipe;
+  recipe: RecipeOldType;
 };
 
 const FavoriteButton = ({ recipe }: FavoriteButtonProps) => {
