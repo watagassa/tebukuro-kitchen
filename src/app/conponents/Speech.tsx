@@ -216,28 +216,26 @@ const Speech = ({
   // }
 
   return (
-    <>
-      <div className="flex w-full items-center justify-center font-mono">
-        {transcript && (
-          <div className="fixed bottom-20 z-10 mb-16 flex max-w-[80vw] rounded-sm border border-orange-200 bg-orange-50 p-2 pl-1 shadow-md">
-            <FiMic className="mr-1 h-5 w-5 text-orange-400" />
-            <span className="my-auto flex max-w-[65vw] justify-end overflow-hidden whitespace-nowrap text-sm text-black">
-              {transcript}
-            </span>
-          </div>
-        )}
-        <div className="fixed bottom-0 z-10 mb-16 flex max-w-[80vw] rounded-sm border border-orange-200 bg-orange-50 p-2 pl-1">
-          <img
-            src="/tebukuro.svg"
-            alt="tebukuroicon"
-            className="mr-2 h-5 w-5 text-orange-400"
-          />
-          <span className="my-auto flex max-w-[65vw] justify-end overflow-hidden whitespace-nowrap text-sm text-gray-400">
-            {response != "" ? response : "ここには認識結果が表示されます"}
+    <div className="flex w-full items-center justify-center font-mono">
+      {transcript && (
+        <div className="fixed bottom-20 z-10 mb-16 flex max-w-[80vw] rounded-sm border border-orange-200 bg-orange-50 p-2 pl-1 shadow-md">
+          <FiMic className="mr-1 h-5 w-5 text-orange-400" />
+          <span className="my-auto flex max-w-[65vw] justify-end overflow-hidden whitespace-nowrap text-sm text-black">
+            {transcript}
           </span>
         </div>
+      )}
+      <div className="fixed bottom-0 z-10 mb-16 flex max-w-[80vw] rounded-md border border-orange-200 bg-orange-50 p-2 pl-1 shadow-lg">
+        <img
+          src="/tebukuro.svg"
+          alt="tebukuroicon"
+          className="mr-2 h-5 w-5 text-orange-400"
+        />
+        <span className="my-auto flex max-w-[65vw] justify-end overflow-hidden whitespace-nowrap text-sm text-gray-400">
+          {response != "" ? response : "ここには認識結果が表示されます"}
+        </span>
       </div>
-    </>
+    </div>
   );
 };
 
