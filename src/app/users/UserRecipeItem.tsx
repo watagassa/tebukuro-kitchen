@@ -19,7 +19,7 @@ const UserRecipeItem = ({
   name,
   image_url,
 }: {
-  user_id?: number;
+  user_id?: string;
   id: number;
   name: string;
   image_url?: string;

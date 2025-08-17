@@ -52,6 +52,7 @@ export type DetailRecipe = {
   descripts: Descript[];
   ingredients: Ingredient[];
   profiles: {
+    id: string;
     name: string;
     avatar_url: string;
   };
