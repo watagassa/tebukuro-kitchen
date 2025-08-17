@@ -1,5 +1,19 @@
 "use client";
 
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
+
+import { FaArrowLeft, FaArrowRight, FaDoorOpen } from "react-icons/fa";
+import { FiCameraOff } from "react-icons/fi";
+import { MdOutlineTimer } from "react-icons/md";
+import { PiNoteDuotone } from "react-icons/pi";
+
+import GuideModal from "./GuideModal";
+import IngModal from "./IngModal";
+import TimerModal from "./TimerModal";
+import YtModal from "./YtModal";
 import RecipeHeader from "@/app/conponents/RecipeHeader";
 import Speech from "@/app/conponents/Speech";
 import { Descript, Ingredient } from "@/app/types";
@@ -8,19 +22,6 @@ import {
   getByIngredientId,
   getRecipesbyId,
 } from "@/app/utils/supabaseFunctionsNew";
-import Image from "next/image";
-import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
-import { FaArrowLeft, FaArrowRight, FaDoorOpen } from "react-icons/fa";
-import { FiCameraOff } from "react-icons/fi";
-import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
-import { MdOutlineTimer } from "react-icons/md";
-import { PiNoteDuotone } from "react-icons/pi";
-import GuideModal from "./GuideModal";
-import IngModal from "./IngModal";
-import TimerModal from "./TimerModal";
-import YtModal from "./YtModal";
 import { speak } from "@/app/utils/text-to-speech";
 
 //丸を描画する length=丸の数 page=塗りつぶし判定用ページ数
@@ -156,18 +157,9 @@ const Cook = ({
             title={title}
             link={recipePage}
             iconFill="white"
+            guideModalOpen={guideModalOpen}
+            setGuideModalOpen={setGuideModalOpen}
           />
-          {title != "" ? ( //ヘッダーのタイトルのロードが完了したら表示（より自然に）
-            <button
-              onClick={() => setGuideModalOpen(!guideModalOpen)}
-              className="absolute right-1 top-0.5 z-50 bg-transparent p-3 font-bold text-white"
-            >
-              <IoChatbubbleEllipsesOutline className="mx-auto h-6 w-6" />
-              ガイド
-            </button>
-          ) : (
-            <span></span>
-          )}
         </div>
 
         <div className="flex content-center justify-center">
@@ -286,7 +278,7 @@ const Cook = ({
               className="hidden bg-transparent font-bold button:block"
             >
               <PiNoteDuotone className="mx-7 h-6 w-6" />
-              材料は?
+              材料
             </button>
             <button
               onClick={() => setTimerModalOpen(!timerModalOpen)}
@@ -294,9 +286,9 @@ const Cook = ({
             >
               <MdOutlineTimer className="mx-7 h-6 w-6" />
               <p className="text-xs leading-none tracking-tighter">
-                〜分〜秒
+                タイマー
                 <br />
-                セット
+                O分セット
               </p>
             </button>
             {page == length - 1 ? (
