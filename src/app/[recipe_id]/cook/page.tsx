@@ -200,9 +200,9 @@ const Cook = ({
           動画表示
         </button>
       </div> */}
-        <div className="fixed bottom-14 flex w-full justify-between">
+        <div className="fixed bottom-16 flex w-full cursor-pointer justify-between">
           <button
-            onClick={() => speak(descript[page]?.text)}
+            onClick={() => speaker(descript[page]?.text)}
             className="bg-black text-white"
           >
             スピーチ
@@ -265,7 +265,6 @@ const Cook = ({
               <button
                 onClick={() => {
                   setPage(page - 1);
-                  speaker(descript[page]?.text);
                 }}
                 className="h-14 w-20 bg-transparent font-bold"
               >
