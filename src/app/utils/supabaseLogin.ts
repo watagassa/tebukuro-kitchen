@@ -90,7 +90,7 @@ export const logout = async () => {
 };
 
 // idよりユーザープロフィール取得
-export const getProfileByID = async (id: number) => {
+export const getProfileByID = async (id: string) => {
   const profile = await supabase
     .from("profiles")
     .select("*")
@@ -107,7 +107,7 @@ export const getProfileByID = async (id: number) => {
   return frontProfile;
 };
 
-export const exchangeIDtoUUID = async (id: number) => {
+export const exchangeIDtoUUID = async (id: string) => {
   const { data, error } = await supabase
     .from("profiles")
     .select("user_id")

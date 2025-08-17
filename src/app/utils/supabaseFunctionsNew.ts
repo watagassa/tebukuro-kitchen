@@ -417,7 +417,7 @@ export const getImageUrl = async (filePath: string) => {
 export const getDetailRecipebyId = async (id: number) => {
   const detailRecipe: PostgrestSingleResponse<DetailRecipe> = await supabase
     .from("recipes")
-    .select("*, descripts(*), ingredients(*), profiles(name, avatar_url)")
+    .select("*, descripts(*), ingredients(*), profiles(name, avatar_url,id)")
     .eq("id", id)
     .single();
   if (detailRecipe.error) {

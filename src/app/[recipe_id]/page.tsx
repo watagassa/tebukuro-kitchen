@@ -86,7 +86,7 @@ export default function RecipeId({
 
         <div className="m-4 pb-2">
           <div className="flex justify-between gap-2">
-            <div>
+            <Link href={`/users/mypage/${list["profiles"].id}`}>
               <p ref={ref} className="text-2xl font-semibold text-orange-700">
                 {list.name}
               </p>
@@ -101,7 +101,7 @@ export default function RecipeId({
                 />
                 <p>{list.profiles.name}</p>
               </div>
-            </div>
+            </Link>
             <FavoriteButton
               recipe={{
                 id: list.id,
