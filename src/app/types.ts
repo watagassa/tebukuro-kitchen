@@ -9,7 +9,7 @@ import { UUID } from "crypto";
 export type Recipe = {
   id: number;
   user_id: string;
-  user_name: string;
+  user_name?: string;
   name: string;
   image_url?: string;
   time?: string; //料理時間
