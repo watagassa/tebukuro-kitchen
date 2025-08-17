@@ -8,12 +8,23 @@ import { UUID } from "crypto";
 // レシピ
 export type Recipe = {
   id: number;
+  user_id: string;
+  user_name?: string;
   name: string;
   image_url?: string;
   time?: string; //料理時間
   comment?: string;
   howmany?: string; //何人前
 };
+export type RecipeOldType = {
+  id: number;
+  name: string;
+  image_url?: string;
+  time?: string; //料理時間
+  comment?: string;
+  howmany?: string; //何人前
+};
+
 // 材料
 export type Ingredient = {
   id: number;
