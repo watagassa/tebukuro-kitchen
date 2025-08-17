@@ -21,6 +21,7 @@ import GuideModal from "./GuideModal";
 import IngModal from "./IngModal";
 import TimerModal from "./TimerModal";
 import YtModal from "./YtModal";
+import { speak } from "@/app/utils/text-to-speech";
 
 //丸を描画する length=丸の数 page=塗りつぶし判定用ページ数
 const Circle = ({ length, page }: { length: number; page: number }) => {
@@ -120,6 +121,15 @@ const Cook = ({
 
   const imageSrc = descript[page]?.image_url ?? ""; // 画像のＵＲＬ
 
+  async function speaker(text: string | undefined) {
+    const data = await speak(text);
+
+    if (data.audioContent) {
+      const audio = new Audio("data:audio/mp3;base64," + data.audioContent);
+      audio.play();
+    }
+  }
+
   return (
     <>
       <div className="fixed inset-x-0 bottom-0 top-0 -z-50 bg-white">
@@ -198,6 +208,14 @@ const Cook = ({
           動画表示
         </button>
       </div> */}
+        <div className="fixed bottom-14 flex w-full justify-between">
+          <button
+            onClick={() => speak(descript[page]?.text)}
+            className="bg-black text-white"
+          >
+            スピーチ
+          </button>
+        </div>
 
         <div id="container">
           {ingModalOpen && (
@@ -253,7 +271,10 @@ const Cook = ({
               </div>
             ) : (
               <button
-                onClick={() => setPage(page - 1)}
+                onClick={() => {
+                  setPage(page - 1);
+                  speaker(descript[page]?.text);
+                }}
                 className="h-14 w-20 bg-transparent font-bold"
               >
                 <FaArrowLeft className="mx-7 h-6 w-6" />
