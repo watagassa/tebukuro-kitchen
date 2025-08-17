@@ -111,10 +111,10 @@ const TimerModal = ({
             alarm.current
               .play()
               .then(() => {
-                setPlaying(true);
+                // setPlaying(true);
               })
               .catch((/*error*/) => {
-                setPlaying(true);
+                // setPlaying(true);
                 setTimeout(() => {
                   reset();
                 }, 8000);
