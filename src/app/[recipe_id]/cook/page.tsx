@@ -22,7 +22,7 @@ import {
   getByIngredientId,
   getRecipesbyId,
 } from "@/app/utils/supabaseFunctionsNew";
-import { speak } from "@/app/utils/text-to-speech";
+import { getVoice } from "@/app/utils/text-to-speech";
 
 //丸を描画する length=丸の数 page=塗りつぶし判定用ページ数
 const Circle = ({ length, page }: { length: number; page: number }) => {
@@ -122,14 +122,13 @@ const Cook = ({
 
   const imageSrc = descript[page]?.image_url ?? ""; // 画像のＵＲＬ
 
-  async function speaker(text: string | undefined) {
-    const data = await speak(text);
-
+  const speak = async (text: string | undefined) => {
+    const data = await getVoice(text);
     if (data.audioContent) {
       const audio = new Audio("data:audio/mp3;base64," + data.audioContent);
       audio.play();
     }
-  }
+  };
 
   return (
     <>
@@ -202,7 +201,7 @@ const Cook = ({
       </div> */}
         <div className="fixed bottom-16 flex w-full cursor-pointer justify-between">
           <button
-            onClick={() => speaker(descript[page]?.text)}
+            onClick={() => speak(descript[page]?.text)}
             className="bg-black text-white"
           >
             スピーチ
