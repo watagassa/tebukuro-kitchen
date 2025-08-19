@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { FaArrowLeft, FaArrowRight, FaDoorOpen } from "react-icons/fa";
-import { FiCameraOff } from "react-icons/fi";
+import { FiCameraOff, FiVolume2 } from "react-icons/fi";
 import { MdOutlineTimer } from "react-icons/md";
 import { PiNoteDuotone } from "react-icons/pi";
 
@@ -14,6 +14,7 @@ import GuideModal from "./GuideModal";
 import IngModal from "./IngModal";
 import TimerModal from "./TimerModal";
 import YtModal from "./YtModal";
+import VoiceSettingsModal from "./VoiceSettingsModal";
 import RecipeHeader from "@/app/conponents/RecipeHeader";
 import Speech from "@/app/conponents/Speech";
 import { Descript, Ingredient } from "@/app/types";
@@ -88,6 +89,7 @@ const Cook = ({
   const [ytModalOpen, setYtModalOpen] = useState(false);
   const [guideModalOpen, setGuideModalOpen] = useState(false);
   const [timerModalOpen, setTimerModalOpen] = useState(false);
+  const [voiceSettingsModalOpen, setVoiceSettingsModalOpen] = useState(false);
 
   const [keyword, setKeyword] = useState(""); // 動画検索ワード YtModal(youtube)用
 
@@ -96,6 +98,12 @@ const Cook = ({
   const [timerStart, setTimerStart] = useState(false); // タイマーがスタートされているかどうか
   const [timerDisp, setTimerDisp] = useState(""); // タイマーのテキスト
   const [timerReset, setTimerReset] = useState(false);
+
+  // 音声設定関連
+  const [voiceEnabled, setVoiceEnabled] = useState(true);
+  const [voiceVolume, setVoiceVolume] = useState(50);
+  const [voiceSpeed, setVoiceSpeed] = useState(1.0);
+  const [timerAlarmVolume, setTimerAlarmVolume] = useState(50);
 
   // 音声認識コンポーネントでのページ操作用関数
   const back = (
@@ -180,6 +188,12 @@ const Cook = ({
         >
           {descript[page]?.text ?? "読み込み中・・・"}
         </div>
+        <button
+          onClick={() => setVoiceSettingsModalOpen(!voiceSettingsModalOpen)}
+          className="fixed bottom-[4.5rem] right-4 rounded-full bg-orange-50 p-2 shadow-lg"
+        >
+          <FiVolume2 className="size-7 font-semibold text-orange-400" />
+        </button>
 
         {/* 動画表示デバッグ用 */}
         {/* <div className="w-full flex justify-between fixed bottom-14">
@@ -234,6 +248,21 @@ const Cook = ({
             setTimerDisp={setTimerDisp}
             timerReset={timerReset}
           />
+          {voiceSettingsModalOpen && (
+            <VoiceSettingsModal
+              modalClose={() => {
+                setVoiceSettingsModalOpen(false);
+              }}
+              voiceEnabled={voiceEnabled}
+              setVoiceEnabled={setVoiceEnabled}
+              voiceVolume={voiceVolume}
+              setVoiceVolume={setVoiceVolume}
+              voiceSpeed={voiceSpeed}
+              setVoiceSpeed={setVoiceSpeed}
+              timerAlarmVolume={timerAlarmVolume}
+              setTimerAlarmVolume={setTimerAlarmVolume}
+            />
+          )}
         </div>
 
         {/* フッター */}
