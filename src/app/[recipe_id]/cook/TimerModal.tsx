@@ -24,8 +24,6 @@ const TimerModal = ({
   setInputTime,
   start,
   setStart,
-  timerDisp,
-  setTimerDisp,
   timerReset,
 }: {
   timerModalOpen: boolean;
@@ -34,10 +32,10 @@ const TimerModal = ({
   setInputTime: React.Dispatch<SetStateAction<string>>;
   start: boolean;
   setStart: React.Dispatch<SetStateAction<boolean>>;
-  timerDisp: string;
-  setTimerDisp: React.Dispatch<SetStateAction<string>>;
   timerReset: boolean;
 }) => {
+  const [timerDisp, setTimerDisp] = useState(""); // タイマーのテキスト
+
   const [inUse, setInUse] = useState(false); // タイマーの使用中判定（左下表示判定用）
   const [update, setUpdate] = useState(false); // 値更新検出用
 

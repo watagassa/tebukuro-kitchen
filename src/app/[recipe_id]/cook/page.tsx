@@ -97,7 +97,6 @@ const Cook = ({
   // タイマー関連
   const [inputTime, setInputTime] = useState(""); // 音声で認識したタイマーの時間
   const [timerStart, setTimerStart] = useState(false); // タイマーがスタートされているかどうか
-  const [timerDisp, setTimerDisp] = useState(""); // タイマーのテキスト
   const [timerReset, setTimerReset] = useState(false);
 
   // 音声設定関連
@@ -260,8 +259,6 @@ const Cook = ({
             setInputTime={setInputTime}
             start={timerStart}
             setStart={setTimerStart}
-            timerDisp={timerDisp}
-            setTimerDisp={setTimerDisp}
             timerReset={timerReset}
           />
           {voiceSettingsModalOpen && (
