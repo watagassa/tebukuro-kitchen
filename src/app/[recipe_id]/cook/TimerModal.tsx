@@ -43,7 +43,6 @@ const TimerModal = ({
   const [sec, setSec] = useState(0); // 秒
 
   const alarm = useRef<HTMLAudioElement>(); // アラーム用変数
-  const [playing, setPlaying] = useState(false); // アラームが再生しているかどうか
   // アラームの初期化
   useEffect(() => {
     alarm.current = new Audio("/TimerAlarm.mp3");
@@ -69,12 +68,12 @@ const TimerModal = ({
       setTimerDisp(num2TimerText(min, sec, setMin, setSec, true));
     }
 
-    if (min === 0 && sec === 0 && !playing) {
+    if (min === 0 && sec === 0 && !start) {
       setInUse(false);
     } else {
       setInUse(true);
     }
-  }, [update, setTimerDisp, setInUse, min, sec, playing]);
+  }, [update, setInUse, min, sec, start]);
 
   // アラーム終了時の処理（終了するまではstart判定はtrueのまま）
   if (alarm.current) {
@@ -89,13 +88,12 @@ const TimerModal = ({
     if (alarm.current) {
       alarm.current.pause();
       alarm.current.currentTime = 0;
-      setPlaying(false);
     }
     setMin(0);
     setSec(0);
     setStart(false);
     setUpdate((prev) => !prev); // ← こう書くと依存に update を入れなくてOK
-  }, [alarm, setPlaying, setMin, setSec, setStart, setUpdate]);
+  }, [alarm, setMin, setSec, setStart, setUpdate]);
 
   // タイマーのインターバル処理
   useEffect(() => {
@@ -106,23 +104,17 @@ const TimerModal = ({
         if (sec <= 0 && min == 0) {
           clearInterval(manager);
           if (alarm.current) {
-            alarm.current
-              .play()
-              .then(() => {
-                // setPlaying(true);
-              })
-              .catch((/*error*/) => {
-                // setPlaying(true);
-                setTimeout(() => {
-                  reset();
-                }, 8000);
-              });
+            alarm.current.play().catch((/*error*/) => {
+              setTimeout(() => {
+                reset();
+              }, 8000);
+            });
           }
         } else {
-          setSec(sec - 1);
+          setSec((prev) => prev - 1);
           if (sec == 0) {
             setSec(59);
-            setMin(min - 1);
+            setMin((prev) => prev - 1);
           }
         }
         setTimerDisp(num2TimerText(min, sec, setMin, setSec, false));
@@ -133,18 +125,13 @@ const TimerModal = ({
         clearInterval(manager);
       }
     };
-  }, [setTimerDisp, start, setStart, min, sec, reset]);
+  }, [setTimerDisp, start, min, sec, reset]);
 
   // スタート、ストップボタン
   const start_stop = () => {
     if (min !== 0 || sec !== 0) setStart(!start);
     else reset();
   };
-
-  // アラームが鳴っている時のストップボタン
-  useEffect(() => {
-    if (playing && (min == 0 || sec == 0)) reset();
-  }, [start, min, playing, reset, sec]);
 
   // 音声認識でのリセット検出
   useEffect(() => {
