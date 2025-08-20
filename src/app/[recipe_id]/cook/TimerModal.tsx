@@ -49,19 +49,19 @@ const TimerModal = ({
   // アラームの初期化
   useEffect(() => {
     alarm.current = new Audio("/TimerAlarm.mp3");
-  }, [alarm]);
+  }, []);
 
-  // 音声入力された時のみ変換して初期化
+  // 音声入力での初期化、入力処理
   useEffect(() => {
     if (inputTime != "") {
       const { m, s } = str2TimerText(inputTime);
       setMin(m);
       setSec(s);
       setInUse(true);
-      setUpdate(!update);
+      setUpdate((prev) => !prev);
       setInputTime(""); //一旦毎回リセットするようにする
     }
-  }, [inputTime, setInputTime, setInUse, update]);
+  }, [inputTime, setInputTime]);
 
   // タイマー更新関数
   useEffect(() => {

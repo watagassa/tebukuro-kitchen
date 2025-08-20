@@ -154,7 +154,6 @@ const Cook = ({
           setTimerModalOpen={setTimerModalOpen}
           setInputTime={setInputTime}
           setTimerStart={setTimerStart}
-          timerReset={timerReset}
           setTimerReset={setTimerReset}
         />
         <div className="relative">

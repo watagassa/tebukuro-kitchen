@@ -32,7 +32,6 @@ const Speech = ({
   setTimerModalOpen,
   setInputTime,
   setTimerStart,
-  timerReset,
   setTimerReset,
 }: {
   next: screenController["next"];
@@ -47,7 +46,6 @@ const Speech = ({
   setTimerModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setInputTime: React.Dispatch<React.SetStateAction<string>>;
   setTimerStart: React.Dispatch<React.SetStateAction<boolean>>;
-  timerReset: boolean;
   setTimerReset: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [response, setResponse] = useState("");
@@ -133,7 +131,7 @@ const Speech = ({
     {
       command: /.*(リセット).*/,
       callback: () => {
-        setTimerReset(!timerReset);
+        setTimerReset((prev) => !prev);
         resetTranscript();
         setResponse("タイマーをリセットします");
         SpeechRecognition.startListening({ continuous: true });
