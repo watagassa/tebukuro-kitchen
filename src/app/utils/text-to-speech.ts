@@ -14,6 +14,7 @@ export const getVoice = async (text: string | undefined, speed: number) => {
         audioConfig: {
           audioEncoding: "MP3",
           speakingRate: speed,
+          // ブラウザが勝手に音量を平均化しちゃうので音量調整出来ないかも
           volumeGainDb: 0.0,
         },
       }),
