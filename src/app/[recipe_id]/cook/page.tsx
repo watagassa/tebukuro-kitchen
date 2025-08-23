@@ -2,13 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import {
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { FaArrowLeft, FaArrowRight, FaDoorOpen } from "react-icons/fa";
@@ -21,7 +15,7 @@ import IngModal from "./IngModal";
 import TimerModal from "./TimerModal";
 import YtModal from "./YtModal";
 import VoiceSettingsModal from "./VoiceSettingsModal";
-import RecipeHeader from "@/app/conponents/RecipeHeader";
+import RecipeHeader from "@/app/conponents/RecipeHeaderOld";
 import Speech from "@/app/conponents/Speech";
 import { Descript, Ingredient } from "@/app/types";
 import {
@@ -65,11 +59,9 @@ const ModalContainer = ({ children }: { children: React.JSX.Element }) => {
 const Cook = ({
   params,
   searchParams,
-  setInCook,
 }: {
   params: { recipe_id: number };
   searchParams: { from?: string };
-  setInCook: React.Dispatch<SetStateAction<boolean>>;
 }) => {
   const [title, setTitle] = useState<string>(""); // 料理画面 上部タイトル
   const [howMany, setHowMany] = useState<string>(""); // 材料表示 何人前
@@ -181,7 +173,6 @@ const Cook = ({
             iconFill="white"
             guideModalOpen={guideModalOpen}
             setGuideModalOpen={setGuideModalOpen}
-            setInCook={setInCook}
           />
         </div>
 
