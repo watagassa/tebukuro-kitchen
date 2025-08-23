@@ -18,7 +18,7 @@ import DescriptItem from "@/app/conponents/DescriptItem";
 import LoadingDataFetch from "@/app/conponents/LoadingDataFetch";
 import { Descript, DetailRecipe, Ingredient } from "@/app/types";
 import { getDetailRecipebyId } from "@/app/utils/supabaseFunctionsNew";
-import Cook from "./cook/page";
+import Cook from "./cook/Cook";
 
 export default function RecipeId({
   params,
