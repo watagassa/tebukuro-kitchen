@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { IoIosArrowBack } from "react-icons/io";
 import { MdOutlineQuestionMark } from "react-icons/md";
 
@@ -9,28 +10,24 @@ type RecipeHeaderProps = {
   iconFill: string;
   guideModalOpen?: boolean;
   setGuideModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
-  setInCook: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const RecipeHeader = ({
   bgColor,
   textColor,
   title,
+  link,
   iconFill,
   guideModalOpen,
   setGuideModalOpen,
-  setInCook,
 }: RecipeHeaderProps) => {
   return (
     <header
       className={`sticky top-0 flex w-full items-center border-b border-gray-400 p-5 shadow-md ${bgColor} z-40 min-h-[69px]`}
     >
-      <button
-        onClick={() => setInCook(false)}
-        className="absolute left-5 text-3xl"
-      >
+      <Link href={link} className="absolute left-5 text-3xl">
         <IoIosArrowBack fill={iconFill} />
-      </button>
+      </Link>
       <p
         className={`flex-1 text-center text-xl font-semibold ${textColor} truncate pl-10 pr-11`}
       >
