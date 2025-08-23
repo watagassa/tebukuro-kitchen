@@ -41,7 +41,7 @@ const UserRecipeItem = ({
 
         <div className="flex h-full flex-grow flex-col justify-between">
           <p className="mt-auto break-words text-base font-semibold">{name}</p>
-          {!user_id && (
+          {user_id && (
             <div className="flex gap-4 self-end pt-1 text-xs md:pt-3">
               <Link
                 href={`/users/edit/${id}`}
