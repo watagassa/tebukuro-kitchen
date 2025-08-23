@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { FaArrowLeft, FaArrowRight, FaDoorOpen } from "react-icons/fa";
@@ -129,13 +129,22 @@ const Cook = ({
 
   const imageSrc = descript[page]?.image_url ?? ""; // 画像のＵＲＬ
 
-  const speak = async (text: string | undefined) => {
-    const data = await getVoice(text);
-    if (data.audioContent) {
-      const audio = new Audio("data:audio/mp3;base64," + data.audioContent);
-      audio.play();
+  const audio = useRef<HTMLAudioElement>();
+  const speak = useCallback(async (text: string | undefined, speed: number) => {
+    if (!text) return;
+    if (audio.current) {
+      audio.current.pause();
+      audio.current.currentTime = 0;
     }
-  };
+    const data = await getVoice(text, speed);
+    if (data.audioContent) {
+      audio.current = new Audio("data:audio/mp3;base64," + data.audioContent);
+      audio.current.play();
+    }
+  }, []);
+  useEffect(() => {
+    speak(descript[page]?.text, voiceSpeed);
+  }, [descript, page, speak, voiceSpeed]);
 
   return (
     <>
@@ -213,7 +222,7 @@ const Cook = ({
       </div> */}
         <div className="fixed bottom-16 flex w-full cursor-pointer justify-between">
           <button
-            onClick={() => speak(descript[page]?.text)}
+            onClick={() => speak(descript[page]?.text, voiceSpeed)}
             className="bg-black text-white"
           >
             スピーチ
@@ -288,6 +297,7 @@ const Cook = ({
             ) : (
               <button
                 onClick={() => {
+                  if (audio.current) audio.current.pause();
                   setPage(page - 1);
                 }}
                 className="h-14 w-20 bg-transparent font-bold"
@@ -321,7 +331,10 @@ const Cook = ({
               </Link>
             ) : (
               <button
-                onClick={() => setPage(page + 1)}
+                onClick={() => {
+                  if (audio.current) audio.current.pause();
+                  setPage(page + 1);
+                }}
                 className="h-14 w-20 bg-transparent font-bold"
               >
                 <FaArrowRight className="mx-7 h-6 w-6" />

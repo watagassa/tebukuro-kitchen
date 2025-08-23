@@ -1,7 +1,7 @@
 "use server";
 
 // Google Cloud Text-to-Speech API を呼び出す
-export const getVoice = async (text: string | undefined) => {
+export const getVoice = async (text: string | undefined, speed: number) => {
   const apiKey = process.env.YOUTUBE_API_KEY;
   const res = await fetch(
     `https://texttospeech.googleapis.com/v1/text:synthesize?key=${apiKey}`,
@@ -11,7 +11,11 @@ export const getVoice = async (text: string | undefined) => {
       body: JSON.stringify({
         input: { text },
         voice: { languageCode: "ja-JP", ssmlGender: "NEUTRAL" },
-        audioConfig: { audioEncoding: "MP3" },
+        audioConfig: {
+          audioEncoding: "MP3",
+          speakingRate: speed,
+          volumeGainDb: 0.0,
+        },
       }),
     },
   );
