@@ -145,12 +145,13 @@ export const getAllUserRecipesByID = async (user_id: string) => {
     console.error("ユーザーのUUIDが取得できませんでした");
     return [] as Recipe[];
   }
-  const recipes = await supabase
-    .from("recipes")
-    .select("*")
-    .eq("user_id", user_UUID);
-  if (recipes.error) {
-    console.error("ユーザーのレシピ取得中にエラー", recipes.error);
+  const { data, error } = await supabase.rpc("get_user_recipes", {
+    count: 10,
+    exclude_ids: ramdomFetchedIds, // 取得済みID
+  });
+  if (error) {
+    console.error("ユーザーのレシピ取得中にエラー", error);
   }
-  return recipes.data as Recipe[];
+  console.log("getAllUserRecipesByID data", data);
+  return data as Recipe[];
 };
