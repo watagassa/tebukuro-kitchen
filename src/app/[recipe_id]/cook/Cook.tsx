@@ -106,6 +106,7 @@ const Cook = ({
   const [voiceVolume, setVoiceVolume] = useState(50);
   const [voiceSpeed, setVoiceSpeed] = useState(1.0);
   const [timerAlarmVolume, setTimerAlarmVolume] = useState(50);
+  const [repeatFlag, setRepeatFlag] = useState(false);
 
   // 音声認識コンポーネントでのページ操作用関数
   const back = (
@@ -187,7 +188,7 @@ const Cook = ({
         audio.current.currentTime = 0;
       }
     };
-  }, [descript, page, voiceSpeed, voiceEnabled]);
+  }, [descript, page, voiceSpeed, voiceEnabled, repeatFlag]);
 
   return (
     <>
@@ -206,6 +207,10 @@ const Cook = ({
           setInputTime={setInputTime}
           setTimerStart={setTimerStart}
           setTimerReset={setTimerReset}
+          setVoiceEnabled={setVoiceEnabled}
+          voiceSpeed={voiceSpeed}
+          setVoiceSpeed={setVoiceSpeed}
+          setRepeatFlag={setRepeatFlag}
         />
         <div className="relative">
           <RecipeHeader

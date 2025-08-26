@@ -33,6 +33,10 @@ const Speech = ({
   setInputTime,
   setTimerStart,
   setTimerReset,
+  setVoiceEnabled,
+  voiceSpeed,
+  setVoiceSpeed,
+  setRepeatFlag,
 }: {
   next: screenController["next"];
   back: screenController["back"];
@@ -47,6 +51,10 @@ const Speech = ({
   setInputTime: React.Dispatch<React.SetStateAction<string>>;
   setTimerStart: React.Dispatch<React.SetStateAction<boolean>>;
   setTimerReset: React.Dispatch<React.SetStateAction<boolean>>;
+  setVoiceEnabled: React.Dispatch<React.SetStateAction<boolean>>;
+  voiceSpeed: number;
+  setVoiceSpeed: React.Dispatch<React.SetStateAction<number>>;
+  setRepeatFlag: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [response, setResponse] = useState("");
 
@@ -170,6 +178,60 @@ const Speech = ({
         setGuideModalOpen(true);
         resetTranscript();
         setResponse("ガイドを表示します");
+        SpeechRecognition.startListening({ continuous: true });
+      },
+      matchInterim: true,
+    },
+    {
+      command: /.*(もう一度).*/,
+      callback: () => {
+        setRepeatFlag((prev) => !prev);
+        resetTranscript();
+        setResponse("もう一度読み上げます");
+        SpeechRecognition.startListening({ continuous: true });
+      },
+      matchInterim: true,
+    },
+    {
+      command: /.*(読み上げて).*/,
+      callback: () => {
+        setVoiceEnabled(true);
+        resetTranscript();
+        setResponse("音声読み上げをONにしました");
+        SpeechRecognition.startListening({ continuous: true });
+      },
+      matchInterim: true,
+    },
+    {
+      command: /.*(読み上げないで).*/,
+      callback: () => {
+        setVoiceEnabled(false);
+        resetTranscript();
+        setResponse("音声読み上げをOFFにしました");
+        SpeechRecognition.startListening({ continuous: true });
+      },
+      matchInterim: true,
+    },
+    {
+      command: /.*(早口で).*/,
+      callback: () => {
+        setVoiceSpeed((prev) => (prev < 2 ? prev + 0.25 : prev));
+        resetTranscript();
+        setResponse(
+          `読み上げ速度を${voiceSpeed < 2 ? voiceSpeed + 0.25 : voiceSpeed}に設定しました`,
+        );
+        SpeechRecognition.startListening({ continuous: true });
+      },
+      matchInterim: true,
+    },
+    {
+      command: /.*(ゆっくりで).*/,
+      callback: () => {
+        setVoiceSpeed((prev) => (prev > 0.25 ? prev - 0.25 : prev));
+        resetTranscript();
+        setResponse(
+          `読み上げ速度を${voiceSpeed > 0.25 ? voiceSpeed - 0.25 : voiceSpeed}に設定しました`,
+        );
         SpeechRecognition.startListening({ continuous: true });
       },
       matchInterim: true,
