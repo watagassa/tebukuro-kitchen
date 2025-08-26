@@ -2,13 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import {
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { SetStateAction, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { FaArrowLeft, FaArrowRight, FaDoorOpen } from "react-icons/fa";
@@ -137,22 +131,63 @@ const Cook = ({
 
   const imageSrc = descript[page]?.image_url ?? ""; // 画像のＵＲＬ
 
+  // 音声読み上げの処理
   const audio = useRef<HTMLAudioElement>();
-  const speak = useCallback(async (text: string | undefined, speed: number) => {
-    if (!text) return;
-    if (audio.current) {
-      audio.current.pause();
-      audio.current.currentTime = 0;
-    }
-    const data = await getVoice(text, speed);
-    if (data.audioContent) {
-      audio.current = new Audio("data:audio/mp3;base64," + data.audioContent);
-      audio.current.play();
-    }
-  }, []);
   useEffect(() => {
-    speak(descript[page]?.text, voiceSpeed);
-  }, [descript, page, speak, voiceSpeed]);
+    // 音声読み上げがOFFの場合は何もしない
+    if (!voiceEnabled) {
+      return;
+    }
+
+    // このuseEffectの処理が中断されたかどうかを判定するフラグ
+    let isCancelled = false;
+
+    const playSpeech = async () => {
+      const textToSpeak = descript[page]?.text;
+      if (!textToSpeak) return;
+
+      try {
+        // 既存の音声を停止
+        if (audio.current) {
+          audio.current.pause();
+        }
+
+        const data = await getVoice(textToSpeak, voiceSpeed);
+
+        // APIからデータ取得後に処理が中断されていないかチェック
+        if (isCancelled) {
+          return; // 中断されていたら再生しない
+        }
+
+        if (data.audioContent) {
+          audio.current = new Audio(
+            "data:audio/mp3;base64," + data.audioContent,
+          );
+          // 再生直前にもう一度チェック
+          if (isCancelled) {
+            return;
+          }
+          await audio.current.play();
+        }
+      } catch (error) {
+        // 中断によるエラーでなければコンソールに出力
+        if (!isCancelled) {
+          console.error("Speech generation failed:", error);
+        }
+      }
+    };
+
+    playSpeech();
+
+    // クリーンアップ関数
+    return () => {
+      isCancelled = true; // フラグを立てて、進行中のAPIレスポンス後の処理を止める
+      if (audio.current) {
+        audio.current.pause(); // 現在再生中の音声を即座に停止
+        audio.current.currentTime = 0;
+      }
+    };
+  }, [descript, page, voiceSpeed, voiceEnabled]);
 
   return (
     <>
@@ -229,14 +264,6 @@ const Cook = ({
           動画表示
         </button>
       </div> */}
-        <div className="fixed bottom-16 flex w-full cursor-pointer justify-between">
-          <button
-            onClick={() => speak(descript[page]?.text, voiceSpeed)}
-            className="bg-black text-white"
-          >
-            スピーチ
-          </button>
-        </div>
 
         <div id="container">
           {ingModalOpen && (
