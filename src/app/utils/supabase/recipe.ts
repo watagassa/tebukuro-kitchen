@@ -4,7 +4,7 @@ import { exchangeIDtoUUID } from "../supabaseLogin";
 import { getCurrentUserID } from "../supabaseFunctionsNew";
 
 const ramdomFetchedIds: number[] = [];
-const searchFetchedIds: number[] = [];
+const fetchedIdsMap = new Map<string, number[]>();
 let favoriteFetchedIds: number[] = [];
 let searchFavFeatchedIds: number[] = [];
 
@@ -26,15 +26,21 @@ export const randomFetcher = async () => {
 
 export const searchFeatcher = async (key: string) => {
   const kw = key.substring(key.indexOf("-") + 1, key.lastIndexOf("-"));
+
+  if (!fetchedIdsMap.has(kw)) {
+    fetchedIdsMap.set(kw, []);
+  }
+
   const { data, error } = await supabase.rpc("get_random_recipes_keyword", {
     count: 10,
-    exclude_ids: searchFetchedIds, // 取得済みID
+    exclude_ids: fetchedIdsMap.get(kw),
     keyword: kw,
   });
+
   if (error) throw error;
   if (data) {
     const newIds = data.map((r: Recipe) => r.id);
-    searchFetchedIds.push(...newIds);
+    fetchedIdsMap.get(kw)!.push(...newIds);
   }
   return data ?? ([] as Recipe[]);
 };
