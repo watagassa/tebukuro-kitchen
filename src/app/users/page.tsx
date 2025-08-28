@@ -41,6 +41,7 @@ const UserId = () => {
       <UserRecipeList
         user_id={pageElements.user_id}
         userRecipe={pageElements.created_recipes}
+        pageType="self"
       />
       <div className="mt-auto">
         <Footer pathName="/users" />
