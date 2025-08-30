@@ -10,14 +10,6 @@ import Loading from "../loading";
 const UserId = () => {
   const { data: pageElements, error } = useSWR("/userPage", getMyPage, {
     revalidateOnFocus: false, // windowをフォーカスすると再検証しない
-    fallbackData: {
-      user_id: "guest",
-      profile: {
-        name: "ゲスト",
-        avatar_url: "/thumbnail.png",
-      },
-      created_recipes: [],
-    },
   });
 
   if (error) return <div>{error}</div>;

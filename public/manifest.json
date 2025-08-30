@@ -1,28 +1,27 @@
 {
-  "theme_color": "#8936FF",
-  "background_color": "#2EC6FE",
-  "icons": [
-    {
-      "purpose": "maskable",
-      "sizes": "512x512",
-      "src": "icon512_maskable.png",
-      "type": "image/png"
-    },
-    {
-      "purpose": "any",
-      "sizes": "512x512",
-      "src": "icon512_rounded.png",
-      "type": "image/png"
-    }
-  ],
-  "orientation": "any",
-  "display": "standalone",
-  "dir": "auto",
-  "lang": "ja",
-  "name": "てぶくろキッチン",
-  "short_name": "てぶくろキッチン",
-  "start_url": "/",
-  "scope": "/",
-  "description": "ハンズフリーで快適な料理のためのアプリ",
-  "id": "/"
+    "theme_color":"#fb923c",
+    "background_color":"#fb923c",
+    "icons":[
+        {
+            "purpose":"maskable",
+            "sizes":"512x512",
+            "src":"icon512_maskable.png",
+            "type":"image/png"
+        },{
+            "purpose":"any",
+            "sizes":"512x512",
+            "src":"icon512_rounded.png",
+            "type":"image/png"
+        }
+    ],
+    "orientation":"portrait",
+    "display":"standalone",
+    "dir":"auto",
+    "lang":"ja",
+    "name":"てぶくろキッチン",
+    "short_name":"てぶくろキッチン",
+    "start_url":"/",
+    "scope":"/",
+    "description":"ハンズフリーで快適な料理のためのアプリ"
 }
+
