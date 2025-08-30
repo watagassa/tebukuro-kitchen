@@ -204,7 +204,7 @@ const Cook = ({
             </div>
           )}
         </div>
-        <div className="mb-10 ml-4 mt-6 image-mid:mb-2 image-mid:mt-5 image-sml:mb-0 image-sml:mt-2">
+        <div className="mb-4 ml-4 mt-6 image-mid:mb-2 image-mid:mt-5 image-sml:mb-0 image-sml:mt-2">
           <Circle length={length} page={page} />
         </div>
         <div
