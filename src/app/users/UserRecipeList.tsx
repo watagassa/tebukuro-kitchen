@@ -4,9 +4,11 @@ import UserRecipeItem from "./UserRecipeItem";
 const UserRecipeList = ({
   user_id,
   userRecipe,
+  pageType,
 }: {
   user_id: string;
   userRecipe: Recipe[];
+  pageType: "self" | "other";
 }) => {
   return (
     <section className="mx-2 max-h-[36rem] overflow-y-scroll rounded-xl bg-white">
@@ -14,7 +16,7 @@ const UserRecipeList = ({
         <>
           {userRecipe.map((recipe: Recipe) => (
             <UserRecipeItem
-              user_id={user_id}
+              user_id={pageType === "self" ? user_id : undefined}
               key={recipe.id}
               id={recipe.id}
               name={recipe.name}
