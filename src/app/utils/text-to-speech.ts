@@ -2,6 +2,7 @@
 
 // Google Cloud Text-to-Speech API を呼び出す
 export const getVoice = async (text: string | undefined, speed: number) => {
+  if (!text) return;
   const apiKey = process.env.YOUTUBE_API_KEY;
   const res = await fetch(
     `https://texttospeech.googleapis.com/v1/text:synthesize?key=${apiKey}`,
@@ -20,7 +21,6 @@ export const getVoice = async (text: string | undefined, speed: number) => {
       }),
     },
   );
-
   const data = await res.json();
   return data;
 };

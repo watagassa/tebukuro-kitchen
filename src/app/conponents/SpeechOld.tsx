@@ -33,10 +33,6 @@ const Speech = ({
   setInputTime,
   setTimerStart,
   setTimerReset,
-  setVoiceEnabled,
-  voiceSpeed,
-  setVoiceSpeed,
-  setRepeatFlag,
 }: {
   next: screenController["next"];
   back: screenController["back"];
@@ -51,10 +47,6 @@ const Speech = ({
   setInputTime: React.Dispatch<React.SetStateAction<string>>;
   setTimerStart: React.Dispatch<React.SetStateAction<boolean>>;
   setTimerReset: React.Dispatch<React.SetStateAction<boolean>>;
-  setVoiceEnabled: React.Dispatch<React.SetStateAction<boolean>>;
-  voiceSpeed: number;
-  setVoiceSpeed: React.Dispatch<React.SetStateAction<number>>;
-  setRepeatFlag: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [response, setResponse] = useState("");
 
@@ -182,60 +174,6 @@ const Speech = ({
       },
       matchInterim: true,
     },
-    {
-      command: /.*(もう一度).*/,
-      callback: () => {
-        setRepeatFlag((prev) => !prev);
-        resetTranscript();
-        setResponse("もう一度読み上げます");
-        SpeechRecognition.startListening({ continuous: true });
-      },
-      matchInterim: true,
-    },
-    {
-      command: /.*(読み上げて).*/,
-      callback: () => {
-        setVoiceEnabled(true);
-        resetTranscript();
-        setResponse("音声読み上げをONにしました");
-        SpeechRecognition.startListening({ continuous: true });
-      },
-      matchInterim: true,
-    },
-    {
-      command: /.*(読み上げないで).*/,
-      callback: () => {
-        setVoiceEnabled(false);
-        resetTranscript();
-        setResponse("音声読み上げをOFFにしました");
-        SpeechRecognition.startListening({ continuous: true });
-      },
-      matchInterim: true,
-    },
-    {
-      command: /.*(早口で).*/,
-      callback: () => {
-        setVoiceSpeed((prev) => (prev < 2 ? prev + 0.25 : prev));
-        resetTranscript();
-        setResponse(
-          `読み上げ速度を${voiceSpeed < 2 ? voiceSpeed + 0.25 : voiceSpeed}に設定しました`,
-        );
-        SpeechRecognition.startListening({ continuous: true });
-      },
-      matchInterim: true,
-    },
-    {
-      command: /.*(ゆっくりで).*/,
-      callback: () => {
-        setVoiceSpeed((prev) => (prev > 0.25 ? prev - 0.25 : prev));
-        resetTranscript();
-        setResponse(
-          `読み上げ速度を${voiceSpeed > 0.25 ? voiceSpeed - 0.25 : voiceSpeed}に設定しました`,
-        );
-        SpeechRecognition.startListening({ continuous: true });
-      },
-      matchInterim: true,
-    },
   ];
 
   const {
@@ -275,48 +213,27 @@ const Speech = ({
   //   console.log("Speech conponent ERROR");
   // }
 
-  // 数秒後に response を消す処理
-  useEffect(() => {
-    if (!response) return; // response が空なら何もしない
-
-    const timer = setTimeout(() => {
-      setResponse("");
-    }, 2500); // ← 2.5秒後に消える（必要なら秒数変更）
-
-    return () => clearTimeout(timer); // クリーンアップ
-  }, [response]);
-
   return (
-    <>
+    <div className="flex w-full items-center justify-center font-mono">
       {transcript && (
-        <div className="ml-4 flex w-full font-mono">
-          <div className="fixed bottom-[4.5rem] z-10 flex max-w-[80vw] rounded-md border border-orange-200 bg-orange-50 p-2 pl-1">
-            <FiMic className="mr-1 h-5 w-5 text-orange-400" />
-            <span className="my-auto flex max-w-[65vw] justify-end overflow-hidden whitespace-nowrap text-sm text-gray-400">
-              {transcript}
-            </span>
-          </div>
+        <div className="fixed bottom-20 z-10 mb-16 flex max-w-[80vw] rounded-sm border border-orange-200 bg-orange-50 p-2 pl-1 shadow-md">
+          <FiMic className="mr-1 h-5 w-5 text-orange-400" />
+          <span className="my-auto flex max-w-[65vw] justify-end overflow-hidden whitespace-nowrap text-sm text-black">
+            {transcript}
+          </span>
         </div>
       )}
-      {response && (
-        <div className="flex w-full items-center justify-center">
-          <div
-            className={`fixed bottom-0 z-10 mb-16 flex max-w-[80vw] items-center rounded-md border border-orange-200 bg-orange-50 p-2 pl-1 shadow-lg ${
-              response ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            <img
-              src="/tebukuro.svg"
-              alt="tebukuroicon"
-              className="mr-1 h-5 w-5 text-orange-400"
-            />
-            <span className="my-auto flex max-w-[65vw] justify-end overflow-hidden whitespace-nowrap text-sm font-thin text-black">
-              「{response}」
-            </span>
-          </div>
-        </div>
-      )}
-    </>
+      <div className="fixed bottom-0 z-10 mb-16 flex max-w-[80vw] rounded-md border border-orange-200 bg-orange-50 p-2 pl-1 shadow-lg">
+        <img
+          src="/tebukuro.svg"
+          alt="tebukuroicon"
+          className="mr-2 h-5 w-5 text-orange-400"
+        />
+        <span className="my-auto flex max-w-[65vw] justify-end overflow-hidden whitespace-nowrap text-sm text-gray-400">
+          {response != "" ? response : "ここには認識結果が表示されます"}
+        </span>
+      </div>
+    </div>
   );
 };
 
