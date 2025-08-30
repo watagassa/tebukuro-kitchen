@@ -108,7 +108,6 @@ const Speech = ({
         setIngModalOpen(false);
         setYtModalOpen(false);
         setGuideModalOpen(false);
-        setTimerStart(false);
         setTimerModalOpen(false);
         resetTranscript();
         setResponse("表示を閉じます");
