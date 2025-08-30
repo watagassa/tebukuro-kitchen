@@ -1,19 +1,18 @@
 /** @type {import('next').NextConfig} */
-import nextPwa from "next-pwa";
-import withBundleAnalyzer from "@next/bundle-analyzer";
 
-const withPWA = nextPwa({
-  dest: "public",
-  // disable: process.env.NODE_ENV === 'development',
+import nextPWA from 'next-pwa';
+
+const withPWA = nextPWA({
+  dest: 'public',
   register: true,
   skipWaiting: true,
-});
+})
 
 if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
   throw new Error("環境変数 NEXT_PUBLIC_SUPABASE_URL が設定されていません");
 }
 
-const nextConfig = {
+const nextConfig = withPWA({
   reactStrictMode: true,
   images: {
     // googleのユーザ画像を表示するための設定
@@ -25,9 +24,7 @@ const nextConfig = {
         hostname: process.env.NEXT_PUBLIC_SUPABASE_URL.split("/")[2],
       },
     ],
-  },
-};
+  }
+})
 
-export default withBundleAnalyzer({
-  enabled: process.env.ANALYZE === "true",
-})(withPWA(nextConfig));
+export default nextConfig
