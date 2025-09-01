@@ -4,7 +4,7 @@ import { exchangeIDtoUUID } from "../supabaseLogin";
 import { getCurrentUserID } from "../supabaseFunctionsNew";
 
 const ramdomFetchedIds: number[] = [];
-const searchFetchedIds: number[] = [];
+const fetchedIdsMap = new Map<string, number[]>();
 let favoriteFetchedIds: number[] = [];
 let searchFavFeatchedIds: number[] = [];
 
@@ -12,7 +12,7 @@ export const free_favoriteFetchedId = () => (favoriteFetchedIds = []);
 export const free_searchFavFeatchedIds = () => (searchFavFeatchedIds = []);
 
 export const randomFetcher = async () => {
-  const { data, error } = await supabase.rpc("get_random_recipes_exclude", {
+  const { data, error } = await supabase.rpc("get_random_recipes", {
     count: 10,
     exclude_ids: ramdomFetchedIds, // 取得済みID
   });
@@ -26,22 +26,27 @@ export const randomFetcher = async () => {
 
 export const searchFeatcher = async (key: string) => {
   const kw = key.substring(key.indexOf("-") + 1, key.lastIndexOf("-"));
-  const { data, error } = await supabase.rpc("get_random_recipes_exclude", {
+
+  if (!fetchedIdsMap.has(kw)) {
+    fetchedIdsMap.set(kw, []);
+  }
+
+  const { data, error } = await supabase.rpc("get_random_recipes_keyword", {
     count: 10,
-    exclude_ids: searchFetchedIds, // 取得済みID
+    exclude_ids: fetchedIdsMap.get(kw),
     keyword: kw,
   });
+
   if (error) throw error;
   if (data) {
     const newIds = data.map((r: Recipe) => r.id);
-    searchFetchedIds.push(...newIds);
+    fetchedIdsMap.get(kw)!.push(...newIds);
   }
-  if (error) throw error;
   return data ?? ([] as Recipe[]);
 };
 
 export const favoriteFetcher = async (): Promise<Recipe[]> => {
-  const { data, error } = await supabase.rpc("get_favorite_recipes_by_uuid", {
+  const { data, error } = await supabase.rpc("get_favorite_recipes", {
     count: 10,
     exclude_ids: favoriteFetchedIds, // 取得済みID
     target_user_id: await getCurrentUserID(),
@@ -56,7 +61,7 @@ export const favoriteFetcher = async (): Promise<Recipe[]> => {
 
 export const searchFavFeatcher = async (key: string): Promise<Recipe[]> => {
   const kw = key.substring(key.indexOf("-") + 1, key.lastIndexOf("-"));
-  const { data, error } = await supabase.rpc("get_favorite_recipes_by_uuid", {
+  const { data, error } = await supabase.rpc("get_favorite_recipes", {
     count: 10,
     exclude_ids: searchFavFeatchedIds, // 取得済みID
     target_user_id: await getCurrentUserID(),
@@ -140,18 +145,33 @@ export const searchFavFeatcher = async (key: string): Promise<Recipe[]> => {
 //   return data ?? ([] as Recipe[]);
 // };
 
-export const getAllUserRecipesByID = async (user_id: number) => {
+export const getAllUserRecipesByID = async (user_id: string) => {
   const user_UUID = await exchangeIDtoUUID(user_id);
   if (!user_UUID) {
     console.error("ユーザーのUUIDが取得できませんでした");
     return [] as Recipe[];
   }
-  const recipes = await supabase
-    .from("recipes")
-    .select("*")
-    .eq("user_id", user_UUID);
-  if (recipes.error) {
-    console.error("ユーザーのレシピ取得中にエラー", recipes.error);
+  const { data, error } = await supabase.rpc("get_user_recipes", {
+    user_id: user_UUID,
+  });
+  if (error) {
+    console.error("ユーザーのレシピ取得中にエラー", error);
   }
-  return recipes.data as Recipe[];
+  console.log("getAllUserRecipesByID data", data);
+  return data as Recipe[];
+};
+
+export const getAllUserRecipesByUUID = async (user_UUID: string) => {
+  if (!user_UUID) {
+    console.error("ユーザーのUUIDが取得できませんでした");
+    return [] as Recipe[];
+  }
+  const { data, error } = await supabase.rpc("get_user_recipes", {
+    user_id: user_UUID,
+  });
+  if (error) {
+    console.error("ユーザーのレシピ取得中にエラー", error);
+  }
+  console.log("getAllUserRecipesByID data", data);
+  return data as Recipe[];
 };
