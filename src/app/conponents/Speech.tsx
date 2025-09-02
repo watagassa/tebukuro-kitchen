@@ -257,6 +257,13 @@ const Speech = ({
   //   }
   // }, [transcript, lastTranscript, response]);
 
+  // マウント時認識開始、アンマウント時停止
+  useEffect(() => {
+    SpeechRecognition.startListening({ continuous: true });
+    return () => {
+      SpeechRecognition.stopListening();
+    };
+  }, []);
   // 音声認識が停止したときに再スタートする処理
   // 認識停止予防
   useEffect(() => {
@@ -315,6 +322,14 @@ const Speech = ({
           </div>
         </div>
       )}
+      <div className="ml-4 flex w-full font-mono">
+        <div className="fixed bottom-[8rem] z-10 flex max-w-[80vw] rounded-md border border-orange-200 bg-orange-50 p-2 pl-1">
+          <FiMic className="mr-1 h-5 w-5 text-orange-400" />
+          <span className="my-auto flex max-w-[65vw] justify-end overflow-hidden whitespace-nowrap text-sm text-gray-400">
+            {`${listening}`}
+          </span>
+        </div>
+      </div>
     </>
   );
 };
