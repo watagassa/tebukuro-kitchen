@@ -337,7 +337,6 @@ const Cook = ({
             ) : (
               <button
                 onClick={() => {
-                  if (audio.current) audio.current.pause();
                   setPage(page - 1);
                 }}
                 className="h-14 w-20 bg-transparent font-bold"
@@ -372,7 +371,6 @@ const Cook = ({
             ) : (
               <button
                 onClick={() => {
-                  if (audio.current) audio.current.pause();
                   setPage(page + 1);
                 }}
                 className="h-14 w-20 bg-transparent font-bold"
