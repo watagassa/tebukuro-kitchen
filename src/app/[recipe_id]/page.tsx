@@ -181,8 +181,8 @@ export default function RecipeId({
               調理を開始する
             </button>
           </main>
-      <Footer pathName="/" />
-    </div>
+          <Footer pathName="/" />
+        </div>
       ) : (
         <Cook
           params={params}
