@@ -6,26 +6,28 @@ import UserRecipeList from "../../UserRecipeList";
 import useSWR from "swr";
 import { getOtherUserPage } from "../../getPageElements";
 import { notFound } from "next/navigation";
+import Loading from "@/app/loading";
 
 const UserId = ({ params }: { params: { user_id: string } }) => {
-  const { data: pageElements, error } = useSWR(
-    `${params.user_id}`,
-    getOtherUserPage,
-    {
-      fallbackData: {
-        user_id: "error",
-        profile: {
-          name: "error",
-          avatar_url: "/thumbnail.png",
-        },
-        created_recipes: [],
-      },
-      revalidateOnFocus: false, // windowをフォーカスすると再検証しない
-    },
-  );
+  const {
+    data: pageElements,
+    error,
+    isLoading,
+  } = useSWR(`${params.user_id}`, getOtherUserPage, {
+    revalidateOnFocus: false, // windowをフォーカスすると再検証しない
+  });
 
-  if (error) return <div>{notFound()}</div>;
-  if (!pageElements) return <div>!data</div>;
+  if (error) {
+    switch (error.status) {
+      case 404:
+        notFound();
+        break;
+      default:
+        throw error;
+    }
+  }
+
+  if (isLoading || !pageElements) return <Loading />;
 
   return (
     <div className="flex min-h-screen flex-col bg-[#FFFBF4]">
@@ -48,9 +50,7 @@ const UserId = ({ params }: { params: { user_id: string } }) => {
           pageType="other"
         />
       </section>
-      <div className="mt-auto">
-        <Footer pathName="/" />
-      </div>
+      <Footer pathName="/" />
     </div>
   );
 };

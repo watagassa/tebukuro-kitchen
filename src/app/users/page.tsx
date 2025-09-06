@@ -35,9 +35,7 @@ const UserId = () => {
         userRecipe={pageElements.created_recipes}
         pageType="self"
       />
-      <div className="mt-auto">
-        <Footer pathName="/users" />
-      </div>
+      <Footer pathName="/users" />
     </div>
   );
 };
