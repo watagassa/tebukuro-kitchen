@@ -20,8 +20,8 @@ https://tebukuro-kitchen.vercel.app/
 | 音声認識             | react-speech-recognition |
 | バリデーション       | zod |
 | データフェッチ       | SWR |
-| 外部API / サービス   | Youtube API |
-| UI / アイコン        | react-icons |
+| 外部API / サービス   | Youtube API / Google Cloud Text-to-Speech API |
+| UI / アイコン        | MUI / react-icons |
 | デザイン             | Figma |
 | デプロイ             | Vercel |
 | 開発環境 / ツール    | ESLint / Prettier / Husky |
@@ -29,6 +29,7 @@ https://tebukuro-kitchen.vercel.app/
 ## ■ インフラ構成図
 
 ## ■ ER図
+<img width="2270" height="1410" alt="Image" src="https://github.com/user-attachments/assets/062b7526-834c-42be-8c0a-398755d3129c" />
 
 ## ■ 画面遷移図
 
