@@ -172,9 +172,7 @@ export default function RecipeId({
           調理を開始する
         </Link>
       </main>
-      <div className="sticky bottom-0">
-        <Footer pathName="/" />
-      </div>
+      <Footer pathName="/" />
     </div>
   );
 }

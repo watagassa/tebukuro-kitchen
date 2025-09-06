@@ -20,11 +20,7 @@ export default function HomeForm() {
         fetcher={searchKW === "" ? randomFetcher : searchFeatcher}
       />
 
-      <div
-        className={`sticky bottom-0 z-20 w-full transition-transform duration-200`}
-      >
-        <Footer pathName="/" />
-      </div>
+      <Footer pathName="/" />
     </div>
   );
 }

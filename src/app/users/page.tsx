@@ -34,9 +34,7 @@ const UserId = () => {
         user_id={pageElements.user_id}
         userRecipe={pageElements.created_recipes}
       />
-      <div className="mt-auto">
-        <Footer pathName="/users" />
-      </div>
+      <Footer pathName="/users" />
     </div>
   );
 };
