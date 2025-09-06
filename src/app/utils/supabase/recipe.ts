@@ -157,7 +157,6 @@ export const getAllUserRecipesByID = async (user_id: string) => {
   if (error) {
     console.error("ユーザーのレシピ取得中にエラー", error);
   }
-  console.log("getAllUserRecipesByID data", data);
   return data as Recipe[];
 };
 
@@ -172,6 +171,5 @@ export const getAllUserRecipesByUUID = async (user_UUID: string) => {
   if (error) {
     console.error("ユーザーのレシピ取得中にエラー", error);
   }
-  console.log("getAllUserRecipesByID data", data);
   return data as Recipe[];
 };
