@@ -257,6 +257,13 @@ const Speech = ({
   //   }
   // }, [transcript, lastTranscript, response]);
 
+  // マウント時認識開始、アンマウント時停止
+  useEffect(() => {
+    SpeechRecognition.startListening({ continuous: true });
+    return () => {
+      SpeechRecognition.stopListening();
+    };
+  }, []);
   // 音声認識が停止したときに再スタートする処理
   // 認識停止予防
   useEffect(() => {

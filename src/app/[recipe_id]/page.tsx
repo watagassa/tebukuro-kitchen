@@ -60,6 +60,7 @@ export default function RecipeId({
               title={list.name}
               link={from === "favorites" ? "/favorites" : "/"}
               iconFill="black"
+              inCook={inCook}
               setInCook={setInCook}
             />
           )}

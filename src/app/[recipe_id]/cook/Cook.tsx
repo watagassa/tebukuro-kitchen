@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { SetStateAction, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
@@ -338,7 +337,6 @@ const Cook = ({
             ) : (
               <button
                 onClick={() => {
-                  if (audio.current) audio.current.pause();
                   setPage(page - 1);
                 }}
                 className="h-14 w-20 bg-transparent font-bold"
@@ -366,14 +364,13 @@ const Cook = ({
               </p>
             </button>
             {page == length - 1 ? (
-              <Link href={recipePage} className="font-bold">
+              <button onClick={() => setInCook(false)} className="font-bold">
                 <FaDoorOpen className="mx-7 my-1 mb-0 h-6 w-6" />
                 <div className="text-center">終了</div>
-              </Link>
+              </button>
             ) : (
               <button
                 onClick={() => {
-                  if (audio.current) audio.current.pause();
                   setPage(page + 1);
                 }}
                 className="h-14 w-20 bg-transparent font-bold"
