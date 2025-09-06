@@ -1,8 +1,10 @@
 import { IoMdClose } from "react-icons/io";
-import { FiSearch } from "react-icons/fi";
+import { FiSearch, FiVolumeX, FiVolume2 } from "react-icons/fi";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { MdOutlineTimer } from "react-icons/md";
 import { PiNoteDuotone } from "react-icons/pi";
+import { FaArrowRotateRight } from "react-icons/fa6";
+import { HiOutlineChevronDoubleRight } from "react-icons/hi";
 
 const iconClass = "size-4 text-orange-400";
 const commands = [
@@ -36,6 +38,26 @@ const commands = [
     title: "「閉じて」",
     desc: "表示を閉じる",
   },
+  {
+    icon: <FaArrowRotateRight className={iconClass} />,
+    title: "「もう一度」",
+    desc: "直前の音声を読み上げる",
+  },
+  {
+    icon: <FiVolumeX className={iconClass} />,
+    title: "「読み上げて/読み上げないで」",
+    desc: "音声読み上げをオン/オフ",
+  },
+  {
+    icon: <HiOutlineChevronDoubleRight className={iconClass} strokeWidth={2} />,
+    title: "「早口で/ゆっくりで」",
+    desc: "音声の読み上げ速度を変更",
+  },
+  {
+    icon: <FiVolume2 className={iconClass} />,
+    title: "「大きくして/小さくして」",
+    desc: "音声の読み上げ音量を変更",
+  },
 ];
 
 type GuideModalProps = {
@@ -53,7 +75,7 @@ const GuideModal = ({ modalClose }: GuideModalProps) => {
         onClick={bgClickClose}
         className="flex h-full items-center justify-center"
       >
-        <div className="mx-10 w-full max-w-sm rounded-2xl bg-white p-3 text-gray-600 shadow-lg sm:max-w-md md:max-w-lg">
+        <div className="mx-10 max-h-[calc(100vh-10rem)] w-full max-w-sm overflow-y-auto rounded-2xl bg-white p-3 text-gray-600 shadow-lg sm:max-w-md md:max-w-lg">
           <div className="mb-4 flex items-end justify-between border-b-2 border-orange-600 pb-1">
             <div className="text-xl font-bold text-orange-600">音声ガイド</div>
             <button
@@ -70,7 +92,7 @@ const GuideModal = ({ modalClose }: GuideModalProps) => {
                 <div className="rounded-full bg-orange-100 p-2">{icon}</div>
                 <div>
                   <p className="font-semibold text-orange-700">{title}</p>
-                  <p className="ml-1">{desc}</p>
+                  <p className="ml-1 text-xs">{desc}</p>
                 </div>
               </div>
             ))}

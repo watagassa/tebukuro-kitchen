@@ -1,8 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { SetStateAction, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { FaArrowLeft, FaArrowRight, FaDoorOpen } from "react-icons/fa";
@@ -15,8 +14,8 @@ import IngModal from "./IngModal";
 import TimerModal from "./TimerModal";
 import YtModal from "./YtModal";
 import VoiceSettingsModal from "./VoiceSettingsModal";
-import RecipeHeader from "@/app/conponents/RecipeHeaderOld";
-import Speech from "@/app/conponents/SpeechOld";
+import RecipeHeader from "@/app/conponents/RecipeHeader";
+import Speech from "@/app/conponents/Speech";
 import { Descript, Ingredient } from "@/app/types";
 import {
   getByDescriptId,
@@ -59,9 +58,11 @@ const ModalContainer = ({ children }: { children: React.JSX.Element }) => {
 const Cook = ({
   params,
   searchParams,
+  setInCook,
 }: {
   params: { recipe_id: number };
   searchParams: { from?: string };
+  setInCook: React.Dispatch<SetStateAction<boolean>>;
 }) => {
   const [title, setTitle] = useState<string>(""); // 料理画面 上部タイトル
   const [howMany, setHowMany] = useState<string>(""); // 材料表示 何人前
@@ -104,6 +105,7 @@ const Cook = ({
   const [voiceVolume, setVoiceVolume] = useState(50);
   const [voiceSpeed, setVoiceSpeed] = useState(1.0);
   const [timerAlarmVolume, setTimerAlarmVolume] = useState(50);
+  const [repeatFlag, setRepeatFlag] = useState(false);
 
   // 音声認識コンポーネントでのページ操作用関数
   const back = (
@@ -129,22 +131,63 @@ const Cook = ({
 
   const imageSrc = descript[page]?.image_url ?? ""; // 画像のＵＲＬ
 
+  // 音声読み上げの処理
   const audio = useRef<HTMLAudioElement>();
-  const speak = useCallback(async (text: string | undefined, speed: number) => {
-    if (!text) return;
-    if (audio.current) {
-      audio.current.pause();
-      audio.current.currentTime = 0;
-    }
-    const data = await getVoice(text, speed);
-    if (data.audioContent) {
-      audio.current = new Audio("data:audio/mp3;base64," + data.audioContent);
-      audio.current.play();
-    }
-  }, []);
   useEffect(() => {
-    speak(descript[page]?.text, voiceSpeed);
-  }, [descript, page, speak, voiceSpeed]);
+    // 音声読み上げがOFFの場合は何もしない
+    if (!voiceEnabled) {
+      return;
+    }
+
+    // このuseEffectの処理が中断されたかどうかを判定するフラグ
+    let isCancelled = false;
+
+    const playSpeech = async () => {
+      const textToSpeak = descript[page]?.text;
+      if (!textToSpeak) return;
+
+      try {
+        // 既存の音声を停止
+        if (audio.current) {
+          audio.current.pause();
+        }
+
+        const data = await getVoice(textToSpeak, voiceSpeed);
+
+        // APIからデータ取得後に処理が中断されていないかチェック
+        if (isCancelled) {
+          return; // 中断されていたら再生しない
+        }
+
+        if (data.audioContent) {
+          audio.current = new Audio(
+            "data:audio/mp3;base64," + data.audioContent,
+          );
+          // 再生直前にもう一度チェック
+          if (isCancelled) {
+            return;
+          }
+          await audio.current.play();
+        }
+      } catch (error) {
+        // 中断によるエラーでなければコンソールに出力
+        if (!isCancelled) {
+          console.error("Speech generation failed:", error);
+        }
+      }
+    };
+
+    playSpeech();
+
+    // クリーンアップ関数
+    return () => {
+      isCancelled = true; // フラグを立てて、進行中のAPIレスポンス後の処理を止める
+      if (audio.current) {
+        audio.current.pause(); // 現在再生中の音声を即座に停止
+        audio.current.currentTime = 0;
+      }
+    };
+  }, [descript, page, voiceSpeed, voiceEnabled, repeatFlag]);
 
   return (
     <>
@@ -163,6 +206,10 @@ const Cook = ({
           setInputTime={setInputTime}
           setTimerStart={setTimerStart}
           setTimerReset={setTimerReset}
+          setVoiceEnabled={setVoiceEnabled}
+          voiceSpeed={voiceSpeed}
+          setVoiceSpeed={setVoiceSpeed}
+          setRepeatFlag={setRepeatFlag}
         />
         <div className="relative">
           <RecipeHeader
@@ -173,6 +220,7 @@ const Cook = ({
             iconFill="white"
             guideModalOpen={guideModalOpen}
             setGuideModalOpen={setGuideModalOpen}
+            setInCook={setInCook}
           />
         </div>
 
@@ -195,7 +243,7 @@ const Cook = ({
             </div>
           )}
         </div>
-        <div className="mb-10 ml-4 mt-6 image-mid:mb-2 image-mid:mt-5 image-sml:mb-0 image-sml:mt-2">
+        <div className="mb-4 ml-4 mt-6 image-mid:mb-2 image-mid:mt-5 image-sml:mb-0 image-sml:mt-2">
           <Circle length={length} page={page} />
         </div>
         <div
@@ -220,14 +268,6 @@ const Cook = ({
           動画表示
         </button>
       </div> */}
-        <div className="fixed bottom-16 flex w-full cursor-pointer justify-between">
-          <button
-            onClick={() => speak(descript[page]?.text, voiceSpeed)}
-            className="bg-black text-white"
-          >
-            スピーチ
-          </button>
-        </div>
 
         <div id="container">
           {ingModalOpen && (
@@ -297,7 +337,6 @@ const Cook = ({
             ) : (
               <button
                 onClick={() => {
-                  if (audio.current) audio.current.pause();
                   setPage(page - 1);
                 }}
                 className="h-14 w-20 bg-transparent font-bold"
@@ -325,14 +364,13 @@ const Cook = ({
               </p>
             </button>
             {page == length - 1 ? (
-              <Link href={recipePage} className="font-bold">
+              <button onClick={() => setInCook(false)} className="font-bold">
                 <FaDoorOpen className="mx-7 my-1 mb-0 h-6 w-6" />
                 <div className="text-center">終了</div>
-              </Link>
+              </button>
             ) : (
               <button
                 onClick={() => {
-                  if (audio.current) audio.current.pause();
                   setPage(page + 1);
                 }}
                 className="h-14 w-20 bg-transparent font-bold"

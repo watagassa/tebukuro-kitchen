@@ -1,6 +1,6 @@
+import Link from "next/link";
 import { IoIosArrowBack } from "react-icons/io";
 import { MdOutlineQuestionMark } from "react-icons/md";
-import { useRouter } from "next/navigation";
 
 type RecipeHeaderProps = {
   bgColor: string;
@@ -10,8 +10,6 @@ type RecipeHeaderProps = {
   iconFill: string;
   guideModalOpen?: boolean;
   setGuideModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
-  inCook?: boolean;
-  setInCook: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const RecipeHeader = ({
@@ -22,26 +20,14 @@ const RecipeHeader = ({
   iconFill,
   guideModalOpen,
   setGuideModalOpen,
-  inCook,
-  setInCook,
 }: RecipeHeaderProps) => {
-  const router = useRouter();
   return (
     <header
       className={`sticky top-0 flex w-full items-center border-b border-gray-400 p-5 shadow-md ${bgColor} z-40 min-h-[69px]`}
     >
-      <button
-        onClick={() =>
-          typeof inCook === "boolean"
-            ? inCook
-              ? setInCook(false)
-              : router.replace(link)
-            : setInCook(false)
-        }
-        className="absolute left-5 text-3xl"
-      >
+      <Link href={link} className="absolute left-5 text-3xl">
         <IoIosArrowBack fill={iconFill} />
-      </button>
+      </Link>
       <p
         className={`flex-1 text-center text-xl font-semibold ${textColor} truncate pl-10 pr-11`}
       >

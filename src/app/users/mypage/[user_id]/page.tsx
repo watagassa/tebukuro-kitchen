@@ -47,6 +47,7 @@ const UserId = ({ params }: { params: { user_id: string } }) => {
         <UserRecipeList
           user_id={params.user_id}
           userRecipe={pageElements.created_recipes}
+          pageType="other"
         />
       </section>
       <Footer pathName="/" />

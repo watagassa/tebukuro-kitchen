@@ -33,6 +33,7 @@ const UserId = () => {
       <UserRecipeList
         user_id={pageElements.user_id}
         userRecipe={pageElements.created_recipes}
+        pageType="self"
       />
       <Footer pathName="/users" />
     </div>
