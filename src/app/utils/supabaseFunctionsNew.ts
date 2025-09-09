@@ -10,6 +10,7 @@ import {
 import { Dispatch, SetStateAction } from "react";
 import imageCompression from "browser-image-compression";
 
+
 // 全レシピ取得
 export const getAllRecipes = async () => {
   const recipes = await supabase.from("recipes").select("*");
@@ -421,7 +422,20 @@ export const getDetailRecipebyId = async (id: number) => {
     .eq("id", id)
     .single();
   if (detailRecipe.error) {
-    console.error("supabaseエラー", detailRecipe.error);
+    const catchError:any = new Error("レシピが見つかりません");
+    switch(detailRecipe.error.code){
+      case "PGRST116":
+        catchError.name = "NotFound";
+        catchError.code = "404";
+        catchError.info = detailRecipe.error
+        throw catchError;
+        break;
+      default:
+        catchError.name = "SupabaseError";
+        catchError.code = "500";
+        catchError.info = detailRecipe.error
+        throw catchError;
+    }
   }
   console.log(detailRecipe.data);
   if (detailRecipe.data?.descripts !== undefined) {
@@ -448,9 +462,6 @@ export const getDetailRecipebyId = async (id: number) => {
       },
     );
     console.log("sortING", detailRecipe.data?.ingredients);
-  }
-  if (detailRecipe.error) {
-    console.error("supabaseエラー", detailRecipe.error);
   }
   return detailRecipe.data as DetailRecipe;
 };
