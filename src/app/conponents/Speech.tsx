@@ -36,6 +36,8 @@ const Speech = ({
   setVoiceEnabled,
   voiceSpeed,
   setVoiceSpeed,
+  voiceVolume,
+  setVoiceVolume,
   setRepeatFlag,
   isSpeaking,
 }: {
@@ -55,6 +57,8 @@ const Speech = ({
   setVoiceEnabled: React.Dispatch<React.SetStateAction<boolean>>;
   voiceSpeed: number;
   setVoiceSpeed: React.Dispatch<React.SetStateAction<number>>;
+  voiceVolume: number;
+  setVoiceVolume: React.Dispatch<React.SetStateAction<number>>;
   setRepeatFlag: React.Dispatch<React.SetStateAction<boolean>>;
   isSpeaking: boolean;
 }) => {
@@ -205,28 +209,46 @@ const Speech = ({
       },
       matchInterim: true,
     },
+    {
+      command: /.*(大きくして).*/,
+      callback: () => {
+        setVoiceVolume((prev) => (prev < 100 ? prev + 10 : prev));
+        resetTranscript();
+        setResponse(
+          `読み上げ音量を${voiceVolume < 100 ? voiceVolume + 10 : voiceVolume}%に設定しました`,
+        );
+      },
+      matchInterim: true,
+    },
+    {
+      command: /.*(小さくして).*/,
+      callback: () => {
+        setVoiceVolume((prev) => (prev > 0 ? prev - 10 : prev));
+        resetTranscript();
+        setResponse(
+          `読み上げ音量を${voiceVolume > 0 ? voiceVolume - 10 : voiceVolume}%に設定しました`,
+        );
+      },
+      matchInterim: true,
+    },
   ];
 
   const { transcript, listening, resetTranscript } = useSpeechRecognition({
     commands,
   });
 
-  // マウント時に認識開始、アンマウント時に停止
+  // アンマウント時に停止
   useEffect(() => {
-    if (!isSpeaking) {
-      SpeechRecognition.startListening({ continuous: true });
-    }
     return () => {
+      resetTranscript();
       SpeechRecognition.stopListening();
     };
-  }, [isSpeaking]);
+  }, [resetTranscript]);
 
   // 音声読み上げ状態に応じて、認識の開始/停止を制御
   useEffect(() => {
     if (isSpeaking) {
-      if (listening) {
-        SpeechRecognition.stopListening();
-      }
+      SpeechRecognition.stopListening();
     } else {
       // 読み上げ中でなく、かつ認識が止まっている場合に再開する
       if (!listening) {

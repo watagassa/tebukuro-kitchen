@@ -104,11 +104,11 @@ const Cook = ({
   const [voiceEnabled, setVoiceEnabled] = useState(true);
   const [voiceVolume, setVoiceVolume] = useState(50);
   const [voiceSpeed, setVoiceSpeed] = useState(1.0);
-  const [timerAlarmVolume, setTimerAlarmVolume] = useState(50);
+  // const [timerAlarmVolume, setTimerAlarmVolume] = useState(50);
   const [repeatFlag, setRepeatFlag] = useState(false);
 
   // 音声読み上げ中かどうかを管理するState
-  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(true);
 
   // 音声認識コンポーネントでのページ操作用関数
   const back = (
@@ -220,6 +220,7 @@ const Cook = ({
         const source = audioContext.createBufferSource();
         source.buffer = audioBuffer;
         source.connect(gainNode!);
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         source.start(0);
 
         sourceNodeRef.current = source;
@@ -266,8 +267,10 @@ const Cook = ({
           setVoiceEnabled={setVoiceEnabled}
           voiceSpeed={voiceSpeed}
           setVoiceSpeed={setVoiceSpeed}
+          voiceVolume={voiceVolume}
+          setVoiceVolume={setVoiceVolume}
           setRepeatFlag={setRepeatFlag}
-          isSpeaking={isSpeaking} // ★ Speechコンポーネントに再生状態を渡す
+          isSpeaking={isSpeaking}
         />
         <div className="relative">
           <RecipeHeader
@@ -369,8 +372,8 @@ const Cook = ({
               setVoiceVolume={setVoiceVolume}
               voiceSpeed={voiceSpeed}
               setVoiceSpeed={setVoiceSpeed}
-              timerAlarmVolume={timerAlarmVolume}
-              setTimerAlarmVolume={setTimerAlarmVolume}
+              // timerAlarmVolume={timerAlarmVolume}
+              // setTimerAlarmVolume={setTimerAlarmVolume}
             />
           )}
         </div>
