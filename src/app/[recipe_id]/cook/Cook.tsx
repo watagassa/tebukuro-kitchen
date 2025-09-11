@@ -328,10 +328,10 @@ const Cook = ({
         </div>
 
         {/* フッター */}
-        <div className="fixed bottom-0 z-20 flex h-14 w-full justify-center bg-orange-400 text-white">
-          <div className="fixed bottom-0 z-30 flex h-14 w-full justify-between text-white">
+        <div className="fixed bottom-0 z-20 flex h-[4.25rem] w-full justify-center bg-orange-400 text-white">
+          <div className="fixed bottom-0 z-30 flex h-[4.25rem] w-full justify-between pb-3 text-white">
             {page == 0 ? (
-              <div className="h-14 w-20">
+              <div className="h-[4.25rem] w-20">
                 <div className="mx-7 h-6 w-6"></div>
               </div>
             ) : (
@@ -339,7 +339,7 @@ const Cook = ({
                 onClick={() => {
                   setPage(page - 1);
                 }}
-                className="h-14 w-20 bg-transparent font-bold"
+                className="h-[4.25rem] w-20 bg-transparent pb-3 font-bold"
               >
                 <FaArrowLeft className="mx-7 h-6 w-6" />
                 戻って
@@ -373,7 +373,7 @@ const Cook = ({
                 onClick={() => {
                   setPage(page + 1);
                 }}
-                className="h-14 w-20 bg-transparent font-bold"
+                className="h-[4.25rem] w-20 bg-transparent pb-3 font-bold"
               >
                 <FaArrowRight className="mx-7 h-6 w-6" />
                 進んで
