@@ -6,6 +6,7 @@ import UserLogoutButton from "./UserLogoutButton";
 import useSWR from "swr";
 import { getMyPage } from "./getPageElements";
 import Loading from "../loading";
+import UserHeader from "./UserHeader";
 
 const UserId = () => {
   const { data: pageElements, error } = useSWR("/userPage", getMyPage, {
@@ -17,11 +18,7 @@ const UserId = () => {
 
   return (
     <div className="flex min-h-screen flex-col bg-[#FFFBF4] text-black">
-      <header className="sticky flex w-full items-center justify-center border-b border-gray-400 bg-orange-400 p-6 shadow-md">
-        <p className="text-balance pl-10 pr-4 text-center text-xl font-semibold text-white">
-          マイページ
-        </p>
-      </header>
+      <UserHeader />
       <section className="flex justify-between bg-white p-3">
         <UserProfile
           name={pageElements.profile.name}
