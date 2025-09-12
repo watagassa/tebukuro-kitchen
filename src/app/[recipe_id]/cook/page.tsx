@@ -103,7 +103,7 @@ const Cook = ({
   const [voiceEnabled, setVoiceEnabled] = useState(true);
   const [voiceVolume, setVoiceVolume] = useState(50);
   const [voiceSpeed, setVoiceSpeed] = useState(1.0);
-  const [timerAlarmVolume, setTimerAlarmVolume] = useState(50);
+  // const [timerAlarmVolume, setTimerAlarmVolume] = useState(50);
 
   // 音声認識コンポーネントでのページ操作用関数
   const back = (
@@ -281,8 +281,8 @@ const Cook = ({
               setVoiceVolume={setVoiceVolume}
               voiceSpeed={voiceSpeed}
               setVoiceSpeed={setVoiceSpeed}
-              timerAlarmVolume={timerAlarmVolume}
-              setTimerAlarmVolume={setTimerAlarmVolume}
+              // timerAlarmVolume={timerAlarmVolume}
+              // setTimerAlarmVolume={setTimerAlarmVolume}
             />
           )}
         </div>

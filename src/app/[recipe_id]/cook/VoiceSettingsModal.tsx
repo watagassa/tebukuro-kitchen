@@ -11,8 +11,8 @@ type VoiceSettingsModalProps = {
   setVoiceVolume: React.Dispatch<SetStateAction<number>>;
   voiceSpeed: number;
   setVoiceSpeed: React.Dispatch<SetStateAction<number>>;
-  timerAlarmVolume: number;
-  setTimerAlarmVolume: React.Dispatch<SetStateAction<number>>;
+  // timerAlarmVolume: number;
+  // setTimerAlarmVolume: React.Dispatch<SetStateAction<number>>;
 };
 
 const VoiceSettingsModal = ({
@@ -23,8 +23,8 @@ const VoiceSettingsModal = ({
   setVoiceVolume,
   voiceSpeed,
   setVoiceSpeed,
-  timerAlarmVolume,
-  setTimerAlarmVolume,
+  // timerAlarmVolume,
+  // setTimerAlarmVolume,
 }: VoiceSettingsModalProps) => {
   const bgClickClose = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) modalClose();
@@ -101,7 +101,7 @@ const VoiceSettingsModal = ({
                 {voiceSpeed}x
               </p>
             </div>
-            <div className="space-y-1">
+            {/* <div className="space-y-1">
               <p>タイマー音量</p>
               <div className="flex items-center justify-between gap-3 text-xs text-gray-500">
                 <p>小</p>
@@ -120,7 +120,7 @@ const VoiceSettingsModal = ({
               <p className="flex justify-center text-xs text-gray-500">
                 {timerAlarmVolume}%
               </p>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
