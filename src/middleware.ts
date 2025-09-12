@@ -2,6 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { exchangeIDtoUUID } from "./app/utils/supabaseLogin";
 
 export async function middleware(request: NextRequest) {
   // サーバー用
@@ -68,9 +69,25 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/", request.url)); // 403ページがあればそちらに
     }
   }
-  return NextResponse.next();
-}
 
+  // 認可チェック: /users/mypage/[user_id]
+  // マイページで自分のページにアクセスしたら /users にリダイレクト
+  if (path.startsWith("/users/mypage")) {
+    const {
+      data: { user },
+      error: user_error,
+    } = await supabase.auth.getUser();
+    if (!user_error && user) {
+      const match = path.match(/^\/users\/mypage\/([^/]+)$/);
+      const user_id = await exchangeIDtoUUID(match ? match[1] : "");
+
+      if (user.id == user_id) {
+        return NextResponse.redirect(new URL("/users", request.url));
+      }
+    }
+    return NextResponse.next();
+  }
+}
 export const config = {
   matcher: [
     "/edit/:path*",
