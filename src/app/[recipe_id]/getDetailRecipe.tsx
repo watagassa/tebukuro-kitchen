@@ -3,13 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { useInView } from "react-intersection-observer";
 import { FiCameraOff } from "react-icons/fi";
 import RecipeHeader from "@/app/conponents/RecipeHeader";
 import Footer from "@/app/conponents/Footer";
 import { Descript, DetailRecipe, Ingredient } from "@/app/types";
 import Cook from "./cook/Cook";
-import { IoIosArrowBack } from "react-icons/io";
 import { WiTime4 } from "react-icons/wi";
 import FavoriteButton from "../conponents/FavoriteButton";
 import IngredientItem from "../conponents/IngredientItem";
@@ -28,9 +26,6 @@ export default function RecipeDetailClient({
 }) {
   const [inCook, setInCook] = useState(false);
   const from = searchParams?.from || "/";
-  const { ref, inView } = useInView({
-    threshold: 0,
-  });
   // 'list' というstateの代わりに、propsから受け取った 'recipe' を使います
   const list = recipe;
 
@@ -40,31 +35,19 @@ export default function RecipeDetailClient({
     <>
       {!inCook ? (
         <div className="bg-orange-primary contain-paint">
-          {!inView && (
-            <RecipeHeader
-              bgColor="bg-white"
-              textColor="text-black"
-              title={list.name}
-              link={from === "favorites" ? "/favorites" : "/"}
-              iconFill="black"
-              inCook={inCook}
-              setInCook={setInCook}
-            />
-          )}
+          <RecipeHeader
+            bgColor="bg-white"
+            textColor="text-black"
+            title={list.name}
+            link={from === "favorites" ? "/favorites" : "/"}
+            iconFill="black"
+            inCook={inCook}
+            setInCook={setInCook}
+          />
 
           <main className="min-h-[calc(100vh-150px)] pb-10">
             <figure className="relative flex aspect-[3/2] items-center justify-center border-b border-gray-400 bg-gray-100 shadow-md">
-              {inView && (
-                <Link
-                  href={from === "favorites" ? "/favorites" : "/"}
-                  className="absolute left-4 top-4 z-10 flex cursor-pointer items-center justify-center rounded-full bg-white p-1 text-3xl shadow-lg"
-                >
-                  <IoIosArrowBack />
-                </Link>
-              )}
-
               {/* nullのみを判定しているので、url先の画像が見つからない場合に対処できない */}
-
               {list.image_url ? (
                 <Image
                   src={list.image_url}
@@ -82,10 +65,7 @@ export default function RecipeDetailClient({
             <div className="m-4 pb-2">
               <div className="flex justify-between gap-2">
                 <Link href={`/users/mypage/${list["profiles"].id}`}>
-                  <p
-                    ref={ref}
-                    className="text-2xl font-semibold text-orange-700"
-                  >
+                  <p className="text-2xl font-semibold text-orange-700">
                     {list.name}
                   </p>
 
