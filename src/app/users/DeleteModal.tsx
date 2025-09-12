@@ -1,6 +1,7 @@
 import React from "react";
 import { deleteRecipeDatas } from "../utils/supabaseFunctionsNew";
 import { useRouter } from "next/navigation";
+import { mutate } from "swr";
 
 const DeleteModal = ({
   modalClose,
@@ -20,6 +21,8 @@ const DeleteModal = ({
   const deleter = async () => {
     await deleteRecipeDatas(id);
     router.refresh(); // リストからstateを受け取って更新の方がいいかも？
+    mutate("/userPage"); // userページでのみ削除モーダルが存在すると仮定した場合のプログラム
+    modalClose();
   };
 
   return (
