@@ -132,7 +132,11 @@ const Speech = ({
     {
       command: /タイマー(.*)セット.*/,
       callback: (material: string) => {
-        const time = material.replace(/\s+/g, "");
+        const timeRelatedString = material.replace(
+          /[^0-9０-９一二三四五六七八九十百秒分時間半\s]/g,
+          "",
+        );
+        const time = timeRelatedString.replace(/\s+/g, "");
         setInputTime(time);
         resetTranscript();
         setResponse(`タイマーを"${time}"に設定しました`);
@@ -242,7 +246,7 @@ const Speech = ({
     };
   }, []);
 
-  // 音声読み上げ状態に応じて、認識の開始/停止を制御
+  // 認識の再開処理
   useEffect(() => {
     if (!listening) {
       resetTranscript();
