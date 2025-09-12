@@ -39,7 +39,6 @@ const Speech = ({
   voiceVolume,
   setVoiceVolume,
   setRepeatFlag,
-  isSpeaking,
 }: {
   next: screenController["next"];
   back: screenController["back"];
@@ -60,7 +59,6 @@ const Speech = ({
   voiceVolume: number;
   setVoiceVolume: React.Dispatch<React.SetStateAction<number>>;
   setRepeatFlag: React.Dispatch<React.SetStateAction<boolean>>;
-  isSpeaking: boolean;
 }) => {
   const [response, setResponse] = useState("");
 
@@ -240,22 +238,17 @@ const Speech = ({
   // アンマウント時に停止
   useEffect(() => {
     return () => {
-      resetTranscript();
       SpeechRecognition.stopListening();
     };
-  }, [resetTranscript]);
+  }, []);
 
   // 音声読み上げ状態に応じて、認識の開始/停止を制御
   useEffect(() => {
-    if (isSpeaking) {
-      SpeechRecognition.stopListening();
-    } else {
-      // 読み上げ中でなく、かつ認識が止まっている場合に再開する
-      if (!listening) {
-        SpeechRecognition.startListening({ continuous: true });
-      }
+    if (!listening) {
+      resetTranscript();
+      SpeechRecognition.startListening({ continuous: true });
     }
-  }, [isSpeaking, listening]);
+  }, [resetTranscript, listening]);
 
   // 数秒後に response を消す処理
   useEffect(() => {

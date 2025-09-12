@@ -107,9 +107,6 @@ const Cook = ({
   // const [timerAlarmVolume, setTimerAlarmVolume] = useState(50);
   const [repeatFlag, setRepeatFlag] = useState(false);
 
-  // 音声読み上げ中かどうかを管理するState
-  const [isSpeaking, setIsSpeaking] = useState(true);
-
   // 音声認識コンポーネントでのページ操作用関数
   const back = (
     num: number,
@@ -148,7 +145,6 @@ const Cook = ({
         sourceNodeRef.current.stop();
         sourceNodeRef.current = null;
       }
-      setIsSpeaking(false);
     };
 
     if (!voiceEnabled) {
@@ -189,13 +185,9 @@ const Cook = ({
           );
         }
 
-        // 読み上げ開始を通知
-        setIsSpeaking(true);
-
         // APIから音声データを取得
         const data = await getVoice(textToSpeak, voiceSpeed);
         if (isCancelled || !data.audioContent) {
-          setIsSpeaking(false);
           return;
         }
 
@@ -212,7 +204,6 @@ const Cook = ({
           byteArray.buffer,
         );
         if (isCancelled) {
-          setIsSpeaking(false);
           return;
         }
 
@@ -220,21 +211,18 @@ const Cook = ({
         const source = audioContext.createBufferSource();
         source.buffer = audioBuffer;
         source.connect(gainNode!);
-        await new Promise((resolve) => setTimeout(resolve, 1000));
         source.start(0);
 
         sourceNodeRef.current = source;
 
         // 再生終了時の処理
         source.onended = () => {
-          setIsSpeaking(false);
           sourceNodeRef.current = null;
         };
       } catch (error) {
         if (!isCancelled) {
           console.error("Speech generation or playback failed:", error);
         }
-        setIsSpeaking(false);
       }
     };
 
@@ -270,7 +258,6 @@ const Cook = ({
           voiceVolume={voiceVolume}
           setVoiceVolume={setVoiceVolume}
           setRepeatFlag={setRepeatFlag}
-          isSpeaking={isSpeaking}
         />
         <div className="relative">
           <RecipeHeader
