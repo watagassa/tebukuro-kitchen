@@ -40,7 +40,12 @@ const UserRecipeItem = ({
         </div>
 
         <div className="flex h-full flex-grow flex-col justify-between">
-          <p className="mt-auto break-words text-base font-semibold">{name}</p>
+          <Link
+            href={`/${id}`}
+            className="mt-2 break-words text-base font-semibold hover:underline"
+          >
+            {name}
+          </Link>
           {user_id && (
             <div className="flex gap-4 self-end pt-1 text-xs md:pt-3">
               <Link
