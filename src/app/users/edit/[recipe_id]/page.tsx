@@ -289,7 +289,7 @@ const Edit = ({ params }: { params: { recipe_id: number } }) => {
             レシピを更新する
           </button>
         </main>
-        <Footer pathName="/registration" />
+        <Footer pathName="" />
       </form>
     </div>
   );
