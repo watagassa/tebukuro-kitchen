@@ -6,6 +6,7 @@ import LoadingComponent from "./LoadingDataFetch";
 import Error from "next/error";
 import { PAGE_SIZE_SWR } from "../utils/supabaseFunctionsNew";
 import { useSeachKW } from "./Header/SearchBar";
+import { FiHeart } from "react-icons/fi";
 
 type propsType = {
   materialKey: string; //表示管理用 一意のキーを指定する
@@ -41,6 +42,19 @@ const AddRecipeCords = ({ materialKey, fetcher }: propsType) => {
   if (error)
     return <Error statusCode={500} title="データの取得に失敗しました" />;
 
+  if (isEmpty) {
+    return (
+      <section className="flex flex-grow flex-col items-center justify-center gap-2 bg-[#FFFBF4] text-black">
+        <FiHeart size={55} className="text-gray-500" />
+        <p className="text-2xl font-bold text-gray-500">
+          お気に入りを
+          <br />
+          登録しよう！
+        </p>
+      </section>
+    );
+  }
+
   return (
     <div className="flex-1 border-none">
       <div
@@ -48,7 +62,10 @@ const AddRecipeCords = ({ materialKey, fetcher }: propsType) => {
       >
         {data?.flat().map((recipe: Recipe, index) => (
           <div key={index}>
-            <ArticleCard recipe={recipe} />
+            <ArticleCard
+              recipe={recipe}
+              from={materialKey === "favorites" ? "favorites" : ""}
+            />
           </div>
         ))}
       </div>

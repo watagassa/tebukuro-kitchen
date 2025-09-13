@@ -4,6 +4,7 @@ import Link from "next/link";
 import { createPortal } from "react-dom";
 import DeleteModal from "./DeleteModal";
 import { useState } from "react";
+import { FiCameraOff } from "react-icons/fi";
 
 const ModalContainer = ({ children }: { children: React.JSX.Element }) => {
   const container = document.getElementById("container");
@@ -29,18 +30,26 @@ const UserRecipeItem = ({
   return (
     <section className="flex justify-between border-b-2 px-2 py-3">
       <div className="flex w-full items-start gap-3">
-        <div className="relative aspect-[5/4] w-20 shrink-0 md:w-32">
-          <Image
-            // undefinedの場合はアプリロゴを表示する（仮）
-            src={image_url != undefined ? image_url : "/apple-touch-icon.png"}
-            alt=""
-            fill
-            className="rounded-lg object-cover"
-          />
+        <div className="relative flex aspect-[5/4] w-20 shrink-0 items-center justify-center rounded-lg bg-gray-100 object-cover md:w-32">
+          {image_url ? (
+            <Image
+              src={image_url}
+              alt=""
+              fill
+              className="rounded-lg object-cover"
+            />
+          ) : (
+            <FiCameraOff size={24} stroke="#737373" />
+          )}
         </div>
 
         <div className="flex h-full flex-grow flex-col justify-between">
-          <p className="mt-auto break-words text-base font-semibold">{name}</p>
+          <Link
+            href={`/${id}`}
+            className="mt-2 break-words text-base font-semibold hover:underline"
+          >
+            {name}
+          </Link>
           {user_id && (
             <div className="flex gap-4 self-end pt-1 text-xs md:pt-3">
               <Link

@@ -12,7 +12,7 @@ const UserRecipeList = ({
 }) => {
   return (
     <section className="mx-2 max-h-[36rem] overflow-y-scroll rounded-xl bg-white">
-      {userRecipe != undefined ? (
+      {userRecipe.length > 0 ? (
         <>
           {userRecipe.map((recipe: Recipe) => (
             <UserRecipeItem
@@ -23,13 +23,13 @@ const UserRecipeList = ({
               image_url={recipe.image_url}
             />
           ))}
-          <p className="flex justify-center p-8 font-semibold text-gray-400">
+          <p className="flex justify-center p-4 text-sm font-semibold text-gray-400">
             保存されたレシピは以上です
           </p>
         </>
       ) : (
-        <p className="flex justify-center p-8 font-semibold text-gray-400">
-          レシピがありません。
+        <p className="flex justify-center p-6 font-semibold text-gray-400">
+          レシピが保存されていません
         </p>
       )}
     </section>

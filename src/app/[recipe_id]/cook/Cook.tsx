@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { SetStateAction, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
@@ -105,7 +104,7 @@ const Cook = ({
   const [voiceEnabled, setVoiceEnabled] = useState(true);
   const [voiceVolume, setVoiceVolume] = useState(50);
   const [voiceSpeed, setVoiceSpeed] = useState(1.0);
-  const [timerAlarmVolume, setTimerAlarmVolume] = useState(50);
+  // const [timerAlarmVolume, setTimerAlarmVolume] = useState(50);
   const [repeatFlag, setRepeatFlag] = useState(false);
 
   // 音声認識コンポーネントでのページ操作用関数
@@ -132,48 +131,97 @@ const Cook = ({
 
   const imageSrc = descript[page]?.image_url ?? ""; // 画像のＵＲＬ
 
-  // 音声読み上げの処理
-  const audio = useRef<HTMLAudioElement>();
+  // --- Web Audio API関連の参照 ---
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const sourceNodeRef = useRef<AudioBufferSourceNode | null>(null);
+  const gainNodeRef = useRef<GainNode | null>(null);
+
+  // 音声読み上げの処理 (Web Audio APIを使用)
   useEffect(() => {
-    // 音声読み上げがOFFの場合は何もしない
+    // 既存の音声を停止する関数
+    const stopCurrentSpeech = () => {
+      if (sourceNodeRef.current) {
+        sourceNodeRef.current.onended = null; // onendedが誤って発火するのを防ぐ
+        sourceNodeRef.current.stop();
+        sourceNodeRef.current = null;
+      }
+    };
+
     if (!voiceEnabled) {
+      stopCurrentSpeech();
       return;
     }
 
-    // このuseEffectの処理が中断されたかどうかを判定するフラグ
     let isCancelled = false;
 
     const playSpeech = async () => {
       const textToSpeak = descript[page]?.text;
       if (!textToSpeak) return;
 
+      // 既存の音声を停止
+      stopCurrentSpeech();
+
       try {
-        // 既存の音声を停止
-        if (audio.current) {
-          audio.current.pause();
-        }
-
-        const data = await getVoice(textToSpeak, voiceSpeed);
-
-        // APIからデータ取得後に処理が中断されていないかチェック
-        if (isCancelled) {
-          return; // 中断されていたら再生しない
-        }
-
-        if (data.audioContent) {
-          audio.current = new Audio(
-            "data:audio/mp3;base64," + data.audioContent,
-          );
-          // 再生直前にもう一度チェック
-          if (isCancelled) {
+        // AudioContextの初期化（初回のみ）
+        if (!audioContextRef.current) {
+          const AudioContext = window.AudioContext;
+          if (!AudioContext) {
+            console.error("Web Audio API is not supported in this browser.");
+            setVoiceEnabled(false); // Web Audio APIが使えない場合は読み上げを無効化
             return;
           }
-          await audio.current.play();
+          audioContextRef.current = new AudioContext();
+          gainNodeRef.current = audioContextRef.current.createGain();
+          gainNodeRef.current.connect(audioContextRef.current.destination);
         }
+        const audioContext = audioContextRef.current;
+        const gainNode = gainNodeRef.current;
+
+        // 音量設定
+        if (gainNode) {
+          gainNode.gain.setValueAtTime(
+            voiceVolume / 100,
+            audioContext.currentTime,
+          );
+        }
+
+        // APIから音声データを取得
+        const data = await getVoice(textToSpeak, voiceSpeed);
+        if (isCancelled || !data.audioContent) {
+          return;
+        }
+
+        // Base64からArrayBufferに変換
+        const byteCharacters = atob(data.audioContent);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+
+        // 音声データをデコード
+        const audioBuffer = await audioContext.decodeAudioData(
+          byteArray.buffer,
+        );
+        if (isCancelled) {
+          return;
+        }
+
+        // 音声ソースを作成して再生
+        const source = audioContext.createBufferSource();
+        source.buffer = audioBuffer;
+        source.connect(gainNode!);
+        source.start(0);
+
+        sourceNodeRef.current = source;
+
+        // 再生終了時の処理
+        source.onended = () => {
+          sourceNodeRef.current = null;
+        };
       } catch (error) {
-        // 中断によるエラーでなければコンソールに出力
         if (!isCancelled) {
-          console.error("Speech generation failed:", error);
+          console.error("Speech generation or playback failed:", error);
         }
       }
     };
@@ -182,13 +230,10 @@ const Cook = ({
 
     // クリーンアップ関数
     return () => {
-      isCancelled = true; // フラグを立てて、進行中のAPIレスポンス後の処理を止める
-      if (audio.current) {
-        audio.current.pause(); // 現在再生中の音声を即座に停止
-        audio.current.currentTime = 0;
-      }
+      isCancelled = true;
+      stopCurrentSpeech();
     };
-  }, [descript, page, voiceSpeed, voiceEnabled, repeatFlag]);
+  }, [descript, page, voiceSpeed, voiceEnabled, repeatFlag, voiceVolume]);
 
   return (
     <>
@@ -210,6 +255,8 @@ const Cook = ({
           setVoiceEnabled={setVoiceEnabled}
           voiceSpeed={voiceSpeed}
           setVoiceSpeed={setVoiceSpeed}
+          voiceVolume={voiceVolume}
+          setVoiceVolume={setVoiceVolume}
           setRepeatFlag={setRepeatFlag}
         />
         <div className="relative">
@@ -259,16 +306,6 @@ const Cook = ({
         >
           <FiVolume2 className="size-7 font-semibold text-orange-400" />
         </button>
-
-        {/* 動画表示デバッグ用 */}
-        {/* <div className="w-full flex justify-between fixed bottom-14">
-        <button
-          onClick={() => setYtModalOpen(!ytModalOpen)}
-          className="bg-black"
-        >
-          動画表示
-        </button>
-      </div> */}
 
         <div id="container">
           {ingModalOpen && (
@@ -322,26 +359,25 @@ const Cook = ({
               setVoiceVolume={setVoiceVolume}
               voiceSpeed={voiceSpeed}
               setVoiceSpeed={setVoiceSpeed}
-              timerAlarmVolume={timerAlarmVolume}
-              setTimerAlarmVolume={setTimerAlarmVolume}
+              // timerAlarmVolume={timerAlarmVolume}
+              // setTimerAlarmVolume={setTimerAlarmVolume}
             />
           )}
         </div>
 
         {/* フッター */}
-        <div className="fixed bottom-0 z-20 flex h-14 w-full justify-center bg-orange-400 text-white">
-          <div className="fixed bottom-0 z-30 flex h-14 w-full justify-between text-white">
+        <div className="fixed bottom-0 z-20 flex h-[4.25rem] w-full justify-center bg-orange-400 text-white">
+          <div className="fixed bottom-0 z-30 flex h-[4.25rem] w-full justify-between pb-3 text-white">
             {page == 0 ? (
-              <div className="h-14 w-20">
+              <div className="h-[4.25rem] w-20">
                 <div className="mx-7 h-6 w-6"></div>
               </div>
             ) : (
               <button
                 onClick={() => {
-                  if (audio.current) audio.current.pause();
                   setPage(page - 1);
                 }}
-                className="h-14 w-20 bg-transparent font-bold"
+                className="h-[4.25rem] w-20 bg-transparent pb-3 font-bold"
               >
                 <FaArrowLeft className="mx-7 h-6 w-6" />
                 戻って
@@ -366,17 +402,16 @@ const Cook = ({
               </p>
             </button>
             {page == length - 1 ? (
-              <Link href={recipePage} className="font-bold">
+              <button onClick={() => setInCook(false)} className="font-bold">
                 <FaDoorOpen className="mx-7 my-1 mb-0 h-6 w-6" />
                 <div className="text-center">終了</div>
-              </Link>
+              </button>
             ) : (
               <button
                 onClick={() => {
-                  if (audio.current) audio.current.pause();
                   setPage(page + 1);
                 }}
-                className="h-14 w-20 bg-transparent font-bold"
+                className="h-[4.25rem] w-20 bg-transparent pb-3 font-bold"
               >
                 <FaArrowRight className="mx-7 h-6 w-6" />
                 進んで

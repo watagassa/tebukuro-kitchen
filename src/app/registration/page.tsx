@@ -234,9 +234,7 @@ export default function Registration() {
             レシピを登録する
           </button>
         </main>
-        <div className="sticky bottom-0 z-20 w-full">
-          <Footer pathName="/registration" />
-        </div>
+        <Footer pathName="/registration" />
       </form>
     </div>
   );
